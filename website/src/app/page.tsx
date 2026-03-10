@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
+import StyleShowcase from "@/components/StyleShowcase";
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);
@@ -98,6 +99,13 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Style Showcase */}
+      <section className="py-32 px-6">
+        <StyleShowcase />
       </section>
 
       <div className="section-divider" />

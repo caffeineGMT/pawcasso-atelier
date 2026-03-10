@@ -31,10 +31,14 @@ export const artworks: ArtworkItem[] = [
   { id: 20, title: "The Great Catsby", animal: "Cat", style: "Art Deco", imageUrl: "/gallery/the_great_catsby_poster.png", width: 2048, height: 2048 },
   { id: 21, title: "Aries Rising", animal: "Ram", style: "Baroque", imageUrl: "/gallery/aries_zodiac_baroque.png", width: 2048, height: 2048 },
   { id: 22, title: "The Ice Kiln", animal: "Penguin", style: "Watercolor", imageUrl: "/gallery/penguin_pottery_watercolor.png", width: 2048, height: 2048 },
+  { id: 23, title: "Drop the Bass", animal: "Hamster", style: "Pop Art", imageUrl: "/gallery/hamster_dj_pop_art.png", width: 2048, height: 2048 },
+  { id: 24, title: "Blade of the Fox", animal: "Fox", style: "Ukiyo-e", imageUrl: "/gallery/fox_samurai_ukiyoe.png", width: 2048, height: 2048 },
+  { id: 25, title: "Petal & Stem", animal: "Rabbit", style: "Watercolor", imageUrl: "/gallery/bunny_florist_watercolor.png", width: 2048, height: 2048 },
+  { id: 26, title: "The Howling Hour", animal: "Wolf", style: "Dark Fantasy", imageUrl: "/gallery/wolf_noir_poster.png", width: 2048, height: 2048 },
 ];
 
-export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt", "Art Deco"];
-export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish", "Ram"];
+export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt", "Art Deco", "Dark Fantasy"];
+export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish", "Ram", "Rabbit"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },

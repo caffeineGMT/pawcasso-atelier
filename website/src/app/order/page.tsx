@@ -1,7 +1,23 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { artStyleOptions } from "@/lib/data";
+
+const stylePreviewMap: Record<string, { image: string; title: string }> = {
+  renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
+  baroque: { image: "/gallery/lion_portrait.png", title: "Sovereign Light" },
+  impressionist: { image: "/gallery/starry_night_persian_cat.png", title: "Starry Night Whiskers" },
+  ghibli: { image: "/gallery/golden_retriever_ghibli.png", title: "Moonlit Garden" },
+  watercolor: { image: "/gallery/hedgehog_bookshop_tree_trunk.png", title: "The Little Bookshop" },
+  "art-nouveau": { image: "/gallery/owl_art_nouveau.png", title: "The Keeper of Pages" },
+  "ukiyo-e": { image: "/gallery/pisces_zodiac_ukiyoe_portrait.png", title: "Pisces Rising" },
+  cyberpunk: { image: "/gallery/the_catrix_poster.png", title: "The Catrix" },
+  "pixar-3d": { image: "/gallery/red_panda_pixar_chef.png", title: "Chef\u2019s Kiss" },
+  "needle-felt": { image: "/gallery/corgi_needle_felt.png", title: "Woolly Wanderer" },
+  hyperrealism: { image: "/gallery/penguin_gala.png", title: "Black Tie Affair" },
+  "art-deco": { image: "/gallery/the_great_catsby_poster.png", title: "The Great Catsby" },
+};
 
 export default function OrderPage() {
   const [name, setName] = useState("");
@@ -149,6 +165,26 @@ export default function OrderPage() {
                 </button>
               ))}
             </div>
+
+            {/* Style Preview */}
+            {style && stylePreviewMap[style] && (
+              <div className="mt-6 rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.08]">
+                <div className="aspect-[4/3] relative">
+                  <Image
+                    src={stylePreviewMap[style].image}
+                    alt={stylePreviewMap[style].title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 640px"
+                  />
+                </div>
+                <div className="px-4 py-3">
+                  <p className="text-xs text-text-secondary">
+                    Style preview: <span className="text-text-primary font-medium">{stylePreviewMap[style].title}</span>
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Notes */}
