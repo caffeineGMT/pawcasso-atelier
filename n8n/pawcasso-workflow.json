@@ -1,0 +1,225 @@
+{
+  "name": "Pawcasso Atelier - Creative Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "trigger",
+      "name": "Daily 8:00 AM PT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Content Concept Generator\n// Picks today's pillar, style, animal, and builds a creative prompt\n\nconst calendar = {\n  pillars: [\n    { id: 'old_masters', name: 'Old Masters, New Paws', prompts: [\n      'Reimagine \"{painting}\" by {artist} but with a {animal} as the subject',\n      'A {animal} posed exactly like the subject in \"{painting}\" by {artist}',\n    ]},\n    { id: 'cinema', name: 'Cinema Unleashed', prompts: [\n      'A {animal} recreating the iconic {movie} movie poster',\n      'Movie poster parody of {movie} starring a {animal}',\n    ]},\n    { id: 'daily_portrait', name: 'The Daily Portrait', prompts: [\n      'A stunning artistic portrait of a {animal} in {setting}',\n      'Majestic {animal} portrait with dramatic lighting',\n    ]},\n    { id: 'fantasy', name: 'What Breed Is This?', prompts: [\n      'A mythical hybrid creature: half {animal}, half {creature2}, in a {setting}',\n      'A {animal} with magical {feature} in a fantasy landscape',\n    ]},\n    { id: 'historical', name: 'Pets Through Time', prompts: [\n      'A {animal} dressed as a {historical_figure} in {era} era',\n      'A {animal} in {era} period clothing and setting',\n    ]},\n    { id: 'tiny_worlds', name: 'Tiny Worlds', prompts: [\n      'A {animal} running a tiny {shop_type} in a miniature world',\n      'A {animal} in a whimsical diorama-like {scene}',\n    ]},\n  ],\n  styles: [\n    'Renaissance Oil Painting', 'Studio Ghibli / Anime', 'Cyberpunk Neon',\n    'Watercolor Botanical', 'Pop Art (Warhol/Lichtenstein)', 'Pixel Art / 8-Bit',\n    'Art Nouveau', 'Hyperrealism', 'Ukiyo-e (Japanese Woodblock)', 'Dark Fantasy / Gothic'\n  ],\n  animals: [\n    'duck', 'cat', 'dog', 'owl', 'fox', 'lion', 'wolf', 'elephant',\n    'hummingbird', 'pug', 'corgi', 'shiba inu', 'persian cat', 'parrot',\n    'hamster', 'frog', 'mouse', 'hedgehog', 'snow leopard', 'turtle',\n    'dalmatian', 'golden retriever', 'bulldog', 'barn owl', 'eagle',\n    'penguin', 'flamingo', 'raccoon', 'red panda', 'otter'\n  ],\n  paintings: [\n    { title: 'Girl with a Pearl Earring', artist: 'Vermeer' },\n    { title: 'The Birth of Venus', artist: 'Botticelli' },\n    { title: 'American Gothic', artist: 'Grant Wood' },\n    { title: 'The Starry Night', artist: 'Van Gogh' },\n    { title: 'Mona Lisa', artist: 'da Vinci' },\n    { title: 'The Scream', artist: 'Munch' },\n    { title: 'The Great Wave', artist: 'Hokusai' },\n  ],\n  movies: [\n    'The Matrix', 'Jaws', 'Titanic', 'Scarface', 'Star Wars',\n    'The Godfather', 'Jurassic Park', 'Pulp Fiction', 'Forrest Gump',\n    'The Shining', 'E.T.', 'Back to the Future'\n  ],\n  eras: [\n    { era: 'Ancient Egyptian', figure: 'pharaoh' },\n    { era: 'Medieval', figure: 'knight' },\n    { era: 'Renaissance', figure: 'nobleman' },\n    { era: 'Feudal Japanese', figure: 'samurai' },\n    { era: '1920s Art Deco', figure: 'jazz singer' },\n    { era: 'Victorian', figure: 'detective' },\n    { era: '1960s Space Age', figure: 'astronaut' },\n  ],\n  shops: ['ramen shop', 'bakery', 'bookshop', 'flower shop', 'coffee cart', 'tailor'],\n  scenes: ['mushroom forest library', 'treehouse village', 'cloud city', 'underwater coral palace'],\n  features: ['butterfly wings', 'crystalline antlers', 'bioluminescent fur', 'flower crown that blooms'],\n  creatures: ['phoenix', 'dragon', 'unicorn', 'griffin'],\n  settings: ['moonlit forest', 'golden hour savanna', 'misty mountain peak', 'rainy Tokyo street', 'cherry blossom garden']\n};\n\nconst pick = (arr) => arr[Math.floor(Math.random() * arr.length)];\nconst dayOfWeek = new Date().getDay(); // 0=Sun, 1=Mon, ...\n\n// Map day to pillar\nconst pillarMap = [0, 2, 3, 5, 1, 2, 4]; // Sun=old_masters, Mon=portrait, Tue=fantasy, Wed=tiny, Thu=cinema, Fri=portrait, Sat=historical\nconst pillar = calendar.pillars[pillarMap[dayOfWeek]];\nconst style = pick(calendar.styles);\nconst animal = pick(calendar.animals);\n\n// Build the prompt template\nlet promptTemplate = pick(pillar.prompts);\nlet prompt = promptTemplate\n  .replace('{animal}', animal)\n  .replace('{painting}', pick(calendar.paintings).title)\n  .replace('{artist}', pick(calendar.paintings).artist)\n  .replace('{movie}', pick(calendar.movies))\n  .replace('{era}', pick(calendar.eras).era)\n  .replace('{historical_figure}', pick(calendar.eras).figure)\n  .replace('{shop_type}', pick(calendar.shops))\n  .replace('{scene}', pick(calendar.scenes))\n  .replace('{feature}', pick(calendar.features))\n  .replace('{creature2}', pick(calendar.creatures))\n  .replace('{setting}', pick(calendar.settings));\n\nconst fullPrompt = `Create an artistic image in ${style} style: ${prompt}. The image should be stunning, high quality, suitable for an Instagram post. Square format (1:1 ratio, 1080x1080 or larger). Make it visually striking and shareable.`;\n\nconst today = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    date: today,\n    pillar: pillar.name,\n    style: style,\n    animal: animal,\n    concept: prompt,\n    manus_prompt: fullPrompt,\n    attempt: 1,\n    max_attempts: 3\n  }\n}];"
+      },
+      "id": "concept_gen",
+      "name": "Generate Concept",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.manus.ai/v1/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"Using Nano Banana image generation, {{ $json.manus_prompt }} Save the image and provide a direct download link to the generated image file.\",\n  \"agentProfile\": \"manus-1.6-max\",\n  \"createShareableLink\": true,\n  \"autoStart\": true\n}"
+      },
+      "id": "manus_image",
+      "name": "Manus: Generate Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "amount": 120,
+        "unit": "seconds"
+      },
+      "id": "wait_manus",
+      "name": "Wait for Manus",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.manus.ai/v1/tasks/{{ $('Manus: Generate Image').item.json.task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+          ]
+        }
+      },
+      "id": "check_manus",
+      "name": "Check Manus Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "" },
+          "conditions": [
+            {
+              "id": "status_check",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "id": "is_complete",
+      "name": "Is Manus Done?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the image URL and file info from Manus output\nconst output = $input.first().json.output || [];\nlet imageUrl = null;\nlet imageFileName = null;\nlet assistantMessage = '';\n\nfor (const item of output) {\n  if (item.content) {\n    for (const content of item.content) {\n      if (content.type === 'output_file') {\n        imageUrl = content.fileUrl;\n        imageFileName = content.fileName;\n      }\n      if (content.type === 'output_text' && item.role === 'assistant') {\n        assistantMessage = content.text;\n      }\n    }\n  }\n}\n\n// Get concept info from earlier in the chain\nconst concept = $('Generate Concept').item.json;\n\nreturn [{\n  json: {\n    ...concept,\n    image_url: imageUrl,\n    image_filename: imageFileName,\n    manus_task_id: $input.first().json.id,\n    manus_share_url: $input.first().json.metadata?.share_url,\n    manus_response: assistantMessage,\n    credit_usage: $input.first().json.credit_usage\n  }\n}];"
+      },
+      "id": "extract_image",
+      "name": "Extract Image URL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.manus.ai/v1/tasks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"You are the social media manager for @pawcasso.atelier, an Instagram account that posts AI-generated artistic animal portraits. Write an Instagram caption for this post:\\n\\nConcept: {{ $json.concept }}\\nArt Style: {{ $json.style }}\\nContent Pillar: {{ $json.pillar }}\\nAnimal: {{ $json.animal }}\\n\\nCaption rules:\\n1. Start with a HOOK LINE — punchy, funny, or intriguing (1 sentence max)\\n2. Add 1-2 sentences of CONTEXT about the piece\\n3. End with an ENGAGEMENT PROMPT — a question or CTA that invites comments\\n4. Tone: Witty, warm, slightly irreverent. Like a clever friend who's an artist.\\n5. Keep under 150 words total\\n6. Do NOT mention AI or that the art is AI-generated\\n\\nAlso generate 20-25 relevant hashtags in 3 tiers:\\n- Branded: #PawcassoAtelier #PawcassoDaily #PaintedByPawcasso\\n- Broad reach (5-7): from #DigitalArt #ArtOfTheDay #AnimalArt etc.\\n- Niche (10-12): from #AIGeneratedArt #AnimalPortrait #FantasyArt etc.\\n\\nReturn ONLY a JSON object with this exact format (no markdown, no explanation):\\n{\\n  \\\"caption\\\": \\\"the caption text\\\",\\n  \\\"hashtags\\\": \\\"#tag1 #tag2 ...all hashtags...\\\",\\n  \\\"hook\\\": \\\"just the hook line for preview\\\"\\n}\",\n  \"agentProfile\": \"manus-1.6-max\",\n  \"autoStart\": true\n}"
+      },
+      "id": "manus_caption",
+      "name": "Manus: Generate Caption",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, -100]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait_caption",
+      "name": "Wait for Caption",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1760, -100]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.manus.ai/v1/tasks/{{ $('Manus: Generate Caption').item.json.task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+          ]
+        }
+      },
+      "id": "check_caption",
+      "name": "Check Caption Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1980, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract caption from Manus response and compile the review package\nconst captionOutput = $input.first().json.output || [];\nlet captionText = '';\n\nfor (const item of captionOutput) {\n  if (item.content && item.role === 'assistant') {\n    for (const content of item.content) {\n      if (content.type === 'output_text') {\n        captionText += content.text;\n      }\n    }\n  }\n}\n\n// Try to parse JSON from caption text\nlet caption = '';\nlet hashtags = '';\nlet hook = '';\n\ntry {\n  const jsonMatch = captionText.match(/\\{[\\s\\S]*\\}/);\n  if (jsonMatch) {\n    const parsed = JSON.parse(jsonMatch[0]);\n    caption = parsed.caption || captionText;\n    hashtags = parsed.hashtags || '';\n    hook = parsed.hook || '';\n  } else {\n    caption = captionText;\n  }\n} catch (e) {\n  caption = captionText;\n}\n\nconst concept = $('Extract Image URL').item.json;\n\nreturn [{\n  json: {\n    date: concept.date,\n    pillar: concept.pillar,\n    style: concept.style,\n    animal: concept.animal,\n    concept: concept.concept,\n    image_url: concept.image_url,\n    image_filename: concept.image_filename,\n    manus_share_url: concept.manus_share_url,\n    caption: caption,\n    hashtags: hashtags,\n    hook: hook,\n    total_credits: (concept.credit_usage || 0) + ($input.first().json.credit_usage || 0),\n    status: 'pending_review'\n  }\n}];"
+      },
+      "id": "compile_review",
+      "name": "Compile Review Package",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2200, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.REVIEW_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"🎨 **Pawcasso Daily Review**\\n\\n📅 {{ $json.date }}\\n🏛️ Pillar: {{ $json.pillar }}\\n🎨 Style: {{ $json.style }}\\n🐾 Animal: {{ $json.animal }}\\n\\n💡 Concept: {{ $json.concept }}\\n\\n📝 Caption:\\n{{ $json.caption }}\\n\\n🖼️ Image: {{ $json.manus_share_url }}\\n\\n💰 Credits used: {{ $json.total_credits }}\\n\\nReply APPROVE to post, or REDO to regenerate.\"\n}"
+      },
+      "id": "send_review",
+      "name": "Send to Michael for Review",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2420, -100]
+    }
+  ],
+  "connections": {
+    "Daily 8:00 AM PT": {
+      "main": [[{ "node": "Generate Concept", "type": "main", "index": 0 }]]
+    },
+    "Generate Concept": {
+      "main": [[{ "node": "Manus: Generate Image", "type": "main", "index": 0 }]]
+    },
+    "Manus: Generate Image": {
+      "main": [[{ "node": "Wait for Manus", "type": "main", "index": 0 }]]
+    },
+    "Wait for Manus": {
+      "main": [[{ "node": "Check Manus Status", "type": "main", "index": 0 }]]
+    },
+    "Check Manus Status": {
+      "main": [[{ "node": "Is Manus Done?", "type": "main", "index": 0 }]]
+    },
+    "Is Manus Done?": {
+      "main": [
+        [{ "node": "Extract Image URL", "type": "main", "index": 0 }],
+        [{ "node": "Wait for Manus", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Image URL": {
+      "main": [[{ "node": "Manus: Generate Caption", "type": "main", "index": 0 }]]
+    },
+    "Manus: Generate Caption": {
+      "main": [[{ "node": "Wait for Caption", "type": "main", "index": 0 }]]
+    },
+    "Wait for Caption": {
+      "main": [[{ "node": "Check Caption Status", "type": "main", "index": 0 }]]
+    },
+    "Check Caption Status": {
+      "main": [[{ "node": "Compile Review Package", "type": "main", "index": 0 }]]
+    },
+    "Compile Review Package": {
+      "main": [[{ "node": "Send to Michael for Review", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

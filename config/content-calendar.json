@@ -1,0 +1,76 @@
+{
+  "pillars": [
+    {
+      "id": "old_masters",
+      "name": "Old Masters, New Paws",
+      "description": "Classical art reimagined with animals",
+      "day_of_week": ["monday", "sunday"]
+    },
+    {
+      "id": "cinema",
+      "name": "Cinema Unleashed",
+      "description": "Movie poster parodies featuring animals",
+      "day_of_week": ["thursday"]
+    },
+    {
+      "id": "daily_portrait",
+      "name": "The Daily Portrait",
+      "description": "Stunning standalone animal art",
+      "day_of_week": ["monday", "friday"]
+    },
+    {
+      "id": "fantasy",
+      "name": "What Breed Is This?",
+      "description": "Fantasy/mythical hybrid animals",
+      "day_of_week": ["tuesday"]
+    },
+    {
+      "id": "historical",
+      "name": "Pets Through Time",
+      "description": "Animals in historical eras",
+      "day_of_week": ["saturday"]
+    },
+    {
+      "id": "tiny_worlds",
+      "name": "Tiny Worlds",
+      "description": "Miniature/macro scenes with animals",
+      "day_of_week": ["wednesday", "saturday"]
+    },
+    {
+      "id": "community",
+      "name": "Your Pet, Reimagined",
+      "description": "Community submissions reimagined",
+      "day_of_week": ["wednesday"]
+    }
+  ],
+  "art_styles": [
+    "Renaissance Oil Painting",
+    "Studio Ghibli / Anime",
+    "Cyberpunk Neon",
+    "Watercolor Botanical",
+    "Pop Art (Warhol/Lichtenstein)",
+    "Pixel Art / 8-Bit",
+    "Art Nouveau",
+    "Hyperrealism",
+    "Ukiyo-e (Japanese Woodblock)",
+    "Dark Fantasy / Gothic"
+  ],
+  "animals": [
+    "duck", "cat", "dog", "owl", "fox", "lion", "wolf", "elephant",
+    "hummingbird", "pug", "corgi", "shiba inu", "persian cat", "parrot",
+    "hamster", "frog", "mouse", "hedgehog", "snow leopard", "turtle",
+    "dalmatian", "golden retriever", "bulldog", "barn owl", "eagle",
+    "penguin", "flamingo", "raccoon", "red panda", "otter"
+  ],
+  "caption_tone": "witty, warm, slightly irreverent",
+  "caption_structure": "HOOK (1 sentence) → CONTEXT (1-2 sentences) → ENGAGEMENT PROMPT (question/CTA)",
+  "hashtags": {
+    "branded": ["#PawcassoAtelier", "#PawcassoDaily", "#PaintedByPawcasso"],
+    "broad": ["#DigitalArt", "#ArtOfTheDay", "#AnimalArt", "#PetPortrait", "#AIArt", "#ArtistsOfInstagram", "#AnimalLovers"],
+    "niche": ["#AIGeneratedArt", "#AnimalPortrait", "#PetIllustration", "#FantasyArt", "#ConceptArt", "#DigitalIllustration", "#SurrealArt", "#FantasyCreature", "#RenaissanceArt", "#CyberPunkArt"]
+  },
+  "posting_times": {
+    "weekday": "11:00 ET / 08:00 PT",
+    "weekend": "10:00 ET / 07:00 PT"
+  }
+}
