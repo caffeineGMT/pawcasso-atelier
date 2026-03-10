@@ -20,6 +20,9 @@ export const artworks: ArtworkItem[] = [
   { id: 9, title: "Black Tie Affair", animal: "Penguin", style: "Hyperrealism", imageUrl: "/gallery/penguin_gala.png", width: 2048, height: 2048 },
   { id: 10, title: "Chapter & Verse", animal: "Red Panda", style: "Ghibli", imageUrl: "/gallery/red_panda_bookshop.png", width: 2048, height: 2048 },
   { id: 11, title: "Song of the Mountain", animal: "Wolf", style: "Ukiyo-e", imageUrl: "/gallery/wolf_ukiyoe.png", width: 2048, height: 2048 },
+  { id: 12, title: "Moonlit Garden", animal: "Dog", style: "Ghibli", imageUrl: "/gallery/golden_retriever_ghibli.png", width: 2048, height: 2048 },
+  { id: 13, title: "Chef's Kiss", animal: "Red Panda", style: "Pixar 3D", imageUrl: "/gallery/red_panda_pixar_chef.png", width: 2048, height: 2048 },
+  { id: 14, title: "Woolly Wanderer", animal: "Corgi", style: "Needle Felt", imageUrl: "/gallery/corgi_needle_felt.png", width: 2048, height: 2048 },
 ];
 
 export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt"];
