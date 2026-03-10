@@ -27,10 +27,14 @@ export const artworks: ArtworkItem[] = [
   { id: 16, title: "Starry Night Whiskers", animal: "Cat", style: "Impressionist", imageUrl: "/gallery/starry_night_persian_cat.png", width: 2048, height: 2048 },
   { id: 17, title: "The Catrix", animal: "Cat", style: "Cyberpunk", imageUrl: "/gallery/the_catrix_poster.png", width: 2048, height: 2048 },
   { id: 18, title: "Pisces Rising", animal: "Fish", style: "Ukiyo-e", imageUrl: "/gallery/pisces_zodiac_ukiyoe_portrait.png", width: 2048, height: 2048 },
+  { id: 19, title: "Otter Space", animal: "Otter", style: "Pixar 3D", imageUrl: "/gallery/otter_space_pixar.png", width: 2048, height: 2048 },
+  { id: 20, title: "The Great Catsby", animal: "Cat", style: "Art Deco", imageUrl: "/gallery/the_great_catsby_poster.png", width: 2048, height: 2048 },
+  { id: 21, title: "Aries Rising", animal: "Ram", style: "Baroque", imageUrl: "/gallery/aries_zodiac_baroque.png", width: 2048, height: 2048 },
+  { id: 22, title: "The Ice Kiln", animal: "Penguin", style: "Watercolor", imageUrl: "/gallery/penguin_pottery_watercolor.png", width: 2048, height: 2048 },
 ];
 
-export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt"];
-export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish"];
+export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt", "Art Deco"];
+export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish", "Ram"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },
@@ -49,4 +53,5 @@ export const artStyleOptions = [
   { value: "pixar-3d", label: "Pixar 3D Chunky", description: "Round, fluffy, adorably grumpy 3D characters" },
   { value: "needle-felt", label: "Needle Felt", description: "Cozy wool-textured stop-motion style" },
   { value: "hyperrealism", label: "Hyperrealism", description: "Photorealistic detail and precision" },
+  { value: "art-deco", label: "Art Deco", description: "Glamorous 1920s geometric elegance" },
 ];

@@ -80,7 +80,7 @@ export default function HomePage() {
               {
                 num: "2",
                 title: "Choose a style",
-                desc: "Renaissance, Baroque, Impressionist, Ghibli, Pop Art — 14 curated styles to choose from.",
+                desc: "Renaissance, Baroque, Impressionist, Ghibli, Pop Art — 16 curated styles to choose from.",
               },
               {
                 num: "3",
@@ -218,7 +218,7 @@ export default function HomePage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-gold text-sm">&#10003;</span>
-                  <span>14 art styles to choose from</span>
+                  <span>16 art styles to choose from</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-gold text-sm">&#10003;</span>
@@ -263,7 +263,7 @@ export default function HomePage() {
               },
               {
                 q: "Can you match a specific style?",
-                a: "We offer 14 curated styles including Renaissance, Baroque, Impressionist, Ghibli, Ukiyo-e, Pop Art, and more. You can also send a reference image and we\u2019ll match it.",
+                a: "We offer 16 curated styles including Renaissance, Baroque, Impressionist, Ghibli, Ukiyo-e, Pop Art, and more. You can also send a reference image and we\u2019ll match it.",
               },
               {
                 q: "What if I\u2019m not happy?",
