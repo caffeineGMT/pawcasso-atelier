@@ -18,12 +18,21 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Pawcasso Atelier",
     locale: "en_US",
+    images: [
+      {
+        url: "https://pawcasso-atelier.vercel.app/gallery/lion_portrait.png",
+        width: 2048,
+        height: 2048,
+        alt: "Pawcasso Atelier - Sovereign Light",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Pawcasso Atelier | Bespoke Animal Portraits",
     description:
       "Where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
+    images: ["https://pawcasso-atelier.vercel.app/gallery/lion_portrait.png"],
   },
 };
 
