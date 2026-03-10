@@ -39,10 +39,14 @@ export const artworks: ArtworkItem[] = [
   { id: 28, title: "Morning Ritual", animal: "Cat", style: "Minimalist", imageUrl: "/gallery/cat_coffee_line_art.png", width: 2048, height: 2048 },
   { id: 29, title: "The Persistence of Tusks", animal: "Elephant", style: "Surrealist", imageUrl: "/gallery/elephant_surrealist.png", width: 2048, height: 2048 },
   { id: 30, title: "Dungeon Keeper", animal: "Dragon", style: "Pixel Art", imageUrl: "/gallery/pixel_dragon.png", width: 2048, height: 2048 },
+  { id: 31, title: "Gemini Reflected", animal: "Cat", style: "Art Nouveau", imageUrl: "/gallery/gemini_zodiac_art_nouveau.png", width: 2048, height: 2048 },
+  { id: 32, title: "The Blossom Brew", animal: "Raccoon", style: "Ghibli", imageUrl: "/gallery/raccoon_barista_ghibli.png", width: 2048, height: 2048 },
+  { id: 33, title: "Tropical Majesty", animal: "Toucan", style: "Hyperrealism", imageUrl: "/gallery/toucan_hyperrealism.png", width: 2048, height: 2048 },
+  { id: 34, title: "Sir Biscuit the Brave", animal: "Corgi", style: "Fantasy", imageUrl: "/gallery/corgi_knight_fantasy.png", width: 2048, height: 2048 },
 ];
 
 export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt", "Art Deco", "Dark Fantasy", "Minimalist"];
-export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish", "Ram", "Rabbit", "Bull", "Elephant", "Dragon"];
+export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish", "Ram", "Rabbit", "Bull", "Elephant", "Dragon", "Raccoon", "Toucan"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },
