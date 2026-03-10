@@ -25,7 +25,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Connect */}
           <div>
             <h4 className="text-xs tracking-wider text-text-secondary mb-4 uppercase">Connect</h4>
             <a
@@ -39,9 +39,20 @@ export default function Footer() {
               </svg>
               @pawcasso.atelier
             </a>
-            <p className="text-text-secondary text-sm mt-3">
-              DM us for custom requests.
+            <p className="text-text-secondary text-xs mt-4 mb-3">
+              New portraits daily. DM for custom requests.
             </p>
+            <a
+              href="https://tiktok.com/@pawcasso.atelier"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors duration-300 text-sm"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.17v-3.45c-1.46 0-2.8-.5-3.86-1.34v-.07l-.14-3.15z"/>
+              </svg>
+              @pawcasso.atelier
+            </a>
           </div>
         </div>
 

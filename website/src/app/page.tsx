@@ -52,6 +52,27 @@ export default function HomePage() {
               Follow Us
             </a>
           </div>
+
+          {/* Social proof stats */}
+          <div
+            className="flex items-center justify-center gap-8 mt-16 animate-slide-up"
+            style={{ animationDelay: "500ms" }}
+          >
+            <div className="text-center">
+              <div className="text-2xl font-semibold text-text-primary">26+</div>
+              <div className="text-xs text-text-secondary mt-1">Artworks</div>
+            </div>
+            <div className="w-[1px] h-8 bg-white/[0.08]" />
+            <div className="text-center">
+              <div className="text-2xl font-semibold text-text-primary">18</div>
+              <div className="text-xs text-text-secondary mt-1">Art Styles</div>
+            </div>
+            <div className="w-[1px] h-8 bg-white/[0.08]" />
+            <div className="text-center">
+              <div className="text-2xl font-semibold text-text-primary">24h</div>
+              <div className="text-xs text-text-secondary mt-1">Delivery</div>
+            </div>
+          </div>
         </div>
 
         {/* Scroll indicator */}
