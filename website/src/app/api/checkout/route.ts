@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         style,
         notes: notes || "",
       },
-      success_url: `${baseUrl}/?success=true`,
+      success_url: `${baseUrl}/thank-you`,
       cancel_url: `${baseUrl}/order?canceled=true`,
     });
 
