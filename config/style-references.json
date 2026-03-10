@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "project": "Pawcasso Atelier",
+    "description": "Curated art style reference database for AI-generated artistic animal portraits",
+    "version": "1.0.0",
+    "last_updated": "2026-03-09",
+    "notes": "Reference URLs sourced from Wikimedia Commons (upload.wikimedia.org), museum open-access collections, and other permanent CDN-hosted images. All are exemplary works in the public domain or under open licenses. URLs ending in .jpg/.png point to direct image files on stable infrastructure."
+  },
+  "styles": {
+    "Renaissance Oil Painting": {
+      "search_terms": ["Renaissance", "oil painting", "classical", "chiaroscuro", "sfumato", "Old Masters", "Flemish", "Venetian"],
+      "description": "Rich oil painting with dramatic lighting, classical composition, warm earth tones, meticulous detail, and Renaissance-era aesthetic sensibility",
+      "prompt_modifier": "Match the dramatic chiaroscuro lighting, rich oil paint texture with visible brushwork, classical triangular composition, warm earth-tone palette of umbers, siennas, and gold, and the luminous glazing technique characteristic of Renaissance masters. Render fur and features with the same meticulous attention to detail as Renaissance portraiture.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Jan_van_Eyck_-_Portrait_of_a_Man_with_a_Blue_Chaperon_-_WGA7597.jpg/800px-Jan_van_Eyck_-_Portrait_of_a_Blue_Chaperon_-_WGA7597.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/VanEyck_-_Arnolfini_Portrait.jpg/800px-VanEyck_-_Arnolfini_Portrait.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1280px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Albrecht_D%C3%BCrer_-_Feldhase_-_Google_Art_Project.jpg/800px-Albrecht_D%C3%BCrer_-_Feldhase_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Carl_Kahler_-_My_Wife%27s_Lovers.jpg/1280px-Carl_Kahler_-_My_Wife%27s_Lovers.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Leonardo_da_Vinci_-_Lady_with_an_Ermine.jpg/800px-Leonardo_da_Vinci_-_Lady_with_an_Ermine.jpg"
+      ]
+    },
+    "Studio Ghibli / Anime": {
+      "search_terms": ["Studio Ghibli", "anime", "Miyazaki", "Japanese animation", "cel shading", "kawaii", "manga", "Totoro"],
+      "description": "Soft, dreamy anime aesthetic with lush backgrounds, expressive eyes, gentle color palettes, and the whimsical naturalism characteristic of Studio Ghibli films",
+      "prompt_modifier": "Capture the Studio Ghibli aesthetic: soft cel-shaded rendering with gentle gradients, large expressive eyes with light reflections, lush and detailed watercolor-style backgrounds, a warm pastel color palette, whimsical and heartfelt atmosphere. Render the animal with Ghibli-style expressiveness while maintaining anatomical charm. Include environmental storytelling with detailed natural settings.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/0/02/Spirited_Away_-_Haku_and_Chihiro_flying.png",
+        "https://upload.wikimedia.org/wikipedia/en/d/d5/My_Neighbor_Totoro_-_Tonari_no_Totoro_%28Movie_Poster%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/4/43/Ponyo_screenshot.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/5/57/Mononoke_hime_japanese_poster.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/3/3a/Catbus.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/a/a0/Howl%27s_Moving_Castle_%28Animated_film%29_poster.jpg"
+      ]
+    },
+    "Cyberpunk Neon": {
+      "search_terms": ["cyberpunk", "neon", "futuristic", "synthwave", "vaporwave", "sci-fi", "dystopian", "retro-futurism", "blade runner"],
+      "description": "High-contrast neon-lit scenes with deep blacks, electric blues, magentas, and cyans. Futuristic urban environments with holographic elements, rain-slicked surfaces, and tech-augmented subjects",
+      "prompt_modifier": "Create a cyberpunk atmosphere with high-contrast neon lighting in electric blue, hot pink, and cyan against deep black shadows. Include reflective wet surfaces, holographic overlays, tech-augmented details (circuits, LED accents, cybernetic implants), and a gritty urban futuristic background. Use dramatic rim lighting with neon color spill on the subject. The animal should appear as if it belongs in a Blade Runner or Ghost in the Shell world.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/9/9f/Blade_Runner_%281982_poster%29.png",
+        "https://upload.wikimedia.org/wikipedia/en/3/32/Blade_Runner_2049_poster.png",
+        "https://upload.wikimedia.org/wikipedia/en/b/b6/Akira_%281988_poster%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/0/04/Ghost_in_the_Shell_%281995_film%29_poster.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Hong_Kong_Night_Skyline.jpg/1280px-Hong_Kong_Night_Skyline.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GoldenGateBridge-001.jpg/1280px-GoldenGateBridge-001.jpg"
+      ]
+    },
+    "Watercolor Botanical": {
+      "search_terms": ["watercolor", "botanical", "botanical illustration", "floral", "soft wash", "transparent pigment", "natural history illustration", "garden"],
+      "description": "Delicate, translucent watercolor washes with botanical precision. Soft edges blending into white paper, detailed flora surrounding the subject, gentle natural color palette with organic forms",
+      "prompt_modifier": "Render in authentic watercolor technique with transparent pigment washes, visible paper texture showing through, soft wet-on-wet edges, and precise botanical details. Surround the animal subject with accurately rendered flowers, leaves, and natural elements. Use a gentle, natural palette of sage greens, dusty roses, soft lavenders, and warm yellows. Allow white paper to breathe through the composition. Include fine ink or pencil linework for botanical precision.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Naturalis_Biodiversity_Center_-_RMNH.ART.585_-_Chrysanthemum_sinense_-_Kawahara_Keiga_-_Siebold_Collection_-_pencil_drawing_-_water_colour.jpeg/800px-Naturalis_Biodiversity_Center_-_RMNH.ART.585_-_Chrysanthemum_sinense_-_Kawahara_Keiga_-_Siebold_Collection_-_pencil_drawing_-_water_colour.jpeg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Audubon_carolina_pigeon.jpg/800px-Audubon_carolina_pigeon.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/John_James_Audubon_-_Snowy_Owl_-_Google_Art_Project.jpg/800px-John_James_Audubon_-_Snowy_Owl_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Haeckel_Orchidae.jpg/800px-Haeckel_Orchidae.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Haeckel_Trochilidae.jpg/800px-Haeckel_Trochilidae.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Redout%C3%A9_-_Rosa_centifolia_foliacea.jpg/800px-Redout%C3%A9_-_Rosa_centifolia_foliacea.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Albrecht_D%C3%BCrer_-_The_Large_Piece_of_Turf%2C_1503_-_Google_Art_Project.jpg/800px-Albrecht_D%C3%BCrer_-_The_Large_Piece_of_Turf%2C_1503_-_Google_Art_Project.jpg"
+      ]
+    },
+    "Pop Art (Warhol/Lichtenstein)": {
+      "search_terms": ["Pop Art", "Andy Warhol", "Roy Lichtenstein", "bold colors", "Ben-Day dots", "screen print", "comic style", "halftone"],
+      "description": "Bold, flat colors with heavy black outlines, Ben-Day dot patterns, comic-book aesthetics, high contrast, and the repetitive multi-panel look of Warhol silkscreens",
+      "prompt_modifier": "Apply bold Pop Art aesthetics: flat areas of saturated primary and secondary colors, heavy black outlines, Ben-Day dot halftone patterns, comic-book style rendering. Consider a Warhol-style grid of the same animal in different bold color combinations (magenta, cyan, yellow, lime green). Use strong graphic contrast with minimal gradients. Include speech bubbles or onomatopoeia text elements if appropriate. The style should feel like a screen-printed poster or comic panel.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/1/1f/As_I_Opened_Fire_by_Roy_Lichtenstein.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/a/a5/Drowning_Girl.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/7/74/Whaam%21.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/1/1a/Warhol-Campbell_Soup-1-screenprint-1968.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/3/38/BrightlyColoredBird.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/4/40/Shot_Marilyns.jpg"
+      ]
+    },
+    "Pixel Art / 8-Bit": {
+      "search_terms": ["pixel art", "8-bit", "16-bit", "retro gaming", "sprite", "NES", "SNES", "voxel", "chiptune aesthetic"],
+      "description": "Deliberately low-resolution pixel grid aesthetic with limited color palettes, clean pixel placement, dithering patterns, and nostalgic retro gaming charm",
+      "prompt_modifier": "Create authentic pixel art with a visible pixel grid, limited color palette (16-32 colors maximum), careful anti-aliasing through manual pixel placement, and classic dithering techniques for shading. Use a retro gaming aesthetic reminiscent of 16-bit era SNES or Sega Genesis sprites. The animal should be rendered as a charming game character sprite with expressive features despite pixel limitations. Include a simple background with pixel-perfect elements. Maintain clean, deliberate pixel placement -- every pixel should be intentional.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/5/50/NES_Super_Mario_Bros.png",
+        "https://upload.wikimedia.org/wikipedia/en/3/32/Super_Mario_World_game_screenshot.png",
+        "https://upload.wikimedia.org/wikipedia/en/b/ba/Stardew_Valley_gameplay.png",
+        "https://upload.wikimedia.org/wikipedia/en/1/17/Celeste_box_art_full.png",
+        "https://upload.wikimedia.org/wikipedia/en/4/4a/Undertale_cover.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/a/a8/Shovel_Knight_cover_art.png"
+      ]
+    },
+    "Art Nouveau": {
+      "search_terms": ["Art Nouveau", "Alphonse Mucha", "organic curves", "flowing lines", "decorative", "Jugendstil", "botanical ornament", "stained glass"],
+      "description": "Elegant flowing organic lines, decorative floral and botanical motifs, sinuous curves, ornamental borders, and the distinctive poster style of Alphonse Mucha with rich yet harmonious color palettes",
+      "prompt_modifier": "Render in Art Nouveau style with flowing, sinuous organic lines, ornamental floral borders and frames, elegant decorative patterns, and the distinctive Alphonse Mucha poster aesthetic. Use a harmonious palette of gold, olive green, dusty rose, cream, and muted jewel tones. Frame the animal subject within ornate circular or arched decorative borders with intertwining botanical motifs. Include characteristic whiplash curves, stylized hair/fur rendered as flowing decorative lines, and a sense of elegant flatness with subtle shading.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Alfons_Mucha_-_1896_-_Autumn.jpg/800px-Alfons_Mucha_-_1896_-_Autumn.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Alfons_Mucha_-_1896_-_Spring.jpg/800px-Alfons_Mucha_-_1896_-_Spring.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Alfons_Mucha_-_F._Champenois_Imprimeur-%C3%89diteur.jpg/800px-Alfons_Mucha_-_F._Champenois_Imprimeur-%C3%89diteur.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Alfons_Mucha_-_1898_-_Dance.jpg/800px-Alfons_Mucha_-_1898_-_Dance.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Alfons_Mucha_-_Job_cigarettes_1.jpg/800px-Alfons_Mucha_-_Job_cigarettes_1.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Klimt_-_Der_Kuss.jpeg/800px-Klimt_-_Der_Kuss.jpeg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Alfons_Mucha_-_Zodiac.jpg/800px-Alfons_Mucha_-_Zodiac.jpg"
+      ]
+    },
+    "Hyperrealism": {
+      "search_terms": ["hyperrealism", "photorealism", "ultra-realistic", "photographic detail", "macro photography", "studio portrait", "trompe l'oeil"],
+      "description": "Extremely detailed, photo-realistic rendering that surpasses photographic quality. Every hair, reflection, and texture rendered with obsessive precision. Often indistinguishable from high-end photography",
+      "prompt_modifier": "Achieve hyperrealistic rendering with extraordinary attention to detail: individual hairs and whiskers with subsurface scattering, realistic eye reflections showing the environment, accurate skin/fur textures at near-macro level, precise ambient occlusion and global illumination. The result should be indistinguishable from a high-end studio photograph taken with a medium format camera. Include subtle imperfections that add realism. Use professional studio lighting with soft key light, fill light, and rim light separation.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/BrigitteMarchioniniHyperrealism.jpg/800px-BrigitteMarchioniniHyperrealism.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Meisje_met_de_parel.jpg/800px-Meisje_met_de_parel.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Giotto_-_Scrovegni_-_-18-_-_Adoration_of_the_Magi.jpg/800px-Giotto_-_Scrovegni_-_-18-_-_Adoration_of_the_Magi.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Rosa_Bonheur_-_Ploughing_in_the_Nivernais_-_1849.jpg/1280px-Rosa_Bonheur_-_Ploughing_in_the_Nivernais_-_1849.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Rosa_Bonheur_-_The_Horse_Fair_-_Google_Art_Project.jpg/1280px-Rosa_Bonheur_-_The_Horse_Fair_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Edwin_Landseer_-_Monarch_of_the_Glen_-_Google_Art_Project.jpg/800px-Edwin_Landseer_-_Monarch_of_the_Glen_-_Google_Art_Project.jpg"
+      ]
+    },
+    "Ukiyo-e (Japanese Woodblock)": {
+      "search_terms": ["Ukiyo-e", "Japanese woodblock", "Hokusai", "Hiroshige", "Edo period", "woodcut print", "Japanese art", "floating world"],
+      "description": "Traditional Japanese woodblock print aesthetic with flat color areas, bold outlines, decorative patterns, asymmetric composition, and the distinctive visual language of Edo-period masters like Hokusai and Hiroshige",
+      "prompt_modifier": "Render in authentic Ukiyo-e woodblock print style: flat areas of color with no gradients (or subtle bokashi gradients), bold black outlines of varying thickness, decorative textile-like patterns, asymmetric composition, and the distinctive Edo-period color palette of indigo, vermillion, black, ochre, and pale blue. Include characteristic elements like decorative cartouches with Japanese-style text placement, stylized waves or clouds, and the distinctive treatment of fur/feathers as rhythmic linear patterns. The overall feel should resemble a hand-carved and printed woodblock.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/1280px-Tsunami_by_hokusai_19th_century.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Hiroshige_-_Evening_Snow_at_Kanbara_-_Google_Art_Project.jpg/800px-Hiroshige_-_Evening_Snow_at_Kanbara_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Hiroshige_-_Sudden_Shower_over_Shin-%C5%8Chashi_bridge_and_Atake.jpg/800px-Hiroshige_-_Sudden_Shower_over_Shin-%C5%8Chashi_bridge_and_Atake.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hokusai_1760-1849_Ocean_waves.jpg/800px-Hokusai_1760-1849_Ocean_waves.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hiroshige_Full_moon_over_a_mountain_landscape.jpg/800px-Hiroshige_Full_moon_over_a_mountain_landscape.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Kuniyoshi_Utagawa%2C_Cats_%282%29.jpg/800px-Kuniyoshi_Utagawa%2C_Cats_%282%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Hokusai-sketches---hokusai-manga-vol6-crop.jpg/800px-Hokusai-sketches---hokusai-manga-vol6-crop.jpg"
+      ]
+    },
+    "Dark Fantasy / Gothic": {
+      "search_terms": ["dark fantasy", "gothic art", "dark art", "macabre", "medieval", "Beksinski", "dark surrealism", "occult", "eldritch"],
+      "description": "Moody, atmospheric dark fantasy with rich shadows, muted desaturated palettes punctuated by deep reds and golds, ornate medieval or Victorian gothic elements, and an air of mystical darkness",
+      "prompt_modifier": "Create a dark fantasy atmosphere with deep, moody shadows and dramatic low-key lighting. Use a desaturated palette dominated by blacks, dark purples, deep crimsons, tarnished golds, and midnight blues. Include gothic architectural elements (arches, gargoyles, stained glass), ornate medieval decorative motifs, mystical symbols, and atmospheric effects like mist, candlelight, or ethereal glow. The animal should appear noble and slightly otherworldly, as if it were a familiar or magical creature from a dark fairy tale. Render textures with rich detail -- worn stone, aged leather, burnished metal.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Henry_Fuseli_-_The_Nightmare.JPG/800px-Henry_Fuseli_-_The_Nightmare.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gustave_Dor%C3%A9_-_Dante_Alighieri_-_Inferno_-_Plate_9_%28Canto_III_-_Charon%29.jpg/800px-Gustave_Dor%C3%A9_-_Dante_Alighieri_-_Inferno_-_Plate_9_%28Canto_III_-_Charon%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg/800px-Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg/1280px-Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg/800px-Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Gustave_Dor%C3%A9_-_The_Raven_-_plate_1.jpg/800px-Gustave_Dor%C3%A9_-_The_Raven_-_plate_1.jpg"
+      ]
+    },
+    "Impressionist": {
+      "search_terms": ["Impressionism", "Monet", "Renoir", "Degas", "plein air", "visible brushstrokes", "light and color", "en plein air", "Cezanne"],
+      "description": "Visible, expressive brushstrokes capturing light and atmosphere. Vibrant broken color applied in dabs and strokes, soft edges, emphasis on natural light effects, and the fleeting quality of a moment captured outdoors",
+      "prompt_modifier": "Paint in Impressionist style with visible, confident brushstrokes that capture light and movement. Use broken color technique -- placing dabs of pure color side by side to mix optically. Emphasize the effects of natural light: dappled sunlight, reflections on water, atmospheric haze. Keep edges soft and suggestive rather than hard-defined. Use a vibrant palette of complementary colors with lavenders, warm yellows, soft greens, and reflected light in shadows. The overall effect should feel luminous, spontaneous, and full of life -- as if painted en plein air.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Chicago.jpg/1280px-Claude_Monet_-_Water_Lilies_-_1906%2C_Chicago.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/1280px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Pierre-Auguste_Renoir_-_Luncheon_of_the_Boating_Party_-_Google_Art_Project.jpg/1280px-Pierre-Auguste_Renoir_-_Luncheon_of_the_Boating_Party_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Pierre-Auguste_Renoir_-_Bal_du_moulin_de_la_Galette.jpg/1280px-Pierre-Auguste_Renoir_-_Bal_du_moulin_de_la_Galette.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Claude_Monet%2C_Saint-Georges_majeur_au_cr%C3%A9puscule.jpg/1280px-Claude_Monet%2C_Saint-Georges_majeur_au_cr%C3%A9puscule.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Monet_-_Im_Garten_-_1895.jpg/800px-Monet_-_Im_Garten_-_1895.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Pierre-Auguste_Renoir_-_Girl_with_a_Cat_%28Julie_Manet%29_-_Google_Art_Project.jpg/800px-Pierre-Auguste_Renoir_-_Girl_with_a_Cat_%28Julie_Manet%29_-_Google_Art_Project.jpg"
+      ]
+    },
+    "Baroque": {
+      "search_terms": ["Baroque", "Caravaggio", "Rembrandt", "Rubens", "tenebrism", "dramatic lighting", "rich detail", "grandeur", "Dutch Golden Age"],
+      "description": "Dramatic tenebrism with deep shadows and brilliant highlights, rich saturated colors, dynamic compositions with diagonal movement, ornate detail, and the theatrical grandeur of the Baroque masters",
+      "prompt_modifier": "Apply Baroque dramatic lighting with intense tenebrism: a single strong light source creating deep, velvety shadows and brilliant highlights on the subject. Use rich, saturated colors -- deep crimsons, royal blues, burnished golds, and warm flesh tones. Compose with dynamic diagonal movement and dramatic gesture. Include ornate period details: velvet fabrics, jeweled collars, feathered accessories. Render textures with Rembrandt-like impasto for highlights and translucent glazes for shadows. The animal should appear noble and theatrically lit, as if posed for a grand court portrait.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Rembrandt_-_The_Anatomy_Lesson_of_Dr_Nicolaes_Tulp.jpg/1280px-Rembrandt_-_The_Anatomy_Lesson_of_Dr_Nicolaes_Tulp.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Rembrandt_-_The_Night_Watch_-_Google_Art_Project.jpg/1280px-Rembrandt_-_The_Night_Watch_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Caravaggio_-_Supper_at_Emmaus.jpg/1280px-Caravaggio_-_Supper_at_Emmaus.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Judith_Beheading_Holofernes-Caravaggio_%28c.1598-9%29.jpg/800px-Judith_Beheading_Holofernes-Caravaggio_%28c.1598-9%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Rembrandt_Harmensz._van_Rijn_007.jpg/800px-Rembrandt_Harmensz._van_Rijn_007.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Peter_Paul_Rubens_-_The_Tiger_Hunt_-_WGA20399.jpg/1280px-Peter_Paul_Rubens_-_The_Tiger_Hunt_-_WGA20399.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Paulus_Potter_-_The_Young_Bull.jpg/1280px-Paulus_Potter_-_The_Young_Bull.jpg"
+      ]
+    },
+    "Surrealist (Dali)": {
+      "search_terms": ["Surrealism", "Salvador Dali", "Rene Magritte", "dreamlike", "melting", "impossible", "subconscious", "bizarre", "juxtaposition"],
+      "description": "Dreamlike impossible scenes with melting forms, unexpected juxtapositions, hyperreal rendering of impossible subjects, vast barren landscapes, and the uncanny logic of the subconscious mind",
+      "prompt_modifier": "Create a Surrealist composition in the style of Salvador Dali: hyperrealistically rendered impossible scenes with melting or morphing forms, unexpected scale juxtapositions, and dreamlike logic. Place the animal in a vast, barren Dali-esque landscape with long dramatic shadows and distant horizons. Include signature Surrealist elements: elongated limbs or shadows, floating objects, impossible architecture, reflective surfaces, or metamorphosing forms. Maintain photorealistic rendering technique applied to impossible subjects. The mood should be uncanny, beautiful, and unsettling -- as if from a vivid dream.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/e/e5/Magritte_TheSonOfMan.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/1/1c/Magritte_Golconde.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/b/be/Swans_Reflecting_Elephants.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/3/3c/Nothingness.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/2/21/The_Elephants.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/7/7c/Dali_Atomicus_09633u.jpg"
+      ]
+    },
+    "Minimalist Line Art": {
+      "search_terms": ["minimalist", "line art", "continuous line", "single line", "minimal", "contour drawing", "pen and ink", "simple", "elegant"],
+      "description": "Clean, elegant single or few continuous lines on white or solid-color backgrounds. Maximum expression with minimum strokes. The beauty of restraint and negative space",
+      "prompt_modifier": "Create minimalist line art with the absolute fewest lines needed to capture the animal's essential form and character. Use clean, confident continuous lines of consistent or elegantly varying weight on a pure white or soft solid-color background. Embrace negative space -- what is left out is as important as what is drawn. No shading, no color fills, no textures -- just pure line. The drawing should feel effortless and immediate, like a master's quick sketch that captures the entire spirit of the animal in a single flowing gesture. Think Picasso's single-line animal drawings or Matisse's paper cutout simplicity.",
+      "reference_urls": [
+        "https://upload.wikimedia.org/wikipedia/en/b/b9/Picasso_bull_plates.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/0/0a/Pablo_Picasso%2C_1917-18%2C_Portrait_d%27Olga_dans_un_fauteuil_%28Olga_in_an_Armchair%29%2C_oil_on_canvas%2C_130_x_88.8_cm%2C_Mus%C3%A9e_Picasso%2C_Paris%2C_France.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/2/2e/La_danse_%28I%29_by_Matisse.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/4/4d/Matisse-Icare.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Paul_Klee_Cat_and_Bird.jpg/800px-Paul_Klee_Cat_and_Bird.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Keith_Haring_1986.jpg/800px-Keith_Haring_1986.jpg"
+      ]
+    }
+  }
+}

@@ -1,18 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold: #C8963E;
-  --color-gold-light: #e0b86a;
+  --color-gold: #C9A96E;
+  --color-gold-light: #dfc497;
   --color-gold-dark: #a07830;
-  --color-bg: #0A0A0A;
-  --color-bg-card: #141414;
+  --color-bg: #000000;
+  --color-bg-card: #111111;
   --color-bg-elevated: #1a1a1a;
-  --color-text-primary: #F5E6CC;
-  --color-text-secondary: #a09080;
-  --color-border: #2a2a2a;
-  --color-accent-umber: #3D2B1F;
-  --color-accent-red: #8B2500;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-text-primary: #F5F5F7;
+  --color-text-secondary: #86868b;
+  --color-border: #1d1d1f;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
 }
 
 html {
@@ -23,6 +22,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -30,9 +31,16 @@ body {
   color: var(--color-bg);
 }
 
-/* Lightbox overlay */
-.lightbox-overlay {
-  animation: fadeIn 0.2s ease-out;
+/* Scroll reveal animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
@@ -40,11 +48,102 @@ body {
   to { opacity: 1; }
 }
 
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out forwards;
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #C9A96E 0%, #E8D5A8 50%, #C9A96E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(17, 17, 17, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Smooth image hover */
+.img-hover {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-hover:hover {
+  transform: scale(1.03);
+}
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 110, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+/* Lightbox overlay */
+.lightbox-overlay {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* CTA button glow */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #C9A96E, #E8D5A8, #C9A96E);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  filter: blur(12px);
+}
+
+.btn-glow:hover::after {
+  opacity: 0.4;
 }

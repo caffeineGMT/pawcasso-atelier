@@ -4,7 +4,7 @@
       "id": "old_masters",
       "name": "Old Masters, New Paws",
       "description": "Classical art reimagined with animals",
-      "day_of_week": ["monday", "sunday"]
+      "day_of_week": ["saturday"]
     },
     {
       "id": "cinema",
@@ -15,32 +15,59 @@
     {
       "id": "daily_portrait",
       "name": "The Daily Portrait",
-      "description": "Stunning standalone animal art",
-      "day_of_week": ["monday", "friday"]
+      "description": "Stunning standalone animal art with style reference matching",
+      "day_of_week": ["monday"]
     },
     {
       "id": "fantasy",
       "name": "What Breed Is This?",
-      "description": "Fantasy/mythical hybrid animals",
-      "day_of_week": ["tuesday"]
+      "description": "Fantasy/mythical hybrid animals"
     },
     {
       "id": "historical",
       "name": "Pets Through Time",
-      "description": "Animals in historical eras",
-      "day_of_week": ["saturday"]
+      "description": "Animals in historical eras"
     },
     {
       "id": "tiny_worlds",
       "name": "Tiny Worlds",
       "description": "Miniature/macro scenes with animals",
-      "day_of_week": ["wednesday", "saturday"]
+      "day_of_week": ["wednesday"]
     },
     {
-      "id": "community",
-      "name": "Your Pet, Reimagined",
-      "description": "Community submissions reimagined",
-      "day_of_week": ["wednesday"]
+      "id": "emoji_moods",
+      "name": "Mood Pack",
+      "description": "Emoji/sticker sets showing 9 expressive moods of a single animal breed in a 3x3 grid",
+      "format": "carousel_or_single"
+    },
+    {
+      "id": "zodiac",
+      "name": "Zodiac Portraits",
+      "description": "12 zodiac signs as artistic animal figures, each in a unique art style",
+      "day_of_week": ["sunday"],
+      "format": "series"
+    },
+    {
+      "id": "grumpy_cuties",
+      "name": "Grumpy Cuties",
+      "description": "Pixar/DreamWorks-style chunky 3D animals with attitude. Round, fluffy, grumpy expression, arms crossed, vivid colors on clean studio background. Grid format (4x3) or single character.",
+      "day_of_week": ["tuesday"],
+      "format": "single_or_grid",
+      "style_ref": "Search Pinterest for 'cute grumpy 3D animals Pixar style'"
+    },
+    {
+      "id": "felt_friends",
+      "name": "Felt Friends",
+      "description": "Needle-felted/wool stop-motion style animals (Aardman Animations aesthetic). Woolly texture, glossy eyes, felt backgrounds, tiny knitted accessories. Heartwarming and cozy.",
+      "day_of_week": ["friday"],
+      "format": "single",
+      "style_ref": "Search Pinterest for 'needle felted animal art wool puppet'"
+    },
+    {
+      "id": "animated",
+      "name": "Living Portraits",
+      "description": "Short animated videos (5-10 sec) of animals in various animation styles",
+      "format": "video"
     }
   ],
   "art_styles": [
@@ -53,21 +80,28 @@
     "Art Nouveau",
     "Hyperrealism",
     "Ukiyo-e (Japanese Woodblock)",
-    "Dark Fantasy / Gothic"
+    "Dark Fantasy / Gothic",
+    "Impressionist",
+    "Baroque",
+    "Surrealist (Dali)",
+    "Minimalist Line Art",
+    "Pixar 3D Chunky",
+    "Needle Felt / Stop-Motion"
   ],
   "animals": [
     "duck", "cat", "dog", "owl", "fox", "lion", "wolf", "elephant",
     "hummingbird", "pug", "corgi", "shiba inu", "persian cat", "parrot",
     "hamster", "frog", "mouse", "hedgehog", "snow leopard", "turtle",
     "dalmatian", "golden retriever", "bulldog", "barn owl", "eagle",
-    "penguin", "flamingo", "raccoon", "red panda", "otter"
+    "penguin", "flamingo", "raccoon", "red panda", "otter",
+    "border collie", "husky", "dachshund", "siamese cat", "rabbit"
   ],
   "caption_tone": "witty, warm, slightly irreverent",
   "caption_structure": "HOOK (1 sentence) → CONTEXT (1-2 sentences) → ENGAGEMENT PROMPT (question/CTA)",
   "hashtags": {
     "branded": ["#PawcassoAtelier", "#PawcassoDaily", "#PaintedByPawcasso"],
-    "broad": ["#DigitalArt", "#ArtOfTheDay", "#AnimalArt", "#PetPortrait", "#AIArt", "#ArtistsOfInstagram", "#AnimalLovers"],
-    "niche": ["#AIGeneratedArt", "#AnimalPortrait", "#PetIllustration", "#FantasyArt", "#ConceptArt", "#DigitalIllustration", "#SurrealArt", "#FantasyCreature", "#RenaissanceArt", "#CyberPunkArt"]
+    "broad": ["#DigitalArt", "#ArtOfTheDay", "#AnimalArt", "#PetPortrait", "#ArtistsOfInstagram", "#AnimalLovers"],
+    "niche": ["#AnimalPortrait", "#PetIllustration", "#FantasyArt", "#ConceptArt", "#DigitalIllustration", "#SurrealArt", "#FantasyCreature", "#RenaissanceArt", "#CyberPunkArt", "#NeedleFelt", "#StopMotion", "#PixarStyle"]
   },
   "posting_times": {
     "weekday": "11:00 ET / 08:00 PT",

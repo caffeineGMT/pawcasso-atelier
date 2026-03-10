@@ -16,28 +16,35 @@
       "name": "Daily 8:00 AM PT",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
-        "jsCode": "// Content Concept Generator\n// Picks today's pillar, style, animal, and builds a creative prompt\n\nconst calendar = {\n  pillars: [\n    { id: 'old_masters', name: 'Old Masters, New Paws', prompts: [\n      'Reimagine \"{painting}\" by {artist} but with a {animal} as the subject',\n      'A {animal} posed exactly like the subject in \"{painting}\" by {artist}',\n    ]},\n    { id: 'cinema', name: 'Cinema Unleashed', prompts: [\n      'A {animal} recreating the iconic {movie} movie poster',\n      'Movie poster parody of {movie} starring a {animal}',\n    ]},\n    { id: 'daily_portrait', name: 'The Daily Portrait', prompts: [\n      'A stunning artistic portrait of a {animal} in {setting}',\n      'Majestic {animal} portrait with dramatic lighting',\n    ]},\n    { id: 'fantasy', name: 'What Breed Is This?', prompts: [\n      'A mythical hybrid creature: half {animal}, half {creature2}, in a {setting}',\n      'A {animal} with magical {feature} in a fantasy landscape',\n    ]},\n    { id: 'historical', name: 'Pets Through Time', prompts: [\n      'A {animal} dressed as a {historical_figure} in {era} era',\n      'A {animal} in {era} period clothing and setting',\n    ]},\n    { id: 'tiny_worlds', name: 'Tiny Worlds', prompts: [\n      'A {animal} running a tiny {shop_type} in a miniature world',\n      'A {animal} in a whimsical diorama-like {scene}',\n    ]},\n  ],\n  styles: [\n    'Renaissance Oil Painting', 'Studio Ghibli / Anime', 'Cyberpunk Neon',\n    'Watercolor Botanical', 'Pop Art (Warhol/Lichtenstein)', 'Pixel Art / 8-Bit',\n    'Art Nouveau', 'Hyperrealism', 'Ukiyo-e (Japanese Woodblock)', 'Dark Fantasy / Gothic'\n  ],\n  animals: [\n    'duck', 'cat', 'dog', 'owl', 'fox', 'lion', 'wolf', 'elephant',\n    'hummingbird', 'pug', 'corgi', 'shiba inu', 'persian cat', 'parrot',\n    'hamster', 'frog', 'mouse', 'hedgehog', 'snow leopard', 'turtle',\n    'dalmatian', 'golden retriever', 'bulldog', 'barn owl', 'eagle',\n    'penguin', 'flamingo', 'raccoon', 'red panda', 'otter'\n  ],\n  paintings: [\n    { title: 'Girl with a Pearl Earring', artist: 'Vermeer' },\n    { title: 'The Birth of Venus', artist: 'Botticelli' },\n    { title: 'American Gothic', artist: 'Grant Wood' },\n    { title: 'The Starry Night', artist: 'Van Gogh' },\n    { title: 'Mona Lisa', artist: 'da Vinci' },\n    { title: 'The Scream', artist: 'Munch' },\n    { title: 'The Great Wave', artist: 'Hokusai' },\n  ],\n  movies: [\n    'The Matrix', 'Jaws', 'Titanic', 'Scarface', 'Star Wars',\n    'The Godfather', 'Jurassic Park', 'Pulp Fiction', 'Forrest Gump',\n    'The Shining', 'E.T.', 'Back to the Future'\n  ],\n  eras: [\n    { era: 'Ancient Egyptian', figure: 'pharaoh' },\n    { era: 'Medieval', figure: 'knight' },\n    { era: 'Renaissance', figure: 'nobleman' },\n    { era: 'Feudal Japanese', figure: 'samurai' },\n    { era: '1920s Art Deco', figure: 'jazz singer' },\n    { era: 'Victorian', figure: 'detective' },\n    { era: '1960s Space Age', figure: 'astronaut' },\n  ],\n  shops: ['ramen shop', 'bakery', 'bookshop', 'flower shop', 'coffee cart', 'tailor'],\n  scenes: ['mushroom forest library', 'treehouse village', 'cloud city', 'underwater coral palace'],\n  features: ['butterfly wings', 'crystalline antlers', 'bioluminescent fur', 'flower crown that blooms'],\n  creatures: ['phoenix', 'dragon', 'unicorn', 'griffin'],\n  settings: ['moonlit forest', 'golden hour savanna', 'misty mountain peak', 'rainy Tokyo street', 'cherry blossom garden']\n};\n\nconst pick = (arr) => arr[Math.floor(Math.random() * arr.length)];\nconst dayOfWeek = new Date().getDay(); // 0=Sun, 1=Mon, ...\n\n// Map day to pillar\nconst pillarMap = [0, 2, 3, 5, 1, 2, 4]; // Sun=old_masters, Mon=portrait, Tue=fantasy, Wed=tiny, Thu=cinema, Fri=portrait, Sat=historical\nconst pillar = calendar.pillars[pillarMap[dayOfWeek]];\nconst style = pick(calendar.styles);\nconst animal = pick(calendar.animals);\n\n// Build the prompt template\nlet promptTemplate = pick(pillar.prompts);\nlet prompt = promptTemplate\n  .replace('{animal}', animal)\n  .replace('{painting}', pick(calendar.paintings).title)\n  .replace('{artist}', pick(calendar.paintings).artist)\n  .replace('{movie}', pick(calendar.movies))\n  .replace('{era}', pick(calendar.eras).era)\n  .replace('{historical_figure}', pick(calendar.eras).figure)\n  .replace('{shop_type}', pick(calendar.shops))\n  .replace('{scene}', pick(calendar.scenes))\n  .replace('{feature}', pick(calendar.features))\n  .replace('{creature2}', pick(calendar.creatures))\n  .replace('{setting}', pick(calendar.settings));\n\nconst fullPrompt = `Create an artistic image in ${style} style: ${prompt}. The image should be stunning, high quality, suitable for an Instagram post. Square format (1:1 ratio, 1080x1080 or larger). Make it visually striking and shareable.`;\n\nconst today = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    date: today,\n    pillar: pillar.name,\n    style: style,\n    animal: animal,\n    concept: prompt,\n    manus_prompt: fullPrompt,\n    attempt: 1,\n    max_attempts: 3\n  }\n}];"
+        "jsCode": "// Pawcasso Atelier \u2014 Content Concept Generator v2\n// Expanded with: emoji moods, zodiac, animated videos, style references\n\nconst calendar = {\n  pillars: [\n    { id: 'old_masters', name: 'Old Masters, New Paws', type: 'image', prompts: [\n      'Reimagine \"{painting}\" by {artist} but with a {animal} as the subject, wearing period-appropriate attire',\n      'A {animal} posed exactly like the subject in \"{painting}\" by {artist}, authentic style with craquelure texture',\n    ]},\n    { id: 'cinema', name: 'Cinema Unleashed', type: 'image', prompts: [\n      'A {animal} recreating the iconic {movie} movie poster, cinematic and dramatic',\n      'Movie poster parody of {movie} starring a {animal}, full poster layout with title text',\n    ]},\n    { id: 'daily_portrait', name: 'The Daily Portrait', type: 'image', prompts: [\n      'A stunning artistic portrait of a {animal} in {setting}, museum-quality fine art',\n      'Majestic {animal} portrait with dramatic chiaroscuro lighting, rich warm tones',\n    ]},\n    { id: 'fantasy', name: 'What Breed Is This?', type: 'image', prompts: [\n      'A mythical hybrid creature: half {animal}, half {creature2}, in a {setting}, fantasy illustration',\n      'A {animal} with magical {feature} in a fantasy landscape, ethereal and dreamlike',\n    ]},\n    { id: 'historical', name: 'Pets Through Time', type: 'image', prompts: [\n      'A {animal} dressed as a {historical_figure} in {era} era, historically accurate setting and costume',\n      'A {animal} in {era} period clothing posing for a formal portrait, vintage atmosphere',\n    ]},\n    { id: 'tiny_worlds', name: 'Tiny Worlds', type: 'image', prompts: [\n      'A {animal} running a tiny {shop_type} in a miniature world, incredible detail, warm lighting',\n      'A {animal} in a whimsical diorama-like {scene}, tilt-shift miniature feel',\n    ]},\n    { id: 'emoji_moods', name: 'Mood Pack', type: 'image', prompts: [\n      'Create a set of 9 expressive emoji-style illustrations of a {animal}, arranged in a 3x3 grid. Each emoji shows a different mood: happy, sleepy, surprised, guilty, love-eyes, grumpy, cool with sunglasses, crying, laughing. Style: cute but artistic, clean illustration with warm tones on dark background (#0a0a0a). Each emoji in a circle.',\n      'Create a 3x3 grid of 9 adorable {animal} emoji faces showing different expressions: excited, bored, shocked, mischievous, dreamy, hangry, zen, confused, zoomies-mode. Artistic sticker style, warm palette on dark background (#0a0a0a).',\n    ]},\n    { id: 'zodiac', name: 'Zodiac Portraits', type: 'image', prompts: [\n      'A majestic {zodiac_animal} representing the {zodiac_sign} zodiac sign, rendered in {style} style. The zodiac symbol subtly incorporated into the composition. Dark background (#0a0a0a), stunning artistic quality, square format.',\n    ]},\n    { id: 'animated', name: 'Living Portraits', type: 'video', prompts: [\n      'Create a short animated video (5-10 seconds) of a {animal} in {animation_style} style: {animation_scene}. Seamless loop if possible. Square format.',\n      'Animate a {animal} doing {animation_action} in {animation_style} style. Short clip, 5-10 seconds, charming and shareable. Square format.',\n    ]},\n  ],\n  styles: [\n    'Renaissance Oil Painting', 'Studio Ghibli / Anime', 'Cyberpunk Neon',\n    'Watercolor Botanical', 'Pop Art (Warhol/Lichtenstein)', 'Pixel Art / 8-Bit',\n    'Art Nouveau', 'Hyperrealism', 'Ukiyo-e (Japanese Woodblock)', 'Dark Fantasy / Gothic',\n    'Impressionist', 'Baroque', 'Surrealist (Dali)', 'Minimalist Line Art'\n  ],\n  animals: [\n    'duck', 'cat', 'dog', 'owl', 'fox', 'lion', 'wolf', 'elephant',\n    'hummingbird', 'pug', 'corgi', 'shiba inu', 'persian cat', 'parrot',\n    'hamster', 'frog', 'mouse', 'hedgehog', 'snow leopard', 'turtle',\n    'dalmatian', 'golden retriever', 'bulldog', 'barn owl', 'eagle',\n    'penguin', 'flamingo', 'raccoon', 'red panda', 'otter',\n    'border collie', 'husky', 'dachshund', 'siamese cat', 'rabbit'\n  ],\n  paintings: [\n    { title: 'Girl with a Pearl Earring', artist: 'Vermeer' },\n    { title: 'The Birth of Venus', artist: 'Botticelli' },\n    { title: 'American Gothic', artist: 'Grant Wood' },\n    { title: 'The Starry Night', artist: 'Van Gogh' },\n    { title: 'Mona Lisa', artist: 'da Vinci' },\n    { title: 'The Scream', artist: 'Munch' },\n    { title: 'The Great Wave', artist: 'Hokusai' },\n    { title: 'The Persistence of Memory', artist: 'Dali' },\n    { title: 'Whistlers Mother', artist: 'Whistler' },\n    { title: 'The Son of Man', artist: 'Magritte' },\n    { title: 'Nighthawks', artist: 'Edward Hopper' },\n    { title: 'A Sunday on La Grande Jatte', artist: 'Seurat' },\n  ],\n  movies: [\n    'The Matrix', 'Jaws', 'Titanic', 'Scarface', 'Star Wars',\n    'The Godfather', 'Jurassic Park', 'Pulp Fiction', 'Forrest Gump',\n    'The Shining', 'E.T.', 'Back to the Future', 'Blade Runner',\n    'Indiana Jones', 'The Wizard of Oz', 'Ghostbusters', 'Top Gun',\n    'Harry Potter', 'Lord of the Rings', 'The Lion King'\n  ],\n  eras: [\n    { era: 'Ancient Egyptian', figure: 'pharaoh' },\n    { era: 'Medieval', figure: 'knight' },\n    { era: 'Renaissance', figure: 'nobleman' },\n    { era: 'Feudal Japanese', figure: 'samurai' },\n    { era: '1920s Art Deco', figure: 'jazz singer' },\n    { era: 'Victorian', figure: 'detective' },\n    { era: '1960s Space Age', figure: 'astronaut' },\n    { era: 'Ancient Roman', figure: 'senator' },\n    { era: 'Roaring Twenties', figure: 'flapper' },\n    { era: 'Wild West', figure: 'sheriff' },\n  ],\n  zodiac: [\n    { sign: 'Aries', animal: 'ram', style: 'Renaissance Oil Painting', dates: '03-21 to 04-19' },\n    { sign: 'Taurus', animal: 'bull', style: 'Baroque', dates: '04-20 to 05-20' },\n    { sign: 'Gemini', animal: 'twin foxes', style: 'Pop Art', dates: '05-21 to 06-20' },\n    { sign: 'Cancer', animal: 'crab', style: 'Studio Ghibli / Anime', dates: '06-21 to 07-22' },\n    { sign: 'Leo', animal: 'lion', style: 'Art Nouveau', dates: '07-23 to 08-22' },\n    { sign: 'Virgo', animal: 'white dove', style: 'Watercolor Botanical', dates: '08-23 to 09-22' },\n    { sign: 'Libra', animal: 'twin swans', style: 'Impressionist', dates: '09-23 to 10-22' },\n    { sign: 'Scorpio', animal: 'scorpion', style: 'Dark Fantasy / Gothic', dates: '10-23 to 11-21' },\n    { sign: 'Sagittarius', animal: 'horse with archer symbolism', style: 'Hyperrealism', dates: '11-22 to 12-21' },\n    { sign: 'Capricorn', animal: 'mountain goat', style: 'Ukiyo-e (Japanese Woodblock)', dates: '12-22 to 01-19' },\n    { sign: 'Aquarius', animal: 'mystical seahorse', style: 'Cyberpunk Neon', dates: '01-20 to 02-18' },\n    { sign: 'Pisces', animal: 'koi fish', style: 'Ukiyo-e (Japanese Woodblock)', dates: '02-19 to 03-20' },\n  ],\n  animation_styles: [\n    'Pixar/Disney 3D', 'Studio Ghibli hand-drawn', 'watercolor animation',\n    'stop-motion claymation', 'retro cartoon (Looney Tunes)', 'anime',\n    'paper cut-out animation', 'oil painting come to life'\n  ],\n  animation_scenes: [\n    'slowly blinking and looking around curiously',\n    'knocking something off a table with a paw, looking smug',\n    'chasing its own tail in circles',\n    'falling asleep gradually, head drooping',\n    'ears perking up hearing something offscreen',\n    'shaking off water in slow motion',\n    'trying to catch a butterfly',\n  ],\n  animation_actions: [\n    'yawning dramatically', 'doing a happy dance', 'sneaking across a room',\n    'being startled by a cucumber', 'stretching luxuriously', 'tilting head in confusion',\n  ],\n  shops: ['ramen shop', 'bakery', 'bookshop', 'flower shop', 'coffee cart', 'tailor', 'vinyl record store', 'potion shop', 'cheese shop'],\n  scenes: ['mushroom forest library', 'treehouse village', 'cloud city', 'underwater coral palace', 'starlit rooftop garden', 'cozy train compartment', 'rainy window cafe'],\n  features: ['butterfly wings', 'crystalline antlers', 'bioluminescent fur', 'flower crown that blooms', 'galaxy-patterned coat', 'phoenix tail feathers'],\n  creatures: ['phoenix', 'dragon', 'unicorn', 'griffin', 'kirin', 'thunderbird'],\n  settings: ['moonlit forest', 'golden hour savanna', 'misty mountain peak', 'rainy Tokyo street', 'cherry blossom garden', 'Venetian canal at sunset', 'Scottish highlands in mist', 'Moroccan marketplace']\n};\n\nconst pick = (arr) => arr[Math.floor(Math.random() * arr.length)];\nconst dayOfWeek = new Date().getDay(); // 0=Sun, 1=Mon, ..., 6=Sat\n\n// Expanded day-to-pillar mapping with new content types\n// Sun=zodiac, Mon=portrait, Tue=emoji_moods, Wed=tiny_worlds, Thu=cinema, Fri=animated, Sat=old_masters\nconst pillarMap = {\n  0: 'zodiac',\n  1: 'daily_portrait',\n  2: 'emoji_moods',\n  3: 'tiny_worlds',\n  4: 'cinema',\n  5: 'animated',\n  6: 'old_masters',\n};\n\n// Add variety: 30% chance to override with a random pillar\nconst pillarId = Math.random() < 0.3\n  ? pick(Object.keys(calendar.pillars.reduce((acc, p) => { acc[p.id] = p; return acc; }, {})))\n  : pillarMap[dayOfWeek];\n\nconst pillar = calendar.pillars.find(p => p.id === pillarId) || calendar.pillars[0];\nconst style = pick(calendar.styles);\nconst animal = pick(calendar.animals);\n\n// Build the prompt\nlet promptTemplate = pick(pillar.prompts);\nlet prompt = promptTemplate;\n\n// Handle zodiac-specific replacements\nif (pillar.id === 'zodiac') {\n  const zodiacEntry = pick(calendar.zodiac);\n  prompt = prompt\n    .replace('{zodiac_animal}', zodiacEntry.animal)\n    .replace('{zodiac_sign}', zodiacEntry.sign)\n    .replace('{style}', zodiacEntry.style);\n} else if (pillar.id === 'animated') {\n  prompt = prompt\n    .replace('{animation_style}', pick(calendar.animation_styles))\n    .replace('{animation_scene}', pick(calendar.animation_scenes))\n    .replace('{animation_action}', pick(calendar.animation_actions));\n}\n\n// Standard replacements\nprompt = prompt\n  .replace('{animal}', animal)\n  .replace('{painting}', pick(calendar.paintings).title)\n  .replace('{artist}', pick(calendar.paintings).artist)\n  .replace('{movie}', pick(calendar.movies))\n  .replace('{era}', pick(calendar.eras).era)\n  .replace('{historical_figure}', pick(calendar.eras).figure)\n  .replace('{shop_type}', pick(calendar.shops))\n  .replace('{scene}', pick(calendar.scenes))\n  .replace('{feature}', pick(calendar.features))\n  .replace('{creature2}', pick(calendar.creatures))\n  .replace('{setting}', pick(calendar.settings))\n  .replace('{style}', style);\n\nconst isVideo = pillar.type === 'video';\nconst formatNote = isVideo\n  ? 'Create a short animated video (5-10 seconds, square format, seamless loop if possible).'\n  : 'Square format (1:1 ratio, 2048x2048 or larger). Make it visually striking and shareable.';\n\nconst fullPrompt = isVideo\n  ? `Using Nano Banana, ${prompt}. ${formatNote} Save the video file.`\n  : `Using Nano Banana image generation, create an artistic image in ${style} style: ${prompt}. The image should be stunning, high quality, suitable for an Instagram post. ${formatNote} Save the image and provide a direct download link.`;\n\nconst today = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    date: today,\n    pillar: pillar.name,\n    pillar_id: pillar.id,\n    content_type: pillar.type || 'image',\n    style: style,\n    animal: animal,\n    concept: prompt,\n    manus_prompt: fullPrompt,\n    is_video: isVideo,\n    attempt: 1,\n    max_attempts: 3\n  }\n}];\n"
       },
       "id": "concept_gen",
       "name": "Generate Concept",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [220, 0]
+      "position": [
+        220,
+        0
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.manus.ai/v1/tasks",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+            {
+              "name": "API_KEY",
+              "value": "sk-zWERW_y5sLSWbJpw1KU24eHrowpKrzJiRIxXxamWtkjebXKDulCYd_oyE0Ja1UR9ihHEPA7zrBbX-X8Pfr9G611Zdwc4"
+            }
           ]
         },
         "sendBody": true,
@@ -48,7 +55,10 @@
       "name": "Manus: Generate Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [440, 0]
+      "position": [
+        440,
+        0
+      ]
     },
     {
       "parameters": {
@@ -59,7 +69,10 @@
       "name": "Wait for Manus",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [660, 0]
+      "position": [
+        660,
+        0
+      ]
     },
     {
       "parameters": {
@@ -68,7 +81,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+            {
+              "name": "API_KEY",
+              "value": "sk-zWERW_y5sLSWbJpw1KU24eHrowpKrzJiRIxXxamWtkjebXKDulCYd_oyE0Ja1UR9ihHEPA7zrBbX-X8Pfr9G611Zdwc4"
+            }
           ]
         }
       },
@@ -76,18 +92,27 @@
       "name": "Check Manus Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [880, 0]
+      "position": [
+        880,
+        0
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "leftValue": "" },
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
           "conditions": [
             {
               "id": "status_check",
               "leftValue": "={{ $json.status }}",
               "rightValue": "completed",
-              "operator": { "type": "string", "operation": "equals" }
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             }
           ]
         }
@@ -96,7 +121,10 @@
       "name": "Is Manus Done?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1100, 0]
+      "position": [
+        1100,
+        0
+      ]
     },
     {
       "parameters": {
@@ -106,7 +134,10 @@
       "name": "Extract Image URL",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1320, -100]
+      "position": [
+        1320,
+        -100
+      ]
     },
     {
       "parameters": {
@@ -115,18 +146,24 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+            {
+              "name": "API_KEY",
+              "value": "sk-zWERW_y5sLSWbJpw1KU24eHrowpKrzJiRIxXxamWtkjebXKDulCYd_oyE0Ja1UR9ihHEPA7zrBbX-X8Pfr9G611Zdwc4"
+            }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"prompt\": \"You are the social media manager for @pawcasso.atelier, an Instagram account that posts AI-generated artistic animal portraits. Write an Instagram caption for this post:\\n\\nConcept: {{ $json.concept }}\\nArt Style: {{ $json.style }}\\nContent Pillar: {{ $json.pillar }}\\nAnimal: {{ $json.animal }}\\n\\nCaption rules:\\n1. Start with a HOOK LINE — punchy, funny, or intriguing (1 sentence max)\\n2. Add 1-2 sentences of CONTEXT about the piece\\n3. End with an ENGAGEMENT PROMPT — a question or CTA that invites comments\\n4. Tone: Witty, warm, slightly irreverent. Like a clever friend who's an artist.\\n5. Keep under 150 words total\\n6. Do NOT mention AI or that the art is AI-generated\\n\\nAlso generate 20-25 relevant hashtags in 3 tiers:\\n- Branded: #PawcassoAtelier #PawcassoDaily #PaintedByPawcasso\\n- Broad reach (5-7): from #DigitalArt #ArtOfTheDay #AnimalArt etc.\\n- Niche (10-12): from #AIGeneratedArt #AnimalPortrait #FantasyArt etc.\\n\\nReturn ONLY a JSON object with this exact format (no markdown, no explanation):\\n{\\n  \\\"caption\\\": \\\"the caption text\\\",\\n  \\\"hashtags\\\": \\\"#tag1 #tag2 ...all hashtags...\\\",\\n  \\\"hook\\\": \\\"just the hook line for preview\\\"\\n}\",\n  \"agentProfile\": \"manus-1.6-max\",\n  \"autoStart\": true\n}"
+        "jsonBody": "={\n  \"prompt\": \"You are the social media manager for @pawcasso.atelier, an Instagram account that posts AI-generated artistic animal portraits. Write an Instagram caption for this post:\\n\\nConcept: {{ $json.concept }}\\nArt Style: {{ $json.style }}\\nContent Pillar: {{ $json.pillar }}\\nAnimal: {{ $json.animal }}\\n\\nCaption rules:\\n1. Start with a HOOK LINE \u2014 punchy, funny, or intriguing (1 sentence max)\\n2. Add 1-2 sentences of CONTEXT about the piece\\n3. End with an ENGAGEMENT PROMPT \u2014 a question or CTA that invites comments\\n4. Tone: Witty, warm, slightly irreverent. Like a clever friend who's an artist.\\n5. Keep under 150 words total\\n6. Do NOT mention AI or that the art is AI-generated\\n\\nAlso generate 20-25 relevant hashtags in 3 tiers:\\n- Branded: #PawcassoAtelier #PawcassoDaily #PaintedByPawcasso\\n- Broad reach (5-7): from #DigitalArt #ArtOfTheDay #AnimalArt etc.\\n- Niche (10-12): from #AIGeneratedArt #AnimalPortrait #FantasyArt etc.\\n\\nReturn ONLY a JSON object with this exact format (no markdown, no explanation):\\n{\\n  \\\"caption\\\": \\\"the caption text\\\",\\n  \\\"hashtags\\\": \\\"#tag1 #tag2 ...all hashtags...\\\",\\n  \\\"hook\\\": \\\"just the hook line for preview\\\"\\n}\",\n  \"agentProfile\": \"manus-1.6-max\",\n  \"autoStart\": true\n}"
       },
       "id": "manus_caption",
       "name": "Manus: Generate Caption",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1540, -100]
+      "position": [
+        1540,
+        -100
+      ]
     },
     {
       "parameters": {
@@ -137,7 +174,10 @@
       "name": "Wait for Caption",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [1760, -100]
+      "position": [
+        1760,
+        -100
+      ]
     },
     {
       "parameters": {
@@ -146,7 +186,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "API_KEY", "value": "={{ $env.MANUS_API_KEY }}" }
+            {
+              "name": "API_KEY",
+              "value": "sk-zWERW_y5sLSWbJpw1KU24eHrowpKrzJiRIxXxamWtkjebXKDulCYd_oyE0Ja1UR9ihHEPA7zrBbX-X8Pfr9G611Zdwc4"
+            }
           ]
         }
       },
@@ -154,7 +197,10 @@
       "name": "Check Caption Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1980, -100]
+      "position": [
+        1980,
+        -100
+      ]
     },
     {
       "parameters": {
@@ -164,59 +210,157 @@
       "name": "Compile Review Package",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2200, -100]
+      "position": [
+        2200,
+        -100
+      ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.REVIEW_WEBHOOK_URL }}",
+        "url": "https://httpbin.org/post",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"text\": \"🎨 **Pawcasso Daily Review**\\n\\n📅 {{ $json.date }}\\n🏛️ Pillar: {{ $json.pillar }}\\n🎨 Style: {{ $json.style }}\\n🐾 Animal: {{ $json.animal }}\\n\\n💡 Concept: {{ $json.concept }}\\n\\n📝 Caption:\\n{{ $json.caption }}\\n\\n🖼️ Image: {{ $json.manus_share_url }}\\n\\n💰 Credits used: {{ $json.total_credits }}\\n\\nReply APPROVE to post, or REDO to regenerate.\"\n}"
+        "jsonBody": "={\n  \"text\": \"\ud83c\udfa8 **Pawcasso Daily Review**\\n\\n\ud83d\udcc5 {{ $json.date }}\\n\ud83c\udfdb\ufe0f Pillar: {{ $json.pillar }}\\n\ud83c\udfa8 Style: {{ $json.style }}\\n\ud83d\udc3e Animal: {{ $json.animal }}\\n\\n\ud83d\udca1 Concept: {{ $json.concept }}\\n\\n\ud83d\udcdd Caption:\\n{{ $json.caption }}\\n\\n\ud83d\uddbc\ufe0f Image: {{ $json.manus_share_url }}\\n\\n\ud83d\udcb0 Credits used: {{ $json.total_credits }}\\n\\nReply APPROVE to post, or REDO to regenerate.\"\n}"
       },
       "id": "send_review",
       "name": "Send to Michael for Review",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2420, -100]
+      "position": [
+        2420,
+        -100
+      ]
     }
   ],
   "connections": {
     "Daily 8:00 AM PT": {
-      "main": [[{ "node": "Generate Concept", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Generate Concept",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Generate Concept": {
-      "main": [[{ "node": "Manus: Generate Image", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Manus: Generate Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Manus: Generate Image": {
-      "main": [[{ "node": "Wait for Manus", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Wait for Manus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Wait for Manus": {
-      "main": [[{ "node": "Check Manus Status", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Check Manus Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Check Manus Status": {
-      "main": [[{ "node": "Is Manus Done?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Is Manus Done?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Is Manus Done?": {
       "main": [
-        [{ "node": "Extract Image URL", "type": "main", "index": 0 }],
-        [{ "node": "Wait for Manus", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Extract Image URL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Manus",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Extract Image URL": {
-      "main": [[{ "node": "Manus: Generate Caption", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Manus: Generate Caption",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Manus: Generate Caption": {
-      "main": [[{ "node": "Wait for Caption", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Wait for Caption",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Wait for Caption": {
-      "main": [[{ "node": "Check Caption Status", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Check Caption Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Check Caption Status": {
-      "main": [[{ "node": "Compile Review Package", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Compile Review Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Compile Review Package": {
-      "main": [[{ "node": "Send to Michael for Review", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Send to Michael for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
