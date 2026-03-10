@@ -17,12 +17,7 @@ export function getStripe(): Stripe {
 export const PRODUCTS = {
   digital: {
     name: "Digital Portrait",
-    price: 2900, // $29.00 in cents
+    price: 900, // $9.00 in cents
     description: "High-resolution digital portrait (4000x5000px)",
-  },
-  print: {
-    name: "Print-Ready Portrait",
-    price: 7900, // $79.00 in cents
-    description: "Print-ready file with color-calibrated output (300 DPI)",
   },
 } as const;

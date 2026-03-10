@@ -4,13 +4,13 @@ import { getStripe, PRODUCTS } from "@/lib/stripe";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, style, tier, petName, notes } = body;
+    const { name, email, style, petName, notes } = body;
 
-    if (!name || !email || !style || !tier) {
+    if (!name || !email || !style) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const product = tier === "print" ? PRODUCTS.print : PRODUCTS.digital;
+    const product = PRODUCTS.digital;
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     const stripe = getStripe();
@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
         customerName: name,
         petName,
         style,
-        tier,
         notes: notes || "",
       },
       success_url: `${baseUrl}/?success=true`,

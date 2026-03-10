@@ -3,27 +3,26 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About | Pawcasso Atelier",
-  description: "The story behind Pawcasso Atelier — where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
+  description: "The story behind Pawcasso Atelier — where every pet becomes a masterpiece.",
 };
 
 export default function AboutPage() {
   return (
-    <section className="py-16 px-6">
+    <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-light tracking-wide mb-4">
-            About <span className="text-gold">Pawcasso</span>
+        <div className="text-center mb-20">
+          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight mb-6">
+            About <span className="text-gradient">Pawcasso</span>
           </h1>
-          <p className="text-text-secondary text-lg font-light">
+          <p className="text-text-secondary text-lg">
             Where every pet becomes a masterpiece.
           </p>
-          <div className="w-16 h-px bg-gold mx-auto mt-6" />
         </div>
 
         {/* Story */}
         <div className="space-y-8 text-text-secondary leading-relaxed">
-          <p className="text-lg font-light">
+          <p className="text-xl font-light text-text-primary">
             Pawcasso Atelier was born from a simple belief: every pet deserves to be immortalized
             as the masterpiece they truly are.
           </p>
@@ -32,43 +31,40 @@ export default function AboutPage() {
             We create bespoke animal portraits crafted in the tradition of the Old Masters.
             Each commission is a unique work of art, shaped by the personality and spirit
             of your beloved companion. From the curl of a whisker to the glint in their eye,
-            every detail is rendered with the care and precision that fine portraiture demands.
+            every detail is rendered with care and precision.
           </p>
 
           <p>
-            Our styles draw from centuries of artistic tradition -- the dramatic chiaroscuro
-            of the Baroque period, the warm humanism of the Renaissance, the vibrant energy
-            of Impressionism, the flowing elegance of Art Nouveau, and the serene beauty of
-            Ukiyo-e. We also embrace the whimsical charm of modern illustration, including
-            styles inspired by beloved animated worlds. Each portrait is a dialogue between
-            timeless technique and the irreplaceable personality of your pet.
+            Our styles span centuries of artistic tradition — the dramatic chiaroscuro
+            of the Baroque, the warm humanism of the Renaissance, the vibrant energy
+            of Impressionism, the flowing elegance of Art Nouveau, and more. We also embrace
+            modern aesthetics like Pixar-style 3D characters and cozy needle-felt textures.
           </p>
 
-          <div className="border-l-2 border-gold pl-6 py-2 my-12">
-            <p className="text-xl font-light text-text-primary italic">
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 my-12">
+            <p className="text-2xl font-light text-text-primary text-center italic">
               &ldquo;Every pet has a personality that deserves to be seen as art.&rdquo;
             </p>
           </div>
 
-          <h2 className="text-2xl font-light text-text-primary tracking-wide pt-4">
-            Our <span className="text-gold">Process</span>
+          <h2 className="text-3xl font-semibold text-text-primary tracking-tight pt-4">
+            Our <span className="text-gradient">Process</span>
           </h2>
 
           <p>
-            It starts with your favorite photo. From there, our artists study your pet&apos;s
-            unique features -- their expression, posture, and character -- and interpret them
-            through the lens of your chosen artistic style. The result is a high-resolution
-            portrait that looks like it belongs in a gallery.
+            It starts with your favorite photo. From there, we study your pet&apos;s
+            unique features — their expression, posture, and character — and interpret them
+            through the lens of your chosen artistic style.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-10">
             {[
               { step: "01", title: "Share", desc: "Upload your favorite photo of your pet." },
-              { step: "02", title: "Choose", desc: "Select from eight distinctive artistic styles." },
-              { step: "03", title: "Receive", desc: "Your finished portrait, delivered within 48 hours." },
+              { step: "02", title: "Choose", desc: "Select from 16 distinctive artistic styles." },
+              { step: "03", title: "Receive", desc: "Your finished portrait, delivered within 24 hours." },
             ].map((item) => (
-              <div key={item.step} className="text-center p-6 border border-border">
-                <div className="text-gold text-2xl font-light mb-3">{item.step}</div>
+              <div key={item.step} className="text-center p-6 bg-white/[0.03] border border-white/[0.06] rounded-2xl">
+                <div className="text-gradient text-3xl font-semibold mb-3">{item.step}</div>
                 <h3 className="text-sm font-medium tracking-wide text-text-primary mb-2">{item.title}</h3>
                 <p className="text-text-secondary text-xs">{item.desc}</p>
               </div>
@@ -76,21 +72,13 @@ export default function AboutPage() {
           </div>
 
           <p>
-            Whether you choose our digital delivery or print-ready option, every portrait is delivered
-            at museum-quality resolution. Our print-ready files are color-calibrated for professional
-            printing, so your portrait looks stunning on canvas, paper, or any medium you choose.
+            Every portrait is delivered at museum-quality resolution (4000x5000px) — large enough
+            for professional prints up to 13x17 inches at 300 DPI.
           </p>
 
-          <h2 className="text-2xl font-light text-text-primary tracking-wide pt-4">
-            Our <span className="text-gold">Commitment</span>
+          <h2 className="text-3xl font-semibold text-text-primary tracking-tight pt-4">
+            Our <span className="text-gradient">Promise</span>
           </h2>
-
-          <p>
-            We are a small, passionate atelier of artists who adore animals. Every portrait
-            we create is a labor of love. We believe that the bond between humans and their
-            pets is one of the most beautiful things in the world -- and it deserves to be
-            celebrated in the finest artistic tradition.
-          </p>
 
           <p>
             Quality is never compromised. If you are not completely delighted with your portrait,
@@ -99,25 +87,26 @@ export default function AboutPage() {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-16 pt-12 border-t border-border">
-          <h3 className="text-2xl font-light tracking-wide mb-3">
-            Commission Your <span className="text-gold">Masterpiece</span>
+        <div className="text-center mt-20">
+          <div className="section-divider mb-16" />
+          <h3 className="text-3xl font-semibold tracking-tight mb-4">
+            Commission your <span className="text-gradient">masterpiece</span>.
           </h3>
-          <p className="text-text-secondary text-sm mb-6">
+          <p className="text-text-secondary text-sm mb-8">
             Every portrait is one-of-a-kind, just like your pet.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/order"
-              className="px-8 py-3 bg-gold text-bg font-medium tracking-wider text-sm hover:bg-gold-light transition-colors"
+              className="px-8 py-3 bg-white text-black font-medium tracking-wide text-sm rounded-full hover:bg-white/90 transition-all"
             >
-              Order a Portrait
+              Order a Portrait — $9
             </Link>
             <a
               href="https://instagram.com/pawcasso.atelier"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-3 border border-gold/40 text-gold text-sm tracking-wider hover:bg-gold/10 transition-colors"
+              className="px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-text-primary text-sm tracking-wide rounded-full hover:bg-white/[0.1] transition-all"
             >
               Follow on Instagram
             </a>

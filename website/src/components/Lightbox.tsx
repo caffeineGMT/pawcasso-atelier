@@ -41,16 +41,18 @@ export default function Lightbox({ artwork, onClose }: LightboxProps) {
         className="relative max-w-3xl max-h-[85vh] w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
-          src={artwork.imageUrl}
-          alt={artwork.title}
-          width={artwork.width}
-          height={artwork.height}
-          className="w-full h-auto max-h-[75vh] object-contain"
-        />
-        <div className="mt-4 text-center">
-          <h3 className="text-xl font-light tracking-wide text-white">{artwork.title}</h3>
-          <p className="text-text-secondary text-sm mt-1">
+        <div className="rounded-2xl overflow-hidden">
+          <Image
+            src={artwork.imageUrl}
+            alt={artwork.title}
+            width={artwork.width}
+            height={artwork.height}
+            className="w-full h-auto max-h-[75vh] object-contain"
+          />
+        </div>
+        <div className="mt-6 text-center">
+          <h3 className="text-xl font-semibold tracking-tight text-white">{artwork.title}</h3>
+          <p className="text-white/40 text-sm mt-1">
             {artwork.style} &middot; {artwork.animal}
           </p>
         </div>

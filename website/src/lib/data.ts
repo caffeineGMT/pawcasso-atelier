@@ -22,8 +22,8 @@ export const artworks: ArtworkItem[] = [
   { id: 11, title: "Song of the Mountain", animal: "Wolf", style: "Ukiyo-e", imageUrl: "/gallery/wolf_ukiyoe.png", width: 2048, height: 2048 },
 ];
 
-export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism"];
-export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf"];
+export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt"];
+export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Duck", "Hedgehog", "Otter"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },
@@ -34,4 +34,12 @@ export const artStyleOptions = [
   { value: "watercolor", label: "Watercolor", description: "Delicate, translucent washes of color" },
   { value: "art-nouveau", label: "Art Nouveau", description: "Flowing organic lines and decorative elegance" },
   { value: "ukiyo-e", label: "Ukiyo-e", description: "Traditional Japanese woodblock print aesthetic" },
+  { value: "cyberpunk", label: "Cyberpunk Neon", description: "Futuristic neon-lit sci-fi atmosphere" },
+  { value: "pixel-art", label: "Pixel Art", description: "Retro 8-bit and 16-bit game aesthetic" },
+  { value: "surrealist", label: "Surrealist", description: "Dreamlike, Dali-inspired impossible scenes" },
+  { value: "dark-fantasy", label: "Dark Fantasy", description: "Gothic, moody, and mythically dramatic" },
+  { value: "minimalist", label: "Minimalist Line Art", description: "Clean, elegant single-line drawings" },
+  { value: "pixar-3d", label: "Pixar 3D Chunky", description: "Round, fluffy, adorably grumpy 3D characters" },
+  { value: "needle-felt", label: "Needle Felt", description: "Cozy wool-textured stop-motion style" },
+  { value: "hyperrealism", label: "Hyperrealism", description: "Photorealistic detail and precision" },
 ];
