@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";

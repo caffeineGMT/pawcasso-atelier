@@ -9,7 +9,8 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-light tracking-widest text-gold mb-3">PAWCASSO</h3>
             <p className="text-text-secondary text-sm leading-relaxed">
-              AI-powered artistic portraits that transform your beloved pets into timeless masterpieces.
+              Bespoke animal portraits crafted in the tradition of the Old Masters.
+              Where every pet becomes a masterpiece.
             </p>
           </div>
 
@@ -24,7 +25,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Social + CTA */}
           <div>
             <h4 className="text-sm tracking-wider text-text-secondary mb-3 uppercase">Follow Us</h4>
             <a
@@ -38,14 +39,20 @@ export default function Footer() {
               </svg>
               @pawcasso.atelier
             </a>
-            <p className="text-text-secondary text-sm mt-4">
+            <p className="text-text-secondary text-sm mt-4 mb-5">
               DM us for custom requests and rush orders.
             </p>
+            <Link
+              href="/order"
+              className="inline-block px-5 py-2 bg-gold text-bg text-xs font-medium tracking-wider hover:bg-gold-light transition-colors"
+            >
+              Commission Your Masterpiece
+            </Link>
           </div>
         </div>
 
         <div className="border-t border-border pt-6 text-center text-text-secondary text-xs tracking-wide">
-          &copy; {new Date().getFullYear()} Pawcasso Atelier. All rights reserved.
+          &copy; 2026 Pawcasso Atelier. All rights reserved.
         </div>
       </div>
     </footer>

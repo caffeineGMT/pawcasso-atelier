@@ -4,14 +4,26 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pawcasso Atelier | AI-Powered Pet Portraits",
+  title: "Pawcasso Atelier | Bespoke Animal Portraits",
   description:
-    "Transform your beloved pets into stunning artistic masterpieces. Renaissance, Baroque, Impressionist and more styles powered by AI.",
-  keywords: ["pet portrait", "AI art", "animal painting", "custom pet art", "pet gift"],
+    "Bespoke animal portraits crafted in the tradition of the Old Masters. Renaissance, Baroque, Impressionist, Ghibli, and more. Commission your masterpiece today.",
+  keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "bespoke portrait", "pet commission"],
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
-    title: "Pawcasso Atelier | Where Art Meets Animal",
-    description: "AI-powered artistic animal portraits. Turn your pet into a masterpiece.",
+    title: "Pawcasso Atelier | Bespoke Animal Portraits",
+    description:
+      "Where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
     type: "website",
+    siteName: "Pawcasso Atelier",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pawcasso Atelier | Bespoke Animal Portraits",
+    description:
+      "Where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
   },
 };
 

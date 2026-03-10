@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#0A0A0A"/>
+  <g fill="#C8963E">
+    <!-- Paw pads (toes) -->
+    <ellipse cx="10" cy="8" rx="3" ry="3.5"/>
+    <ellipse cx="22" cy="8" rx="3" ry="3.5"/>
+    <ellipse cx="5.5" cy="14" rx="2.5" ry="3"/>
+    <ellipse cx="26.5" cy="14" rx="2.5" ry="3"/>
+    <!-- Main pad -->
+    <path d="M16 14c-5 0-9 3.5-9 7.5 0 4 3.5 7 9 7s9-3 9-7c0-4-4-7.5-9-7.5z"/>
+  </g>
+</svg>

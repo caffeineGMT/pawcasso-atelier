@@ -46,8 +46,9 @@ export default function OrderPage() {
           <h1 className="text-4xl md:text-5xl font-light tracking-wide mb-4">
             Commission a <span className="text-gold">Portrait</span>
           </h1>
-          <p className="text-text-secondary">
-            Fill out the form below and we will create a custom portrait of your pet.
+          <p className="text-text-secondary max-w-lg mx-auto">
+            Share a photo of your beloved companion and select your preferred artistic style.
+            We will craft a bespoke portrait worthy of any gallery wall.
           </p>
         </div>
 

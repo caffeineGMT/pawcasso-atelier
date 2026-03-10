@@ -14,14 +14,16 @@ export const artworks: ArtworkItem[] = [
   { id: 3, title: "The Ramen Master", animal: "Hamster", style: "Ghibli", imageUrl: "/gallery/hamster_ramen.png", width: 2048, height: 2048 },
 ];
 
-export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor"];
+export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e"];
 export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },
-  { value: "oil-painting", label: "Oil Painting", description: "Traditional oil painting with bold brushstrokes" },
   { value: "baroque", label: "Baroque", description: "Dramatic lighting and ornate details" },
   { value: "impressionist", label: "Impressionist", description: "Soft, dreamy brushwork with vibrant colors" },
+  { value: "ghibli", label: "Ghibli", description: "Whimsical, hand-painted fantasy illustration" },
   { value: "pop-art", label: "Pop Art", description: "Bold, colorful, and graphic style" },
   { value: "watercolor", label: "Watercolor", description: "Delicate, translucent washes of color" },
+  { value: "art-nouveau", label: "Art Nouveau", description: "Flowing organic lines and decorative elegance" },
+  { value: "ukiyo-e", label: "Ukiyo-e", description: "Traditional Japanese woodblock print aesthetic" },
 ];
