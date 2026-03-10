@@ -7,3 +7,10 @@ node_modules/
 test-output/
 .next/
 out/
+
+# Large raw content images (use website/public/gallery for web-ready versions)
+content/*.png
+content/day*/lion_portrait.png
+content/day*/cat_vermeer.png
+content/day*/hamster_ramen.png
+test-output/

@@ -22,8 +22,8 @@ export default function HomePage() {
             <span className="block text-gold mt-2">Animal</span>
           </h1>
           <p className="text-text-secondary text-lg md:text-xl font-light max-w-2xl mx-auto mb-10 animate-slide-up" style={{ animationDelay: "200ms" }}>
-            Transform your beloved pet into a stunning artistic masterpiece.
-            AI-powered portraits in Renaissance, Baroque, Impressionist, and more.
+            Bespoke animal portraits crafted in the style of the masters.
+            Renaissance, Baroque, Impressionist, and beyond.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: "300ms" }}>
             <Link
