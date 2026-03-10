@@ -23,10 +23,14 @@ export const artworks: ArtworkItem[] = [
   { id: 12, title: "Moonlit Garden", animal: "Dog", style: "Ghibli", imageUrl: "/gallery/golden_retriever_ghibli.png", width: 2048, height: 2048 },
   { id: 13, title: "Chef's Kiss", animal: "Red Panda", style: "Pixar 3D", imageUrl: "/gallery/red_panda_pixar_chef.png", width: 2048, height: 2048 },
   { id: 14, title: "Woolly Wanderer", animal: "Corgi", style: "Needle Felt", imageUrl: "/gallery/corgi_needle_felt.png", width: 2048, height: 2048 },
+  { id: 15, title: "The Little Bookshop", animal: "Hedgehog", style: "Watercolor", imageUrl: "/gallery/hedgehog_bookshop_tree_trunk.png", width: 2048, height: 2048 },
+  { id: 16, title: "Starry Night Whiskers", animal: "Cat", style: "Impressionist", imageUrl: "/gallery/starry_night_persian_cat.png", width: 2048, height: 2048 },
+  { id: 17, title: "The Catrix", animal: "Cat", style: "Cyberpunk", imageUrl: "/gallery/the_catrix_poster.png", width: 2048, height: 2048 },
+  { id: 18, title: "Pisces Rising", animal: "Fish", style: "Ukiyo-e", imageUrl: "/gallery/pisces_zodiac_ukiyoe_portrait.png", width: 2048, height: 2048 },
 ];
 
 export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt"];
-export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Duck", "Hedgehog", "Otter"];
+export const animals = ["All", "Cat", "Dog", "Lion", "Hamster", "Bird", "Owl", "Fox", "Penguin", "Red Panda", "Wolf", "Corgi", "Hedgehog", "Otter", "Fish"];
 
 export const artStyleOptions = [
   { value: "renaissance", label: "Renaissance", description: "Classical portraiture with rich, warm tones" },
