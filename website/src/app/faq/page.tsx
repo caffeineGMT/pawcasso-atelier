@@ -67,8 +67,8 @@ const faqs = [
         a: "$9 per portrait. High-resolution digital file, delivered within 24 hours. No hidden fees, no subscriptions.",
       },
       {
-        q: "Do you offer refunds?",
-        a: "Yes. If you\u2019re not delighted, contact us within 14 days. We\u2019ll either revise the piece or issue a full refund \u2014 no questions asked.",
+        q: "Can I request revisions?",
+        a: "If your portrait doesn\u2019t feel quite right, reach out within 14 days and we\u2019ll revise it \u2014 up to 3 revisions included. We want every portrait to feel perfect.",
       },
     ],
   },

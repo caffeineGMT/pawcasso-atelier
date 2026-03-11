@@ -296,7 +296,7 @@ export default function HomePage() {
               },
               {
                 q: "What if I\u2019m not happy?",
-                a: "We offer unlimited revisions and a full refund within 14 days \u2014 no questions asked. Your satisfaction is everything.",
+                a: "We offer up to 3 revisions within 14 days to make sure your portrait is perfect. Just reach out and we\u2019ll work with you.",
               },
             ].map((faq) => (
               <div
