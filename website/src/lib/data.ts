@@ -10,6 +10,7 @@ export interface ArtworkItem {
 
 export const artworks: ArtworkItem[] = [
   { id: 1, title: "Cat with a Pearl Earring", animal: "Cat", style: "Renaissance", imageUrl: "/gallery/cat_vermeer.png", width: 2048, height: 2048 },
+  { id: 2, title: "Felt Family Portrait", animal: "Border Collie", style: "Needle Felt", imageUrl: "/gallery/border_collie_portrait_2048x2048.png", width: 2048, height: 2048 },
 ];
 
 export const styles = ["All", "Renaissance", "Baroque", "Impressionist", "Ghibli", "Pop Art", "Watercolor", "Art Nouveau", "Ukiyo-e", "Fantasy", "Hyperrealism", "Cyberpunk", "Pixel Art", "Surrealist", "Pixar 3D", "Needle Felt", "Art Deco", "Dark Fantasy", "Minimalist"];
