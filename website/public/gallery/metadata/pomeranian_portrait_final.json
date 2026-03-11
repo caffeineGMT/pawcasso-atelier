@@ -1,0 +1,26 @@
+{
+  "filename": "pomeranian_portrait_final.png",
+  "title": "Cloud Puff",
+  "animal": "Pomeranian",
+  "style": "Needle Felt",
+  "pet_name": "",
+  "generated_date": "2026-03-11",
+  "review_id": "",
+  "provenance": {
+    "reference_style_url": "https://pawcasso-atelier.vercel.app/refs/felt-plush-border-collie.jpg",
+    "pet_photo_url": "https://pawcasso-atelier.vercel.app/pets/white-pomeranian.jpg",
+    "notes": "",
+    "manus_task_id": "",
+    "manus_share_url": ""
+  },
+  "captions": {
+    "variant_1": null,
+    "variant_2": null,
+    "variant_3": null,
+    "variant_4": null
+  },
+  "hashtags": "",
+  "image_url": "",
+  "status": "approved",
+  "posted": false
+}
