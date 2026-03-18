@@ -1,0 +1,191 @@
+# ProductHunt Tagline Options for Pawcasso Atelier
+
+**REQUIREMENT:** 60 characters max, punchy, clear value prop
+
+---
+
+## TOP 5 FINALISTS (A/B Test via Twitter Poll)
+
+### Option A - Value Focus
+**Tagline:** "AI pet portraits in 16 art styles for just $9"
+**Length:** 47 chars
+**Why it works:** Clear pricing, variety, affordability hook
+**Target persona:** Budget-conscious pet owners
+**Weaknesses:** Might sound too cheap/low quality
+
+### Option B - Artistic Focus
+**Tagline:** "Turn your pet into a Renaissance masterpiece"
+**Length:** 46 chars
+**Why it works:** Aspirational, specific style reference, emotional
+**Target persona:** Art lovers, gift buyers
+**Weaknesses:** Only mentions one style (we have 16)
+
+### Option C - Speed Focus
+**Tagline:** "AI pet portraits delivered in 24 hours"
+**Length:** 40 chars
+**Why it works:** Fast turnaround USP, convenience
+**Target persona:** Last-minute gift buyers, impulse purchasers
+**Weaknesses:** Doesn't mention price or style variety
+
+### Option D - Emotional Hook
+**Tagline:** "Where art meets animal. Custom pet portraits, $9."
+**Length:** 51 chars
+**Why it works:** Brand name callback, emotional + rational appeal
+**Target persona:** Pet parents who see pets as family
+**Weaknesses:** Slightly longer, less punchy
+
+### Option E - Feature Stack (RECOMMENDED)
+**Tagline:** "AI pet portraits. 16 styles. $9. Delivered in 24hrs."
+**Length:** 54 chars
+**Why it works:** Packs max info, benefit-stacking, urgency
+**Target persona:** ProductHunt browsers (feature-driven)
+**Weaknesses:** Can feel cluttered, lacks emotion
+
+---
+
+## TWITTER POLL SETUP (March 18-20, 2026)
+
+**Poll Question:** "Which tagline grabs your attention most? 🎨🐾 (Help us choose for our ProductHunt launch!)"
+
+**Options:**
+1. "AI pet portraits in 16 art styles for $9"
+2. "Turn your pet into a Renaissance masterpiece"
+3. "AI portraits. 16 styles. $9. 24hr delivery."
+4. "Where art meets animal. Custom portraits, $9."
+
+**Duration:** 48 hours
+**Tweet Text:**
+```
+We're launching @pawcasso.atelier on ProductHunt next week! 🚀
+
+Help us pick our tagline - which grabs YOUR attention most?
+
+Vote below 👇 RT for reach!
+
+[poll]
+
+First 20 voters get a free portrait code 🎨
+```
+
+---
+
+## ALTERNATIVE OPTIONS (Backups)
+
+### Short & Sweet
+- "Pet portraits. Reimagined." (26 chars) — Too vague
+- "Your pet as fine art" (21 chars) — Lacks specifics
+- "AI-powered pet art for everyone" (32 chars) — Generic
+
+### Feature-Heavy
+- "High-res AI pet portraits in any art style" (44 chars)
+- "Custom AI pet art: 16 styles, 24hr delivery, $9" (48 chars)
+- "Renaissance, Pixar, or Ukiyo-e pet portraits, $9" (48 chars)
+
+### Problem-Solving
+- "Pet portraits that don't cost $500" (36 chars) — Negative framing
+- "Affordable custom pet art, delivered fast" (42 chars) — Weak
+- "Finally, pet portraits you can afford" (38 chars) — Better
+
+### Aspirational
+- "Museum-quality pet portraits from your phone" (45 chars)
+- "From selfie to masterpiece in 24 hours" (39 chars)
+- "Your pet, painted by AI masters" (32 chars)
+
+### Social Proof Angle
+- "Join 1,000+ happy pet parents" (30 chars) — Need proof first
+- "The #1 AI pet portrait service" (31 chars) — Unverified claim
+
+---
+
+## CATEGORY SELECTION
+
+**Primary Category:** 🎨 Design Tools
+**Why:** AI art generation, creative output
+
+**Secondary Category:** 🐾 Productivity (borderline)
+**Alternative:** Consumer (gift category)
+
+**Tags:**
+- AI
+- Pets
+- Art
+- Gifts
+- E-commerce
+- Image Generation
+- Custom Art
+- Affordable
+
+---
+
+## HEADLINE VARIATIONS (For Landing Page Hero)
+
+These are LONGER versions for the actual ProductHunt listing description:
+
+1. "Transform your pet into a museum-quality masterpiece. Choose from 16 art styles including Renaissance, Pixar 3D, and Ukiyo-e. High-resolution digital portraits delivered in 24 hours for just $9."
+
+2. "AI-powered pet portraits in the style of the masters. Upload a photo, select from 16 curated art styles, and receive 3 unique 4000×5000px portraits within 24 hours. All for $9."
+
+3. "Custom pet art without the custom price tag. Our AI transforms your pet photos into stunning portraits in Renaissance, Baroque, Impressionist, Ghibli, and 12 other styles. $9 per portrait, unlimited revisions included."
+
+---
+
+## DESCRIPTION OPENER (First 3 Sentences)
+
+**Version 1 (Emotional):**
+"Your pet deserves to be immortalized as art. Pawcasso Atelier uses cutting-edge AI to transform ordinary pet photos into extraordinary portraits in the style of Renaissance masters, Pixar animators, or Japanese woodblock artists. All for just $9."
+
+**Version 2 (Feature-Driven):**
+"Upload a pet photo. Choose from 16 art styles. Receive 3 high-resolution portraits in 24 hours. That's Pawcasso Atelier—custom AI pet art that doesn't break the bank."
+
+**Version 3 (Problem/Solution):**
+"Custom pet portraits usually cost $200-500 and take weeks. Pawcasso Atelier delivers museum-quality AI-generated portraits in 24 hours for $9. Same stunning results, fraction of the price, zero waiting."
+
+---
+
+## VISUAL ASSETS TO ACCOMPANY TAGLINE
+
+### Gallery Images (4-6 images required)
+1. **Hero Image:** Before/After split (pet photo → finished portrait)
+2. **Style Showcase:** Grid of same pet in 6 different styles
+3. **Process Flow:** 3-step diagram (Upload → Choose → Receive)
+4. **High-Res Detail:** Zoomed crop showing portrait quality
+5. **Use Case:** Portrait displayed on wall/phone/Instagram
+6. **Social Proof:** Customer testimonials carousel
+
+### ProductHunt Thumbnail
+- **Dimensions:** 1200×630px (Open Graph)
+- **Design:**
+  - Left half: Original pet photo
+  - Right half: Renaissance-style portrait
+  - Center: "→ $9"
+  - Top: "AI Pet Portraits"
+  - Bottom: "16 Styles • 24hr Delivery"
+
+---
+
+## FINAL RECOMMENDATION
+
+**Winning Tagline:** "AI pet portraits. 16 styles. $9. Delivered in 24hrs."
+
+**Why this wins:**
+✅ Contains ALL key value props (AI, variety, price, speed)
+✅ Benefit-stacking format matches ProductHunt browsing behavior
+✅ Under 60 chars with room to spare
+✅ No fluff, pure features
+✅ Price anchor creates psychological comparison
+✅ Urgency implied by 24hr delivery
+
+**Backup Tagline (if too long):** "AI pet portraits in 16 art styles for just $9"
+
+---
+
+**Next Steps:**
+1. ✅ Run Twitter poll March 18-20
+2. ⏳ Finalize tagline based on poll results by March 21
+3. ⏳ Update ProductHunt draft listing
+4. ⏳ Create social media graphics with chosen tagline
+5. ⏳ Prepare press kit with tagline variations
+
+**Status:** READY FOR A/B TEST
+**Owner:** Michael Guo
+**Deadline:** March 21, 2026 (4 days before launch)

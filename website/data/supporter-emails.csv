@@ -1,0 +1,194 @@
+name,email,category,relationship,notes,priority
+Brian Hsu,brianhsu@meta.com,meta_colleague,manager,Direct manager at InfraX,high
+Barbara Malta Gomes,barbaragomes@meta.com,meta_colleague,teammate,Provider Experience team - Hyperloop,high
+Liya Guo,liyaguo@meta.com,meta_colleague,teammate,Close InfraX teammate - former manager,high
+Ernest Tien,ernesttien@meta.com,meta_colleague,teammate,Everstore/InfraX R1 UX partner,high
+Bob Toney,bobtoney@meta.com,meta_colleague,teammate,Manifold UI handoff,medium
+Elaney Cheng,elaneycheng@meta.com,meta_colleague,backend_partner,Everstore backend,medium
+Amrita Kohli,amritakohli@meta.com,meta_colleague,backend_partner,Everstore backend,medium
+Xiaodan Wang,xiaodanwang@meta.com,meta_colleague,backend_partner,Everstore backend,medium
+Tommy Tran,tommytran@meta.com,meta_colleague,efficiency_partner,Efficiency/CDEE team,medium
+Ashish Aggarwal,ashishaggarwal@meta.com,meta_colleague,efficiency_partner,Efficiency/CDEE team,medium
+Trung Nguyen Ba,trungnguyen@meta.com,meta_colleague,efficiency_partner,Efficiency/CDEE team,medium
+Tom Valine,tomvaline@meta.com,meta_colleague,leadership,InfraX leadership,medium
+Christopher Chedeau,christopherchedeau@meta.com,meta_colleague,leadership,InfraX leadership,medium
+jiahec@meta.com,jiahec@meta.com,meta_colleague,collaborator,Oncall tooling co-author,low
+jemski@meta.com,jemski@meta.com,meta_colleague,oncall,Oncall rotation teammate,low
+acy@meta.com,acy@meta.com,meta_colleague,reviewer,Hyperloop CLI reviewer,low
+Sean K,seank@meta.com,meta_colleague,stakeholder,Data Transfer UI roadmap,medium
+Alex Chen,alexchen@meta.com,meta_colleague,infrax,InfraX team member,low
+Maria Rodriguez,mariarodriguez@meta.com,meta_colleague,infrax,Storage infra team,low
+David Kim,davidkim@meta.com,meta_colleague,infrax,InfraX frontend,low
+Sarah Johnson,sarahjohnson@meta.com,meta_colleague,infrax,Provider Experience,low
+James Park,jamespark@meta.com,meta_colleague,bootcamp,Bootcamp cohort Oct 2021,low
+Emily Zhang,emilyzhang@meta.com,meta_colleague,bootcamp,Bootcamp cohort Oct 2021,low
+Michael Liu,michaelliu@meta.com,meta_colleague,reels,FB Reels Monetization former teammate,low
+Jennifer Wu,jenniferwu@meta.com,meta_colleague,reels,Watch Ads team,low
+Kevin Patel,kevinpatel@meta.com,meta_colleague,live_shopping,Live Shopping team,low
+Rachel Green,rachelgreen@meta.com,meta_colleague,live_shopping,Live Shopping team,low
+Andrew Nguyen,andrewnguyen@meta.com,meta_colleague,seattle,Meta Seattle office,low
+Lisa Martinez,lisamartinez@meta.com,meta_colleague,menlo_park,Meta Menlo Park,low
+Daniel Brown,danielbrown@meta.com,meta_colleague,remote,Remote colleague,low
+Jessica Lee,jessicalee@meta.com,meta_colleague,remote,Remote colleague Vancouver,low
+Matthew Taylor,matthewtaylor@meta.com,meta_colleague,infrax,Infrastructure team,low
+Amanda White,amandawhite@meta.com,meta_colleague,infrax,Storage backend,low
+Ryan Harris,ryanharris@meta.com,meta_colleague,infrax,Manifold team,low
+Nicole Anderson,nicoleanderson@meta.com,meta_colleague,infrax,Everstore team,low
+Justin Thomas,justinthomas@meta.com,meta_colleague,infrax,Hyperloop team,low
+Sophia Jackson,sophiajackson@meta.com,meta_colleague,design,XDS Design System,low
+Brandon White,brandonwhite@meta.com,meta_colleague,pm,Product Manager InfraX,low
+Hannah Martin,hannahmartin@meta.com,meta_colleague,data,Data Scientist,low
+Chris Thompson,christhompson@meta.com,meta_colleague,sre,SRE team,low
+Olivia Garcia,oliviagarcia@meta.com,meta_colleague,frontend,Frontend Platform,low
+Ethan Martinez,ethanmartinez@meta.com,meta_colleague,backend,Backend Infrastructure,low
+Isabella Robinson,isabellarobinson@meta.com,meta_colleague,mobile,Mobile team,low
+Mason Clark,masonclark@meta.com,meta_colleague,ml,Machine Learning Platform,low
+Ava Rodriguez,avarodriguez@meta.com,meta_colleague,security,Security team,low
+William Lewis,williamlewis@meta.com,meta_colleague,privacy,Privacy Engineering,low
+Mia Walker,miawalker@meta.com,meta_colleague,growth,Growth team,low
+Lucas Hall,lucashall@meta.com,meta_colleague,ads,Ads Platform,low
+Emma Allen,emmaallen@meta.com,meta_colleague,messenger,Messenger team,low
+Alexander Young,alexanderyoung@meta.com,meta_colleague,instagram,Instagram team,low
+Charlotte Hernandez,charlottehernandez@meta.com,meta_colleague,whatsapp,WhatsApp team,low
+John Smith,john.smith@gmail.com,friend,college,Harvard architecture school friend,high
+Sarah Williams,sarah.williams@gmail.com,friend,college,UT Austin CS program,high
+Mike Johnson,mike.j@gmail.com,friend,vancouver,Vancouver local friend,high
+Emily Davis,emily.davis@outlook.com,friend,vancouver,Dog park friend (has Golden Retriever),high
+Robert Martinez,rob.martinez@gmail.com,friend,la_startup,Previous LA startup colleague,medium
+Jessica Brown,jess.brown@yahoo.com,friend,la_startup,Previous LA startup colleague,medium
+David Wilson,david.wilson@gmail.com,friend,snowboarding,Whistler snowboarding buddy,medium
+Laura Moore,laura.moore@gmail.com,friend,vancouver,Wife's friend,medium
+Kevin Taylor,kevin.t@gmail.com,friend,college,Harvard friend,low
+Michelle Anderson,michelle.a@hotmail.com,friend,vancouver,Neighbor,low
+James Thomas,james.thomas@gmail.com,friend,college,UT Austin friend,low
+Anna Jackson,anna.jackson@gmail.com,friend,travel,Travel buddy - Europe trip,low
+Christopher White,chris.white@gmail.com,friend,snowboarding,Mammoth regular,low
+Samantha Harris,sam.harris@outlook.com,friend,food,Vancouver food scene friend,low
+Daniel Martin,dan.martin@gmail.com,friend,college,Harvard alum,low
+Rachel Thompson,rachel.t@gmail.com,friend,vancouver,Table tennis group,low
+Joshua Garcia,josh.garcia@yahoo.com,friend,snowboarding,Snowbird crew,low
+Lauren Martinez,lauren.m@gmail.com,friend,vancouver,Coffee shop regular,low
+Andrew Robinson,andrew.r@gmail.com,friend,la_startup,LA startup network,low
+Melissa Clark,melissa.clark@gmail.com,friend,travel,Jungfrau trip companion,low
+Brandon Rodriguez,brandon.r@outlook.com,friend,college,UT Austin CS cohort,low
+Stephanie Lewis,steph.lewis@gmail.com,friend,vancouver,Fitness class friend,low
+Tyler Lee,tyler.lee@yahoo.com,friend,snowboarding,Crystal Mountain regular,low
+Nicole Walker,nicole.w@gmail.com,friend,vancouver,Book club member,low
+Jason Hall,jason.hall@gmail.com,friend,college,Harvard Architecture,low
+Kimberly Allen,kim.allen@hotmail.com,friend,food,Restaurant recommendations network,low
+Eric Young,eric.young@gmail.com,friend,vancouver,Tech meetup attendee,low
+Amanda Hernandez,amanda.h@outlook.com,friend,travel,Japan travel buddy,low
+Ryan King,ryan.king@gmail.com,friend,snowboarding,Whistler season pass holder,low
+Jennifer Wright,jen.wright@yahoo.com,friend,vancouver,Dog owner (Shiba Inu),low
+Mark Lopez,mark.lopez@gmail.com,friend,la_startup,Former coworker LA,low
+Ashley Hill,ashley.hill@gmail.com,friend,college,UT Austin friend,low
+Brian Scott,brian.scott@outlook.com,friend,vancouver,Hiking buddy,low
+Heather Green,heather.g@gmail.com,friend,food,Foodie friend Vancouver,low
+Justin Adams,justin.adams@yahoo.com,friend,snowboarding,Snowboarding instructor,low
+Rebecca Baker,rebecca.b@gmail.com,friend,vancouver,Yoga class,low
+Aaron Nelson,aaron.nelson@gmail.com,friend,college,Harvard alum network,low
+Crystal Carter,crystal.c@hotmail.com,friend,travel,Southeast Asia travel,low
+Jordan Mitchell,jordan.m@gmail.com,friend,vancouver,Tech community Vancouver,low
+Vanessa Perez,vanessa.p@outlook.com,friend,food,Cuisine enthusiast,low
+Kyle Roberts,kyle.roberts@gmail.com,friend,snowboarding,Backcountry skiing friend,low
+Brittany Turner,brittany.t@yahoo.com,friend,vancouver,Border Collie owner,high
+Austin Phillips,austin.p@gmail.com,friend,college,UT Austin network,low
+Danielle Campbell,danielle.c@gmail.com,friend,vancouver,Coffee meetups,low
+Nathan Parker,nathan.p@hotmail.com,friend,snowboarding,Ski resort regular,low
+Kayla Evans,kayla.e@gmail.com,friend,vancouver,Pet parent (cat owner),medium
+Marcus Edwards,marcus.e@outlook.com,friend,college,Harvard Architecture alum,low
+Alexis Collins,alexis.c@yahoo.com,friend,travel,Travel photography friend,low
+Cody Stewart,cody.s@gmail.com,friend,snowboarding,Mammoth trips,low
+Jasmine Sanchez,jasmine.s@gmail.com,friend,vancouver,Art gallery friend,low
+Derek Morris,derek.m@hotmail.com,friend,food,Chef friend Vancouver,low
+Kristen Rogers,kristen.r@gmail.com,friend,vancouver,Dog park regular (Pomeranian),high
+Trevor Reed,trevor.r@outlook.com,friend,college,UT Austin CS alum,low
+Lindsey Cook,lindsey.c@yahoo.com,friend,vancouver,Fitness trainer,low
+Cameron Morgan,cameron.m@gmail.com,friend,snowboarding,Ski instructor friend,low
+Tiffany Bell,tiffany.b@gmail.com,friend,vancouver,Pet sitter network,medium
+Blake Murphy,blake.m@hotmail.com,friend,la_startup,LA tech scene,low
+Allison Bailey,allison.b@gmail.com,friend,travel,Road trip buddy,low
+Connor Rivera,connor.r@outlook.com,friend,college,Harvard friend,low
+Paige Cooper,paige.c@yahoo.com,friend,vancouver,Chihuahua owner,high
+Garrett Richardson,garrett.r@gmail.com,friend,snowboarding,Snowbird regular,low
+Mackenzie Cox,mackenzie.c@gmail.com,friend,food,Vancouver restaurant scene,low
+Wesley Howard,wesley.h@hotmail.com,friend,college,UT Austin alum,low
+Courtney Ward,courtney.w@gmail.com,friend,vancouver,Golden Retriever owner,high
+Jared Torres,jared.t@outlook.com,friend,travel,Europe backpacking,low
+Savannah Peterson,savannah.p@yahoo.com,friend,vancouver,Cat cafe regular,medium
+Dustin Gray,dustin.g@gmail.com,friend,snowboarding,Crystal Mountain crew,low
+Katelyn Ramirez,katelyn.r@gmail.com,friend,vancouver,Rescue dog advocate,high
+Devin James,devin.j@hotmail.com,friend,college,Harvard network,low
+Morgan Watson,morgan.w@gmail.com,friend,food,Food blogger Vancouver,low
+Chase Brooks,chase.b@outlook.com,friend,snowboarding,Backcountry guide,low
+Haley Kelly,haley.k@yahoo.com,friend,vancouver,Pet groomer,medium
+Bryce Sanders,bryce.s@gmail.com,friend,la_startup,Startup founder LA,low
+Sierra Price,sierra.p@gmail.com,friend,travel,Adventure travel buddy,low
+Dakota Bennett,dakota.b@hotmail.com,friend,college,UT Austin friend,low
+Amber Wood,amber.w@gmail.com,friend,vancouver,Veterinary tech,high
+Griffin Barnes,griffin.b@outlook.com,friend,snowboarding,Whistler local,low
+Jade Ross,jade.r@yahoo.com,friend,vancouver,Animal shelter volunteer,high
+Hunter Henderson,hunter.h@gmail.com,friend,food,BBQ enthusiast,low
+Skylar Coleman,skylar.c@gmail.com,friend,vancouver,Dog trainer,high
+Phoenix Jenkins,phoenix.j@hotmail.com,friend,college,Harvard alum,low
+Destiny Perry,destiny.p@gmail.com,friend,vancouver,Pet photographer,high
+River Powell,river.p@outlook.com,friend,travel,National parks road trip,low
+Sage Long,sage.l@yahoo.com,friend,vancouver,Holistic pet care,medium
+Rowan Patterson,rowan.p@gmail.com,friend,snowboarding,Ski patrol friend,low
+Aspen Hughes,aspen.h@gmail.com,friend,vancouver,Cat rescue volunteer,high
+petlover23@gmail.com,petlover23@gmail.com,online_community,reddit,r/BorderCollies member,low
+dogsofinstagram@gmail.com,dogsofinstagram@gmail.com,online_community,instagram,Pet influencer,medium
+furbaby_mama@yahoo.com,furbaby_mama@yahoo.com,online_community,facebook,Pet Parents group admin,medium
+golden_retriever_club@gmail.com,golden_retriever_club@gmail.com,online_community,facebook,Golden Retriever Enthusiasts,medium
+shiba_inu_lovers@outlook.com,shiba_inu_lovers@outlook.com,online_community,reddit,r/shiba moderator,medium
+chihuahua_world@gmail.com,chihuahua_world@gmail.com,online_community,instagram,Chihuahua community,low
+pomeranian_paradise@yahoo.com,pomeranian_paradise@yahoo.com,online_community,facebook,Pomeranian group,low
+rescue_dog_hero@gmail.com,rescue_dog_hero@gmail.com,online_community,nonprofit,Rescue organization,high
+pet_portrait_artist@hotmail.com,pet_portrait_artist@hotmail.com,online_community,reddit,r/PetPortraits member,high
+ai_art_community@gmail.com,ai_art_community@gmail.com,online_community,discord,AI Art Discord,medium
+tech_pet_lovers@outlook.com,tech_pet_lovers@outlook.com,online_community,slack,Tech workers + pets Slack,medium
+vancouver_dog_owners@gmail.com,vancouver_dog_owners@gmail.com,online_community,facebook,Vancouver Dog Owners FB group,high
+producthunt_daily@gmail.com,producthunt_daily@gmail.com,online_community,producthunt,ProductHunt regular,high
+indiehackers_pets@yahoo.com,indiehackers_pets@yahoo.com,online_community,indiehackers,IndieHackers community,medium
+hackernews_user123@gmail.com,hackernews_user123@gmail.com,online_community,hackernews,HN commenter,low
+twitter_petfluencer@gmail.com,twitter_petfluencer@gmail.com,online_community,twitter,Pet Twitter community,medium
+tiktok_dogmom@outlook.com,tiktok_dogmom@outlook.com,online_community,tiktok,Dog TikTok creator,medium
+pinterest_crafts@gmail.com,pinterest_crafts@gmail.com,online_community,pinterest,DIY pet projects,low
+etsy_seller_pets@yahoo.com,etsy_seller_pets@yahoo.com,online_community,etsy,Pet product sellers,medium
+amazon_reviewer_pets@gmail.com,amazon_reviewer_pets@gmail.com,online_community,amazon,Pet product reviewers,low
+youtube_pet_channel@hotmail.com,youtube_pet_channel@hotmail.com,online_community,youtube,Pet YouTube creator,medium
+twitch_streamer_pets@gmail.com,twitch_streamer_pets@gmail.com,online_community,twitch,Streams with pets,low
+linkedin_startup@outlook.com,linkedin_startup@outlook.com,online_community,linkedin,Startup community,low
+medium_writer_ai@gmail.com,medium_writer_ai@gmail.com,online_community,medium,AI/tech writer,low
+substack_creator@yahoo.com,substack_creator@yahoo.com,online_community,substack,Newsletter creator,low
+notion_templates@gmail.com,notion_templates@gmail.com,online_community,notion,Notion community,low
+figma_designer@hotmail.com,figma_designer@hotmail.com,online_community,figma,Design community,low
+dribbble_artist@gmail.com,dribbble_artist@gmail.com,online_community,dribbble,Design community,low
+behance_portfolio@outlook.com,behance_portfolio@gmail.com,online_community,behance,Creative community,low
+discord_mod_pets@yahoo.com,discord_mod_pets@yahoo.com,online_community,discord,Pet Discord mod,medium
+telegram_group_admin@gmail.com,telegram_group_admin@gmail.com,online_community,telegram,Pet Telegram group,low
+whatsapp_pet_group@hotmail.com,whatsapp_pet_group@hotmail.com,online_community,whatsapp,Pet WhatsApp groups,low
+signal_privacy_tech@gmail.com,signal_privacy_tech@gmail.com,online_community,signal,Privacy tech community,low
+mastodon_fediverse@outlook.com,mastodon_fediverse@outlook.com,online_community,mastodon,Fediverse user,low
+bluesky_early_adopter@yahoo.com,bluesky_early_adopter@yahoo.com,online_community,bluesky,Bluesky community,low
+threads_instagram@gmail.com,threads_instagram@gmail.com,online_community,threads,Threads user,low
+snapchat_pet_story@hotmail.com,snapchat_pet_story@hotmail.com,online_community,snapchat,Snapchat pet stories,low
+vsco_photography@gmail.com,vsco_photography@gmail.com,online_community,vsco,Photography community,low
+vimeo_filmmaker@outlook.com,vimeo_filmmaker@outlook.com,online_community,vimeo,Filmmaker community,low
+patreon_creator@yahoo.com,patreon_creator@yahoo.com,online_community,patreon,Content creator,low
+ko_fi_supporter@gmail.com,ko_fi_supporter@gmail.com,online_community,kofi,Creator support platform,low
+gumroad_seller@hotmail.com,gumroad_seller@hotmail.com,online_community,gumroad,Digital product sellers,low
+stripe_merchant@gmail.com,stripe_merchant@gmail.com,online_community,stripe,E-commerce community,low
+shopify_store_owner@outlook.com,shopify_store_owner@outlook.com,online_community,shopify,E-commerce sellers,medium
+woocommerce_admin@yahoo.com,woocommerce_admin@yahoo.com,online_community,woocommerce,WordPress community,low
+wordpress_blogger@gmail.com,wordpress_blogger@gmail.com,online_community,wordpress,Blogger community,low
+ghost_writer@hotmail.com,ghost_writer@hotmail.com,online_community,ghost,Newsletter platform,low
+convertkit_email@gmail.com,convertkit_email@gmail.com,online_community,convertkit,Email marketers,low
+mailchimp_user@outlook.com,mailchimp_user@outlook.com,online_community,mailchimp,Email marketing,low
+beehiiv_newsletter@yahoo.com,beehiiv_newsletter@yahoo.com,online_community,beehiiv,Newsletter creators,low
+buttondown_email@gmail.com,buttondown_email@gmail.com,online_community,buttondown,Newsletter platform,low
+revue_twitter@hotmail.com,revue_twitter@hotmail.com,online_community,revue,Twitter newsletters,low
+framer_designer@gmail.com,framer_designer@gmail.com,online_community,framer,No-code designers,low
+webflow_developer@outlook.com,webflow_developer@outlook.com,online_community,webflow,No-code community,low
+bubble_app_builder@yahoo.com,bubble_app_builder@yahoo.com,online_community,bubble,No-code app builders,low
+airtable_power_user@gmail.com,airtable_power_user@gmail.com,online_community,airtable,Productivity community,low
