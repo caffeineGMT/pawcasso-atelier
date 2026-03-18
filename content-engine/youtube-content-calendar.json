@@ -1,0 +1,442 @@
+{
+  "calendar_overview": {
+    "start_date": "2026-03-24",
+    "duration": "6 months (March 24 - September 24, 2026)",
+    "upload_schedule": {
+      "shorts": "Monday, Wednesday, Friday at 7:00 AM PT",
+      "tutorials": "Sunday at 10:00 AM PT"
+    },
+    "goal": "1,000 subscribers, 50,000 views by month 6",
+    "content_split": "72 Shorts + 24 Tutorials = 96 total videos"
+  },
+  "month_1_march_2026": {
+    "theme": "Foundation & Introduction",
+    "goal": "100 subscribers, 5,000 views",
+    "focus": "Establish format, build initial audience, prove concept",
+    "content": [
+      {
+        "date": "2026-03-24",
+        "day": "Monday",
+        "type": "Short",
+        "title": "POV: Your Golden Retriever Becomes a Renaissance Masterpiece",
+        "template": "template_1_before_after_reveal",
+        "animal": "Golden Retriever",
+        "style": "Renaissance",
+        "hook": "POV: Your dog becomes a Renaissance masterpiece",
+        "status": "planned"
+      },
+      {
+        "date": "2026-03-26",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "5 Art Styles, 1 Cat — Which Is Your Favorite?",
+        "template": "template_2_style_comparison",
+        "animal": "Tuxedo Cat",
+        "styles": ["Renaissance", "Pixar 3D", "Cyberpunk", "Watercolor", "Needle Felt"],
+        "hook": "5 art styles, 1 cat — which wins?",
+        "status": "planned"
+      },
+      {
+        "date": "2026-03-28",
+        "day": "Friday",
+        "type": "Short",
+        "title": "Watch AI Paint Your Dog in 60 Seconds",
+        "template": "template_3_process_reveal",
+        "animal": "Border Collie",
+        "style": "Renaissance",
+        "hook": "Watch AI paint your dog in 60 seconds",
+        "status": "planned"
+      },
+      {
+        "date": "2026-03-30",
+        "day": "Sunday",
+        "type": "Tutorial",
+        "title": "How to Take the Perfect Pet Photo for AI Portraits (5 Pro Tips)",
+        "duration": "6-7 minutes",
+        "script": "tutorial_1_perfect_pet_photo",
+        "goal": "Educate viewers, improve customer photo quality, drive orders",
+        "status": "planned"
+      },
+      {
+        "date": "2026-03-31",
+        "day": "Monday",
+        "type": "Short",
+        "title": "Stop Scrolling — Is That a Vermeer or a Golden Retriever?",
+        "template": "template_4_viral_hook",
+        "animal": "Golden Retriever",
+        "style": "Baroque",
+        "hook": "Stop scrolling — is that a Vermeer or a dog?",
+        "status": "planned"
+      }
+    ]
+  },
+  "month_2_april_2026": {
+    "theme": "Variety & Education",
+    "goal": "300 subscribers, 15,000 views",
+    "focus": "Showcase all 17 styles, educate on differences, customer testimonials",
+    "content": [
+      {
+        "date": "2026-04-02",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "Her Reaction When She Saw Her Dog as Art 🥺",
+        "template": "template_5_customer_testimonial",
+        "animal": "Golden Retriever",
+        "style": "Renaissance",
+        "hook": "Her reaction when she saw her dog as art 🥺",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-04",
+        "day": "Friday",
+        "type": "Short",
+        "title": "Renaissance vs Pixar vs Cyberpunk — You Decide",
+        "template": "template_2_style_comparison",
+        "animal": "Husky",
+        "styles": ["Renaissance", "Pixar 3D", "Cyberpunk"],
+        "hook": "Renaissance vs Pixar vs Cyberpunk — you decide",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-06",
+        "day": "Sunday",
+        "type": "Tutorial",
+        "title": "AI Pet Portrait Styles Explained — Which One Suits Your Pet? (17 Styles Reviewed)",
+        "duration": "7-8 minutes",
+        "script": "tutorial_2_art_styles_explained",
+        "goal": "Comprehensive style guide, drive 3-style bundle sales",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-07",
+        "day": "Monday",
+        "type": "Short",
+        "title": "I Turned My Cat Into a Pixar Character",
+        "template": "template_1_before_after_reveal",
+        "animal": "Persian Cat",
+        "style": "Pixar 3D",
+        "hook": "I turned my cat into a Pixar character",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-09",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "Watch This Border Collie Transform Into Watercolor Art",
+        "template": "template_3_process_reveal",
+        "animal": "Border Collie",
+        "style": "Watercolor",
+        "hook": "Watch this border collie transform into watercolor art",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-11",
+        "day": "Friday",
+        "type": "Short",
+        "title": "POV: Your Pet Is Now a Museum Exhibit",
+        "template": "template_4_viral_hook",
+        "animal": "Maine Coon",
+        "style": "Classical",
+        "hook": "Your pet deserves to be in a museum",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-13",
+        "day": "Sunday",
+        "type": "Tutorial",
+        "title": "Unboxing 10 Real Customer Pet Portraits (Reactions Included!)",
+        "duration": "8-10 minutes",
+        "script": "tutorial_3_unboxing_customer_orders",
+        "goal": "Social proof, transparency, drive trust",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-14",
+        "day": "Monday",
+        "type": "Short",
+        "title": "Needle Felt Style Is SO Cozy 🧶",
+        "template": "template_1_before_after_reveal",
+        "animal": "Rabbit",
+        "style": "Needle Felt",
+        "hook": "Needle felt style is the coziest thing you'll see today",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-16",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "Same Golden Retriever, 5 Different Universes",
+        "template": "template_2_style_comparison",
+        "animal": "Golden Retriever",
+        "styles": ["Renaissance", "Cyberpunk", "Pixel Art", "Pop Art", "Ink Wash"],
+        "hook": "Same dog, 5 universes",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-18",
+        "day": "Friday",
+        "type": "Short",
+        "title": "Customer Reactions Hit Different 💙",
+        "template": "template_5_customer_testimonial",
+        "animal": "Border Collie",
+        "style": "Watercolor",
+        "hook": "Customer reactions hit different",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-20",
+        "day": "Sunday",
+        "type": "Tutorial",
+        "title": "Pawcasso vs Midjourney vs DALL-E 3 — Best AI for Pet Portraits?",
+        "duration": "6-7 minutes",
+        "script": "tutorial_4_ai_art_comparison",
+        "goal": "Position Pawcasso competitively, drive informed buyers",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-21",
+        "day": "Monday",
+        "type": "Short",
+        "title": "Cyberpunk Cat Is Everything 🌃",
+        "template": "template_1_before_after_reveal",
+        "animal": "Calico Cat",
+        "style": "Cyberpunk",
+        "hook": "Cyberpunk cat is everything",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-23",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "This AI Can Turn Your Pet Into Museum-Quality Art",
+        "template": "template_3_process_reveal",
+        "animal": "Pomeranian",
+        "style": "Classical",
+        "hook": "This AI can turn your pet into museum-quality art",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-25",
+        "day": "Friday",
+        "type": "Short",
+        "title": "I Paid $9 for This and It's Better Than a $500 Commission",
+        "template": "template_4_viral_hook",
+        "animal": "Golden Retriever",
+        "style": "Renaissance",
+        "hook": "I paid $9 for this and it's better than a $500 commission",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-27",
+        "day": "Sunday",
+        "type": "Tutorial",
+        "title": "Pet Memorial Portraits: How to Honor Your Pet's Memory with AI Art",
+        "duration": "6-7 minutes",
+        "goal": "Emotional connection, high-value segment, drive memorial orders",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-28",
+        "day": "Monday",
+        "type": "Short",
+        "title": "Pop Art Style Makes Every Pet Look Iconic",
+        "template": "template_1_before_after_reveal",
+        "animal": "French Bulldog",
+        "style": "Pop Art",
+        "hook": "Pop art style makes every pet look iconic",
+        "status": "planned"
+      },
+      {
+        "date": "2026-04-30",
+        "day": "Wednesday",
+        "type": "Short",
+        "title": "Classical vs Baroque vs Renaissance — Spot the Difference",
+        "template": "template_2_style_comparison",
+        "animal": "Persian Cat",
+        "styles": ["Classical", "Baroque", "Renaissance"],
+        "hook": "Classical vs Baroque vs Renaissance — can you spot the difference?",
+        "status": "planned"
+      }
+    ]
+  },
+  "month_3_may_2026": {
+    "theme": "Viral Push & Trending Audio",
+    "goal": "500 subscribers, 25,000 views",
+    "focus": "Leverage trending sounds, maximize shareability, expand animal variety",
+    "strategy_notes": "Monitor TikTok Creative Center daily for trending audio. Adapt template_6_trending_sound to current trends. Prioritize Shorts over tutorials this month for algorithm boost."
+  },
+  "month_4_june_2026": {
+    "theme": "Community Building & UGC",
+    "goal": "700 subscribers, 35,000 views",
+    "focus": "Feature customer submissions, run contests, encourage comments",
+    "strategy_notes": "Launch 'Submit Your Pet' campaign. Offer free portrait to best submission each week. Respond to every comment."
+  },
+  "month_5_july_2026": {
+    "theme": "Optimization & Scale",
+    "goal": "850 subscribers, 42,000 views",
+    "focus": "Double down on best-performing formats, A/B test thumbnails, increase upload frequency",
+    "strategy_notes": "Analyze top 10 videos from months 1-4. Replicate their format. Consider increasing Shorts to 5x/week."
+  },
+  "month_6_august_september_2026": {
+    "theme": "Monetization Sprint",
+    "goal": "1,000+ subscribers, 50,000+ views, 4,000 watch hours",
+    "focus": "Hit monetization thresholds, apply for YouTube Partner Program",
+    "strategy_notes": "Publish longer tutorials (10-12 min) to maximize watch time. Cross-promote from Instagram/TikTok to drive subs."
+  },
+  "content_mix_strategy": {
+    "shorts_distribution": {
+      "template_1_before_after_reveal": "30% (most reliable, always performs)",
+      "template_2_style_comparison": "20% (educational, drives 3-style bundles)",
+      "template_3_process_reveal": "15% (behind-the-scenes appeal)",
+      "template_4_viral_hook": "15% (high-risk, high-reward)",
+      "template_5_customer_testimonial": "10% (social proof, trust-building)",
+      "template_6_trending_sound": "10% (algorithm boost, viral potential)"
+    },
+    "animal_variety": {
+      "dogs": "50% (largest audience)",
+      "cats": "35% (second largest)",
+      "other_pets": "15% (rabbits, guinea pigs, birds, horses — niche but engaged)"
+    },
+    "style_rotation": "Feature all 17 styles at least once per month. Rotate 'hero styles' (Renaissance, Pixar 3D, Watercolor) more frequently."
+  },
+  "batch_production_schedule": {
+    "weekly_workflow": [
+      {
+        "day": "Monday",
+        "tasks": [
+          "Review last week's analytics (1 hour)",
+          "Plan next 2 weeks of content (1 hour)",
+          "Update calendar with trending audio (30 min)"
+        ]
+      },
+      {
+        "day": "Tuesday",
+        "tasks": [
+          "Batch film 3 Shorts (2 hours)",
+          "Capture B-roll for upcoming tutorial (1 hour)"
+        ]
+      },
+      {
+        "day": "Wednesday",
+        "tasks": [
+          "Edit all 3 Shorts (3 hours)",
+          "Create thumbnails (1 hour)"
+        ]
+      },
+      {
+        "day": "Thursday",
+        "tasks": [
+          "Upload Shorts, schedule for Mon/Wed/Fri (30 min)",
+          "Film tutorial A-roll (2 hours)"
+        ]
+      },
+      {
+        "day": "Friday",
+        "tasks": [
+          "Edit tutorial (4-5 hours)"
+        ]
+      },
+      {
+        "day": "Saturday",
+        "tasks": [
+          "Finalize tutorial edit (2 hours)",
+          "Create tutorial thumbnail (1 hour)",
+          "Write description, tags, timestamps (30 min)",
+          "Upload, schedule for Sunday 10 AM PT (15 min)"
+        ]
+      },
+      {
+        "day": "Sunday",
+        "tasks": [
+          "Monitor tutorial release (respond to comments)",
+          "Plan next week's content"
+        ]
+      }
+    ],
+    "total_weekly_time": "18-20 hours",
+    "efficiency_tips": [
+      "Batch film 12 Shorts once per month (one 4-hour session)",
+      "Film 4 tutorial A-rolls in one weekend (shared setup)",
+      "Use Canva templates for thumbnails (save 50% of time)",
+      "Schedule uploads in advance (YouTube Studio scheduling feature)"
+    ]
+  },
+  "performance_tracking": {
+    "metrics_to_monitor_weekly": [
+      "Total views (Shorts vs Tutorials breakdown)",
+      "Subscriber count (+/- delta)",
+      "Watch time (hours)",
+      "Average view duration (AVD)",
+      "Click-through rate (CTR) on thumbnails",
+      "Traffic sources (Browse, Suggested, Search, External)",
+      "Top performing videos (views, engagement)",
+      "Audience retention graphs (where do viewers drop off?)"
+    ],
+    "optimization_triggers": [
+      "If CTR < 5%: Test new thumbnail style",
+      "If AVD < 40% on Shorts: Shorten hook time (get to reveal faster)",
+      "If AVD < 50% on Tutorials: Cut fluff, tighten pacing",
+      "If Search traffic < 10%: Improve SEO (title, description, tags)",
+      "If Subscriber conversion < 1%: Add stronger CTAs, improve end screens"
+    ],
+    "success_benchmarks": [
+      "Month 1: 100 subs, 5K views (baseline)",
+      "Month 2: 300 subs, 15K views (3x growth)",
+      "Month 3: 500 subs, 25K views (67% growth)",
+      "Month 4: 700 subs, 35K views (40% growth)",
+      "Month 5: 850 subs, 42K views (21% growth)",
+      "Month 6: 1,000+ subs, 50K+ views (18% growth)"
+    ]
+  },
+  "collaboration_opportunities": {
+    "month_3_onwards": [
+      {
+        "type": "Pet Influencer Collabs",
+        "strategy": "Reach out to Instagram pet accounts with 10K-100K followers. Offer free portrait in exchange for Story/Reel featuring the result. Tag @pawcasso.atelier.",
+        "target": "5 collabs/month"
+      },
+      {
+        "type": "Photography Channel Cross-Promo",
+        "strategy": "Partner with pet photography YouTubers. You film tutorial on their channel (photography tips), they link to Pawcasso. Win-win.",
+        "target": "1 collab/month"
+      },
+      {
+        "type": "Pet Podcast Guest Appearances",
+        "strategy": "Pitch to pet-related podcasts. Share AI art story, offer discount code for listeners. Drives traffic + authority.",
+        "target": "2 podcasts/quarter"
+      }
+    ]
+  },
+  "contingency_plans": {
+    "if_growth_slower_than_expected": [
+      "Increase Shorts frequency to 5x/week (daily)",
+      "Run YouTube Ads ($100/month to promote best-performing videos)",
+      "Launch giveaway: 'Free portrait to 10 lucky subscribers' (must like, comment, subscribe)",
+      "Cross-promote heavily from Instagram/TikTok Stories with direct YouTube links"
+    ],
+    "if_growth_faster_than_expected": [
+      "Hire video editor (Upwork, $20-30/hour) to scale production",
+      "Increase tutorial frequency to 2x/week",
+      "Launch membership tier (YouTube memberships for exclusive styles/early access)",
+      "Expand to live streams ('AI Art Generation Live — Request Your Pet')"
+    ]
+  },
+  "milestones_to_celebrate": [
+    {
+      "milestone": "100 subscribers",
+      "celebration": "Thank you video (Short) — show appreciation, sneak peek of upcoming styles"
+    },
+    {
+      "milestone": "500 subscribers",
+      "celebration": "Community poll: 'What style should we create next?' (unlocks Community tab)"
+    },
+    {
+      "milestone": "1,000 subscribers",
+      "celebration": "Special tutorial: 'I Turned My Subscribers' Pets Into Art (10 Random Selections)' + giveaway"
+    },
+    {
+      "milestone": "Monetization Approved",
+      "celebration": "Behind-the-scenes video: 'How We Built This Channel From Zero' + thank you message"
+    }
+  ]
+}

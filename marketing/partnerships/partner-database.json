@@ -1,0 +1,975 @@
+{
+  "lastUpdated": "2026-03-18",
+  "totalPartners": 50,
+  "categories": {
+    "petBrands": 20,
+    "veterinaryClinics": 15,
+    "petPhotographers": 15
+  },
+  "partners": [
+    {
+      "id": "PB001",
+      "category": "Pet Brand",
+      "name": "BarkBox",
+      "type": "Subscription Box",
+      "website": "https://www.barkbox.com",
+      "contactEmail": "partnerships@barkbox.com",
+      "socialMedia": {
+        "instagram": "@barkbox",
+        "tiktok": "@barkbox"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "3M+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "10% discount code for BarkBox customers",
+      "expectedVolume": "15-25 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Major player, massive reach. Focus on gift angle for subscription boxes."
+    },
+    {
+      "id": "PB002",
+      "category": "Pet Brand",
+      "name": "Chewy Creators",
+      "type": "E-commerce Platform",
+      "website": "https://www.chewy.com/creators",
+      "contactEmail": "influencers@chewy.com",
+      "socialMedia": {
+        "instagram": "@chewy"
+      },
+      "location": "Boston, MA",
+      "estimatedReach": "20M+ customers",
+      "partnershipType": "Affiliate/Co-Marketing",
+      "proposedOffer": "Featured product in creator program, 10% customer discount",
+      "expectedVolume": "20-30 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Tap into their creator network. Position as unique gift item."
+    },
+    {
+      "id": "PB003",
+      "category": "Pet Brand",
+      "name": "Petco",
+      "type": "Retail Chain",
+      "website": "https://www.petco.com",
+      "contactEmail": "partnerships@petco.com",
+      "socialMedia": {
+        "instagram": "@petco"
+      },
+      "location": "San Diego, CA",
+      "estimatedReach": "1,500+ stores",
+      "partnershipType": "In-Store Flyer Display",
+      "proposedOffer": "QR code flyers in stores, 10% discount for Petco customers",
+      "expectedVolume": "10-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Physical retail presence. Focus on in-store flyer displays near checkout."
+    },
+    {
+      "id": "PB004",
+      "category": "Pet Brand",
+      "name": "PetSmart",
+      "type": "Retail Chain",
+      "website": "https://www.petsmart.com",
+      "contactEmail": "corporate@petsmart.com",
+      "socialMedia": {
+        "instagram": "@petsmart"
+      },
+      "location": "Phoenix, AZ",
+      "estimatedReach": "1,600+ stores",
+      "partnershipType": "In-Store Flyer Display",
+      "proposedOffer": "QR code flyers in stores, co-branded social posts",
+      "expectedVolume": "10-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Largest pet retailer. Target their grooming and training centers."
+    },
+    {
+      "id": "PB005",
+      "category": "Pet Brand",
+      "name": "The Farmer's Dog",
+      "type": "Pet Food Subscription",
+      "website": "https://www.thefarmersdog.com",
+      "contactEmail": "hello@thefarmersdog.com",
+      "socialMedia": {
+        "instagram": "@thefarmersdog"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "500K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Bundle offer: free portrait with 3-month subscription",
+      "expectedVolume": "12-18 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Premium brand, high-income customers. Perfect demographic match."
+    },
+    {
+      "id": "PB006",
+      "category": "Pet Brand",
+      "name": "Ollie",
+      "type": "Pet Food Subscription",
+      "website": "https://www.myollie.com",
+      "contactEmail": "partnerships@myollie.com",
+      "socialMedia": {
+        "instagram": "@ollie"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "200K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "10% discount for Ollie customers, featured in newsletter",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Premium pet food, affluent customer base."
+    },
+    {
+      "id": "PB007",
+      "category": "Pet Brand",
+      "name": "Nom Nom",
+      "type": "Pet Food Subscription",
+      "website": "https://www.nomnomnow.com",
+      "contactEmail": "support@nomnomnow.com",
+      "socialMedia": {
+        "instagram": "@nomnomnow"
+      },
+      "location": "Nashville, TN",
+      "estimatedReach": "150K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Featured in welcome box inserts, 10% discount",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Include flyer in their subscription boxes."
+    },
+    {
+      "id": "PB008",
+      "category": "Pet Brand",
+      "name": "Wild One",
+      "type": "Pet Accessories",
+      "website": "https://wildone.com",
+      "contactEmail": "hello@wildone.com",
+      "socialMedia": {
+        "instagram": "@wildone"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "100K+ customers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Co-branded social content, 10% discount for Wild One customers",
+      "expectedVolume": "8-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Design-forward brand, Instagram-savvy audience. Perfect aesthetic match."
+    },
+    {
+      "id": "PB009",
+      "category": "Pet Brand",
+      "name": "Maxbone",
+      "type": "Luxury Pet Products",
+      "website": "https://maxbone.com",
+      "contactEmail": "info@maxbone.com",
+      "socialMedia": {
+        "instagram": "@maxbone"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "50K+ customers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Featured in stores and online, premium bundle offers",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Luxury brand. Position as premium gift option."
+    },
+    {
+      "id": "PB010",
+      "category": "Pet Brand",
+      "name": "Bullymake",
+      "type": "Dog Toys Subscription",
+      "website": "https://bullymake.com",
+      "contactEmail": "support@bullymake.com",
+      "socialMedia": {
+        "instagram": "@bullymake"
+      },
+      "location": "Texas",
+      "estimatedReach": "80K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Insert flyers in subscription boxes, 10% discount",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Strong breed niche (power chewers). Good for targeted marketing."
+    },
+    {
+      "id": "PB011",
+      "category": "Pet Brand",
+      "name": "PupBox",
+      "type": "Puppy Subscription Box",
+      "website": "https://www.pupbox.com",
+      "contactEmail": "support@pupbox.com",
+      "socialMedia": {
+        "instagram": "@pupbox"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "60K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Welcome gift: free portrait for new puppy parents",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "New puppy parents = emotional connection. Perfect for first portrait."
+    },
+    {
+      "id": "PB012",
+      "category": "Pet Brand",
+      "name": "FitBark",
+      "type": "Pet Activity Tracker",
+      "website": "https://www.fitbark.com",
+      "contactEmail": "info@fitbark.com",
+      "socialMedia": {
+        "instagram": "@fitbark"
+      },
+      "location": "Kansas City, MO",
+      "estimatedReach": "40K+ users",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Bundle: tracker + portrait combo deal",
+      "expectedVolume": "5-8 orders/month",
+      "status": "Not Contacted",
+      "priority": "Low",
+      "notes": "Tech-savvy pet owners. Complementary product."
+    },
+    {
+      "id": "PB013",
+      "category": "Pet Brand",
+      "name": "Embark Vet",
+      "type": "Dog DNA Testing",
+      "website": "https://embarkvet.com",
+      "contactEmail": "support@embarkvet.com",
+      "socialMedia": {
+        "instagram": "@embarkvet"
+      },
+      "location": "Boston, MA",
+      "estimatedReach": "100K+ customers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Bundle: DNA test results + breed-specific portrait",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Perfect synergy: DNA results → custom portrait. Unique angle."
+    },
+    {
+      "id": "PB014",
+      "category": "Pet Brand",
+      "name": "Petcube",
+      "type": "Pet Camera",
+      "website": "https://petcube.com",
+      "contactEmail": "support@petcube.com",
+      "socialMedia": {
+        "instagram": "@petcube"
+      },
+      "location": "San Francisco, CA",
+      "estimatedReach": "200K+ users",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Use Petcube photo for portrait, 10% discount",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Tech angle: use their camera photos for portraits."
+    },
+    {
+      "id": "PB015",
+      "category": "Pet Brand",
+      "name": "Rover",
+      "type": "Pet Sitting Platform",
+      "website": "https://www.rover.com",
+      "contactEmail": "partnerships@rover.com",
+      "socialMedia": {
+        "instagram": "@rover"
+      },
+      "location": "Seattle, WA",
+      "estimatedReach": "3M+ users",
+      "partnershipType": "Affiliate",
+      "proposedOffer": "Featured perk for Rover sitters, 15% discount for hosts",
+      "expectedVolume": "15-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Huge network. Target sitters to gift portraits to their client pets."
+    },
+    {
+      "id": "PB016",
+      "category": "Pet Brand",
+      "name": "Wag!",
+      "type": "Dog Walking Platform",
+      "website": "https://wagwalking.com",
+      "contactEmail": "support@wagwalking.com",
+      "socialMedia": {
+        "instagram": "@wagwalking"
+      },
+      "location": "San Francisco, CA",
+      "estimatedReach": "500K+ users",
+      "partnershipType": "Affiliate",
+      "proposedOffer": "10% discount for Wag! walkers and their clients",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Similar to Rover. Target professional dog walkers."
+    },
+    {
+      "id": "PB017",
+      "category": "Pet Brand",
+      "name": "PetPlate",
+      "type": "Fresh Pet Food",
+      "website": "https://www.petplate.com",
+      "contactEmail": "hello@petplate.com",
+      "socialMedia": {
+        "instagram": "@petplate"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "50K+ subscribers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Insert flyers in delivery boxes, 10% discount",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Premium food brand, recurring touchpoint."
+    },
+    {
+      "id": "PB018",
+      "category": "Pet Brand",
+      "name": "Lemonade Pet Insurance",
+      "type": "Pet Insurance",
+      "website": "https://www.lemonade.com/pet",
+      "contactEmail": "support@lemonade.com",
+      "socialMedia": {
+        "instagram": "@lemonade_inc"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "200K+ pet policies",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Welcome gift: free portrait with new policy",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "New policy signup = perfect timing for portrait. Emotional connection."
+    },
+    {
+      "id": "PB019",
+      "category": "Pet Brand",
+      "name": "Paw.com",
+      "type": "Pet Products Marketplace",
+      "website": "https://www.paw.com",
+      "contactEmail": "info@paw.com",
+      "socialMedia": {
+        "instagram": "@pawdotcom"
+      },
+      "location": "Los Angeles, CA",
+      "estimatedReach": "100K+ customers",
+      "partnershipType": "Featured Product",
+      "proposedOffer": "Listed as featured product, 10% discount for Paw customers",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Curated marketplace. Good for brand credibility."
+    },
+    {
+      "id": "PB020",
+      "category": "Pet Brand",
+      "name": "West Paw",
+      "type": "Dog Toys & Accessories",
+      "website": "https://www.westpaw.com",
+      "contactEmail": "info@westpaw.com",
+      "socialMedia": {
+        "instagram": "@westpaw"
+      },
+      "location": "Bozeman, MT",
+      "estimatedReach": "80K+ customers",
+      "partnershipType": "Co-Marketing",
+      "proposedOffer": "Co-branded social content, 10% bundle discount",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Low",
+      "notes": "Eco-friendly brand. Good for conscious consumer angle."
+    },
+    {
+      "id": "VC001",
+      "category": "Veterinary Clinic",
+      "name": "Banfield Pet Hospital",
+      "type": "National Vet Chain",
+      "website": "https://www.banfield.com",
+      "contactEmail": "corporate@banfield.com",
+      "socialMedia": {
+        "instagram": "@banfield"
+      },
+      "location": "Portland, OR (1,000+ locations)",
+      "estimatedReach": "1,000+ clinics",
+      "partnershipType": "Waiting Room Flyers",
+      "proposedOffer": "Memorial portrait flyers in waiting rooms, grief support angle",
+      "expectedVolume": "15-25 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Largest vet chain. Focus on pet loss/memorial services. Waiting room displays."
+    },
+    {
+      "id": "VC002",
+      "category": "Veterinary Clinic",
+      "name": "VCA Animal Hospitals",
+      "type": "National Vet Chain",
+      "website": "https://vcahospitals.com",
+      "contactEmail": "corporate@vca.com",
+      "socialMedia": {
+        "instagram": "@vcahospitals"
+      },
+      "location": "Los Angeles, CA (800+ locations)",
+      "estimatedReach": "800+ clinics",
+      "partnershipType": "Waiting Room Flyers",
+      "proposedOffer": "Memorial portrait program, referral fee for clinic",
+      "expectedVolume": "12-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Second largest chain. Strong memorial/grief counseling programs."
+    },
+    {
+      "id": "VC003",
+      "category": "Veterinary Clinic",
+      "name": "BluePearl Pet Hospital",
+      "type": "Emergency/Specialty Vet",
+      "website": "https://bluepearlvet.com",
+      "contactEmail": "info@bluepearlvet.com",
+      "socialMedia": {
+        "instagram": "@bluepearlvet"
+      },
+      "location": "Tampa, FL (100+ locations)",
+      "estimatedReach": "100+ specialty clinics",
+      "partnershipType": "Memorial Program",
+      "proposedOffer": "Grief support: portrait vouchers for end-of-life cases",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Emergency/specialty care. High emotional stakes. Perfect for memorial angle."
+    },
+    {
+      "id": "VC004",
+      "category": "Veterinary Clinic",
+      "name": "Lap of Love Veterinary Hospice",
+      "type": "In-Home Euthanasia",
+      "website": "https://www.lapoflove.com",
+      "contactEmail": "info@lapoflove.com",
+      "socialMedia": {
+        "instagram": "@lapoflove"
+      },
+      "location": "Tampa, FL (nationwide)",
+      "estimatedReach": "300+ vets, nationwide",
+      "partnershipType": "Memorial Package",
+      "proposedOffer": "Included in end-of-life package: free memorial portrait",
+      "expectedVolume": "15-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "Very High",
+      "notes": "PERFECT FIT. End-of-life care = memorial portraits. Revenue share model."
+    },
+    {
+      "id": "VC005",
+      "category": "Veterinary Clinic",
+      "name": "Bond Vet",
+      "type": "Modern Vet Clinic",
+      "website": "https://bondvet.com",
+      "contactEmail": "hello@bondvet.com",
+      "socialMedia": {
+        "instagram": "@bond_vet"
+      },
+      "location": "New York, NY (10+ locations)",
+      "estimatedReach": "10+ clinics in NYC/Brooklyn",
+      "partnershipType": "Waiting Room Display + Digital",
+      "proposedOffer": "QR code flyers, featured in their app",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Modern, tech-forward brand. Young pet parent demographic."
+    },
+    {
+      "id": "VC006",
+      "category": "Veterinary Clinic",
+      "name": "Small Door Veterinary",
+      "type": "Membership Vet",
+      "website": "https://www.smalldoorvet.com",
+      "contactEmail": "hello@smalldoorvet.com",
+      "socialMedia": {
+        "instagram": "@smalldoorvet"
+      },
+      "location": "New York, NY (5+ locations)",
+      "estimatedReach": "5,000+ members",
+      "partnershipType": "Member Perks",
+      "proposedOffer": "Exclusive member discount, featured in newsletter",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Membership model = ongoing relationship. Premium demographic."
+    },
+    {
+      "id": "VC007",
+      "category": "Veterinary Clinic",
+      "name": "Heart + Paw",
+      "type": "Regional Vet Chain",
+      "website": "https://heartandpaw.com",
+      "contactEmail": "info@heartandpaw.com",
+      "socialMedia": {
+        "instagram": "@heartandpaw"
+      },
+      "location": "Philadelphia, PA (20+ locations)",
+      "estimatedReach": "20+ clinics in PA/NJ",
+      "partnershipType": "Waiting Room Flyers",
+      "proposedOffer": "Memorial portrait program, waiting room displays",
+      "expectedVolume": "5-8 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Growing regional chain. Modern brand, good fit."
+    },
+    {
+      "id": "VC008",
+      "category": "Veterinary Clinic",
+      "name": "Portland Veterinary Emergency and Specialty Care",
+      "type": "Emergency Vet",
+      "website": "https://www.pvesc.com",
+      "contactEmail": "info@pvesc.com",
+      "socialMedia": null,
+      "location": "Portland, OR",
+      "estimatedReach": "Single location, high traffic",
+      "partnershipType": "Memorial Program",
+      "proposedOffer": "Memorial portrait vouchers for grief support",
+      "expectedVolume": "3-5 orders/month",
+      "status": "Not Contacted",
+      "priority": "Low",
+      "notes": "Local example. Template for approaching other emergency vets."
+    },
+    {
+      "id": "VC009",
+      "category": "Veterinary Clinic",
+      "name": "The Village Vets",
+      "type": "Regional Vet Chain",
+      "website": "https://www.thevillagevets.com",
+      "contactEmail": "info@thevillagevets.com",
+      "socialMedia": {
+        "instagram": "@thevillagevets"
+      },
+      "location": "Atlanta, GA (15+ locations)",
+      "estimatedReach": "15+ clinics in Atlanta metro",
+      "partnershipType": "Waiting Room Flyers",
+      "proposedOffer": "Flyer displays, referral commission",
+      "expectedVolume": "5-8 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Regional presence, community-focused brand."
+    },
+    {
+      "id": "VC010",
+      "category": "Veterinary Clinic",
+      "name": "ASPCA Animal Hospital",
+      "type": "Non-Profit Vet",
+      "website": "https://www.aspca.org",
+      "contactEmail": "development@aspca.org",
+      "socialMedia": {
+        "instagram": "@aspca"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "Large non-profit network",
+      "partnershipType": "Donation Partnership",
+      "proposedOffer": "$2 from every portrait donated to ASPCA, co-branded marketing",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Non-profit angle. Cause marketing. Strong brand credibility."
+    },
+    {
+      "id": "VC011",
+      "category": "Veterinary Clinic",
+      "name": "Best Friends Animal Society",
+      "type": "Animal Welfare",
+      "website": "https://bestfriends.org",
+      "contactEmail": "info@bestfriends.org",
+      "socialMedia": {
+        "instagram": "@bestfriendsanimalsociety"
+      },
+      "location": "Kanab, UT",
+      "estimatedReach": "National network",
+      "partnershipType": "Donation Partnership",
+      "proposedOffer": "Adoption special: free portrait with adoption, donation per portrait",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "No-kill sanctuary. New adoption angle perfect for first portrait."
+    },
+    {
+      "id": "VC012",
+      "category": "Veterinary Clinic",
+      "name": "Petco Vet Hospitals",
+      "type": "Retail Vet Chain",
+      "website": "https://www.petco.com/shop/en/petcostore/s/vet-hospitals",
+      "contactEmail": "vethospitals@petco.com",
+      "socialMedia": null,
+      "location": "Nationwide (100+ locations)",
+      "estimatedReach": "100+ in-store clinics",
+      "partnershipType": "In-Store Flyers",
+      "proposedOffer": "Waiting area displays, bundled with Petco partnership",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Leverage existing Petco relationship if established."
+    },
+    {
+      "id": "VC013",
+      "category": "Veterinary Clinic",
+      "name": "PetSmart Veterinary Services",
+      "type": "Retail Vet Chain",
+      "website": "https://www.petsmart.com/services/veterinary-services/",
+      "contactEmail": "vetservices@petsmart.com",
+      "socialMedia": null,
+      "location": "Nationwide (80+ locations)",
+      "estimatedReach": "80+ in-store clinics",
+      "partnershipType": "In-Store Flyers",
+      "proposedOffer": "Waiting area displays, new patient welcome gift",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "In-store vet locations. High foot traffic."
+    },
+    {
+      "id": "VC014",
+      "category": "Veterinary Clinic",
+      "name": "Veterinary Cancer Group",
+      "type": "Specialty Oncology",
+      "website": "https://www.veterinarycancergroup.com",
+      "contactEmail": "info@veterinarycancergroup.com",
+      "socialMedia": null,
+      "location": "Los Angeles, CA (5+ locations)",
+      "estimatedReach": "Specialty oncology patients",
+      "partnershipType": "Memorial Program",
+      "proposedOffer": "Memorial portrait program for end-of-life oncology cases",
+      "expectedVolume": "5-8 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Oncology patients = high emotional connection. Memorial focus."
+    },
+    {
+      "id": "VC015",
+      "category": "Veterinary Clinic",
+      "name": "PAWS (Progressive Animal Welfare Society)",
+      "type": "Shelter + Vet",
+      "website": "https://www.paws.org",
+      "contactEmail": "info@paws.org",
+      "socialMedia": {
+        "instagram": "@pawsseattle"
+      },
+      "location": "Seattle, WA",
+      "estimatedReach": "Regional shelter network",
+      "partnershipType": "Adoption Package",
+      "proposedOffer": "Free portrait with adoption, waiting room displays",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Shelter + vet combo. New adoption angle."
+    },
+    {
+      "id": "PP001",
+      "category": "Pet Photographer",
+      "name": "Puptrait Studio NYC",
+      "type": "Professional Pet Photography",
+      "website": "https://www.puptraitstudio.com",
+      "contactEmail": "hello@puptraitstudio.com",
+      "socialMedia": {
+        "instagram": "@puptraitstudio"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "10K+ Instagram followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "30% commission: they take photos → offer AI portraits as upsell",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Premium photographer. Upsell angle: professional photo → AI art portrait."
+    },
+    {
+      "id": "PP002",
+      "category": "Pet Photographer",
+      "name": "The Dog Agency",
+      "type": "Pet Photography + Talent",
+      "website": "https://thedogagency.com",
+      "contactEmail": "info@thedogagency.com",
+      "socialMedia": {
+        "instagram": "@thedogagency"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "50K+ followers",
+      "partnershipType": "Revenue Share + Affiliate",
+      "proposedOffer": "25% commission on referrals, showcase on their platform",
+      "expectedVolume": "15-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "Very High",
+      "notes": "Pet influencer agency. Perfect for viral reach + credibility."
+    },
+    {
+      "id": "PP003",
+      "category": "Pet Photographer",
+      "name": "Pawtrait by Sophie Gamand",
+      "type": "Fine Art Pet Photography",
+      "website": "https://www.sophiegamand.com",
+      "contactEmail": "contact@sophiegamand.com",
+      "socialMedia": {
+        "instagram": "@sophiegamand"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "300K+ Instagram followers",
+      "partnershipType": "Collaborative Project",
+      "proposedOffer": "Co-branded series: her photos → our AI portraits",
+      "expectedVolume": "20-30 orders/month",
+      "status": "Not Contacted",
+      "priority": "Very High",
+      "notes": "Famous pet photographer. Massive reach. Credibility boost."
+    },
+    {
+      "id": "PP004",
+      "category": "Pet Photographer",
+      "name": "Pets on Q",
+      "type": "Pet Photography",
+      "website": "https://www.petsonq.com",
+      "contactEmail": "info@petsonq.com",
+      "socialMedia": {
+        "instagram": "@petsonq"
+      },
+      "location": "Austin, TX",
+      "estimatedReach": "15K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "30% commission, package their photos with AI portraits",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Regional photographer with strong local following."
+    },
+    {
+      "id": "PP005",
+      "category": "Pet Photographer",
+      "name": "The Dogist",
+      "type": "Pet Photography + Content",
+      "website": "https://www.thedogist.com",
+      "contactEmail": "info@thedogist.com",
+      "socialMedia": {
+        "instagram": "@thedogist"
+      },
+      "location": "New York, NY",
+      "estimatedReach": "3.8M+ Instagram followers",
+      "partnershipType": "Sponsored Content",
+      "proposedOffer": "Sponsored feature: their photos → our AI portraits",
+      "expectedVolume": "30-50 orders/month",
+      "status": "Not Contacted",
+      "priority": "Very High",
+      "notes": "MASSIVE reach. 3.8M followers. Premium investment but huge potential."
+    },
+    {
+      "id": "PP006",
+      "category": "Pet Photographer",
+      "name": "San Diego Pet Photography",
+      "type": "Pet Photography",
+      "website": "https://www.sandiegopetphotography.com",
+      "contactEmail": "info@sandiegopetphotography.com",
+      "socialMedia": {
+        "instagram": "@sandiegopetphotography"
+      },
+      "location": "San Diego, CA",
+      "estimatedReach": "12K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "30% commission on referrals",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Regional photographer. Template for other regional markets."
+    },
+    {
+      "id": "PP007",
+      "category": "Pet Photographer",
+      "name": "Furbaby Photography",
+      "type": "Pet Photography",
+      "website": "https://www.furbabyphotography.com",
+      "contactEmail": "hello@furbabyphotography.com",
+      "socialMedia": {
+        "instagram": "@furbabyphotography"
+      },
+      "location": "Los Angeles, CA",
+      "estimatedReach": "20K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "25% commission, co-branded packages",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "LA market. High-income demographic."
+    },
+    {
+      "id": "PP008",
+      "category": "Pet Photographer",
+      "name": "Boston Terrier Network - Pet Photos",
+      "type": "Breed-Specific Photography",
+      "website": null,
+      "contactEmail": "Via Instagram DM",
+      "socialMedia": {
+        "instagram": "@bostonterriernetwork"
+      },
+      "location": "Online/Nationwide",
+      "estimatedReach": "500K+ followers",
+      "partnershipType": "Affiliate",
+      "proposedOffer": "Featured partner, 20% commission on breed portraits",
+      "expectedVolume": "15-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Massive breed community. Template for other breed networks."
+    },
+    {
+      "id": "PP009",
+      "category": "Pet Photographer",
+      "name": "Paws of Austin",
+      "type": "Pet Photography + Events",
+      "website": "https://www.pawsofaustin.com",
+      "contactEmail": "info@pawsofaustin.com",
+      "socialMedia": {
+        "instagram": "@pawsofaustin"
+      },
+      "location": "Austin, TX",
+      "estimatedReach": "8K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "Event partnership: photo sessions → AI portrait upsell",
+      "expectedVolume": "8-12 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Event photography angle. Group photo sessions."
+    },
+    {
+      "id": "PP010",
+      "category": "Pet Photographer",
+      "name": "Shake - Carli Davidson",
+      "type": "Fine Art Pet Photography",
+      "website": "https://www.carlidavidson.com",
+      "contactEmail": "carli@carlidavidson.com",
+      "socialMedia": {
+        "instagram": "@carlidavidson"
+      },
+      "location": "Portland, OR",
+      "estimatedReach": "100K+ followers",
+      "partnershipType": "Collaborative Project",
+      "proposedOffer": "Co-branded art series, exhibition partnerships",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Famous for 'Shake' series. Art angle. Credibility boost."
+    },
+    {
+      "id": "PP011",
+      "category": "Pet Photographer",
+      "name": "Puppy Tales Photography",
+      "type": "Pet Photography",
+      "website": "https://www.puppytalesphotography.com",
+      "contactEmail": "info@puppytalesphotography.com",
+      "socialMedia": {
+        "instagram": "@puppytalesphotography"
+      },
+      "location": "Denver, CO",
+      "estimatedReach": "10K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "30% commission on AI portrait upsells",
+      "expectedVolume": "5-10 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Regional presence. Growing market."
+    },
+    {
+      "id": "PP012",
+      "category": "Pet Photographer",
+      "name": "Seattle Dog Spot",
+      "type": "Pet Photography + Blog",
+      "website": "https://www.seattledogspot.com",
+      "contactEmail": "info@seattledogspot.com",
+      "socialMedia": {
+        "instagram": "@seattledogspot"
+      },
+      "location": "Seattle, WA",
+      "estimatedReach": "25K+ followers",
+      "partnershipType": "Affiliate + Content",
+      "proposedOffer": "Blog features, 25% commission, sponsored content",
+      "expectedVolume": "10-15 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Strong regional presence + blog. SEO benefit."
+    },
+    {
+      "id": "PP013",
+      "category": "Pet Photographer",
+      "name": "Chicago Pet Photography",
+      "type": "Pet Photography",
+      "website": "https://www.chicagopetphotography.com",
+      "contactEmail": "info@chicagopetphotography.com",
+      "socialMedia": {
+        "instagram": "@chicagopetphotography"
+      },
+      "location": "Chicago, IL",
+      "estimatedReach": "8K+ followers",
+      "partnershipType": "Revenue Share",
+      "proposedOffer": "30% commission on portrait upsells",
+      "expectedVolume": "5-8 orders/month",
+      "status": "Not Contacted",
+      "priority": "Medium",
+      "notes": "Major metro market. Good regional template."
+    },
+    {
+      "id": "PP014",
+      "category": "Pet Photographer",
+      "name": "Pawsh Magazine",
+      "type": "Pet Lifestyle Publication",
+      "website": "https://www.pawshmagazine.com",
+      "contactEmail": "editor@pawshmagazine.com",
+      "socialMedia": {
+        "instagram": "@pawshmagazine"
+      },
+      "location": "Online/National",
+      "estimatedReach": "50K+ readers",
+      "partnershipType": "Editorial + Affiliate",
+      "proposedOffer": "Featured product, editorial coverage, affiliate commission",
+      "expectedVolume": "15-20 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Publication reach. Editorial credibility. SEO backlinks."
+    },
+    {
+      "id": "PP015",
+      "category": "Pet Photographer",
+      "name": "My Dog is My Home",
+      "type": "Pet Photography + Content",
+      "website": "https://mydogismyhome.com",
+      "contactEmail": "hello@mydogismyhome.com",
+      "socialMedia": {
+        "instagram": "@mydogismyhome"
+      },
+      "location": "California",
+      "estimatedReach": "60K+ followers",
+      "partnershipType": "Content Partnership",
+      "proposedOffer": "Featured artist, 25% commission, co-branded content",
+      "expectedVolume": "12-18 orders/month",
+      "status": "Not Contacted",
+      "priority": "High",
+      "notes": "Strong content presence. Engaged community."
+    }
+  ],
+  "outreachGoals": {
+    "month1": {
+      "contactsToMake": 50,
+      "expectedResponses": 15,
+      "targetPartnerships": 3
+    },
+    "month2": {
+      "targetActivePartnerships": 5,
+      "expectedOrdersPerPartner": "10-20",
+      "totalExpectedOrders": "50-100"
+    },
+    "month3": {
+      "targetActivePartnerships": 10,
+      "expectedOrdersPerPartner": "10-20",
+      "totalExpectedOrders": "100-200"
+    }
+  },
+  "trackingFields": {
+    "status": ["Not Contacted", "Email Sent", "Follow-up Sent", "In Discussion", "Agreement Signed", "Active Partnership", "Declined", "No Response"],
+    "priority": ["Very High", "High", "Medium", "Low"]
+  }
+}
