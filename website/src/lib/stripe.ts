@@ -98,6 +98,7 @@ export async function createCheckoutSession({
   petPhotoUrl,
   discountCode,
   referralCode,
+  badge,
   utmSource,
   utmMedium,
   utmCampaign,
@@ -111,6 +112,7 @@ export async function createCheckoutSession({
   petPhotoUrl?: string;
   discountCode?: string;
   referralCode?: string;
+  badge?: string;
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
@@ -149,6 +151,7 @@ export async function createCheckoutSession({
       petPhotoUrl: petPhotoUrl || "",
       discountCode: discountCode || "",
       referralCode: referralCode || "",
+      badge: badge || "",
       utmSource: utmSource || "",
       utmMedium: utmMedium || "",
       utmCampaign: utmCampaign || "",

@@ -229,6 +229,7 @@ export async function POST(req: NextRequest) {
           utmCampaign: metadata.utmCampaign || null,
           referralCode: metadata.referralCode || null,
           discountCode: metadata.discountCode || null,
+          pricingBadge: metadata.badge || null,
           status: 'completed',
           deliveryStatus: 'pending',
           paidAt: new Date(),

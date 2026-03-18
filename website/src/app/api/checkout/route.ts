@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
       tier,
       discountCode,
       referralCode,
+      badge,
       utmSource,
       utmMedium,
       utmCampaign
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
       petPhotoUrl,
       discountCode,
       referralCode: validatedReferralCode,
+      badge,
       utmSource,
       utmMedium,
       utmCampaign,

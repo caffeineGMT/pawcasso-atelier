@@ -252,6 +252,7 @@ model Order {
   utmCampaign           String?
   referralCode          String?
   discountCode          String?
+  pricingBadge          String?   // Badge shown at purchase time (e.g., "Most Popular", "Best Value")
 
   // Status
   status                String    @default("pending") // pending, completed, refunded, failed

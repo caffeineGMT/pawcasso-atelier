@@ -288,12 +288,23 @@ function OrderPageContent() {
 
       // Track InitiateCheckout event (creates "checkout initiators" audience)
       const selectedTierConfig = TIER_CONFIG.find(t => t.id === selectedTier);
+      const tierBadge = TIER_BADGES[selectedTier];
+
       trackInitiateCheckout({
         content_ids: [`portrait_${selectedTier}`],
         contents: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
         value: selectedTierConfig?.price || 9,
         currency: 'USD',
         num_items: 1,
+      });
+
+      // Track badge conversion tracking event
+      trackEvent('checkout_with_badge', {
+        tier: selectedTier,
+        tier_name: selectedTierConfig?.name,
+        badge: tierBadge || 'none',
+        price: selectedTierConfig?.price,
+        experiment: 'most_popular_vs_best_value',
       });
 
       // Track Pinterest Checkout
@@ -315,7 +326,7 @@ function OrderPageContent() {
         items: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
       });
 
-      // Create checkout session with photo URL, tier, and discount code
+      // Create checkout session with photo URL, tier, discount code, and badge info
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -327,7 +338,8 @@ function OrderPageContent() {
           notes,
           petPhotoUrl,
           tier: selectedTier,
-          discountCode: discountCode || undefined
+          discountCode: discountCode || undefined,
+          badge: tierBadge || undefined,
         }),
       });
 
@@ -339,6 +351,7 @@ function OrderPageContent() {
           tier: selectedTier,
           currency: 'USD',
           value: selectedTierConfig?.price,
+          badge: tierBadge || 'none',
         });
         window.location.href = data.url;
       } else {
