@@ -648,6 +648,7 @@ export async function POST(req: NextRequest) {
     // Standard digital portrait order
     const petPhotoUrl = metadata.petPhotoUrl;
     const tier = metadata.tier || "basic";
+    const tierName = metadata.tierName || tier;
     const customerEmail = session.customer_email!;
     const customerName = metadata.customerName || "Customer";
     const petName = metadata.petName || "your pet";
@@ -689,6 +690,26 @@ export async function POST(req: NextRequest) {
           status: 'completed',
           deliveryStatus: 'pending',
           paidAt: new Date(),
+        },
+      });
+      // Track purchase_complete analytics event
+      await prisma.analyticsEvent.create({
+        data: {
+          eventName: 'purchase_complete',
+          userId: customerEmail,
+          sessionId: session.id,
+          utmSource: metadata.utmSource || null,
+          utmMedium: metadata.utmMedium || null,
+          utmCampaign: metadata.utmCampaign || null,
+          pathname: '/checkout',
+          metadata: JSON.stringify({
+            tier,
+            tierName,
+            petName,
+            style,
+            badge: metadata.badge || null,
+          }),
+          revenue: amountTotal / 100, // Convert from cents to dollars
         },
       });
     } catch (dbError) {

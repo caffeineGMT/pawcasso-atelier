@@ -254,13 +254,92 @@ export async function GET(req: NextRequest) {
       // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const days = parseInt(searchParams.get('days') || '30');
+
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
     // Sync orders from Stripe
     await syncStripeOrders();
 
     // Calculate analytics
     const analytics = await calculateAnalytics();
 
-    return NextResponse.json(analytics);
+    // Conversion Funnel - Count unique sessions at each step
+    const funnelEvents = await prisma.$queryRaw<Array<{ eventName: string; count: bigint }>>`
+      SELECT eventName, COUNT(DISTINCT sessionId) as count
+      FROM AnalyticsEvent
+      WHERE createdAt >= ${startDate}
+      GROUP BY eventName
+      ORDER BY
+        CASE eventName
+          WHEN 'page_view' THEN 1
+          WHEN 'gallery_view' THEN 2
+          WHEN 'order_start' THEN 3
+          WHEN 'checkout_start' THEN 4
+          WHEN 'purchase_complete' THEN 5
+          ELSE 6
+        END
+    `;
+
+    const funnel = funnelEvents.map(event => ({
+      eventName: event.eventName,
+      count: Number(event.count),
+    }));
+
+    // Attribution by UTM Source with conversion rates
+    const attributionData = await prisma.$queryRaw<Array<{
+      utmSource: string | null;
+      totalRevenue: number;
+      customers: bigint;
+      purchases: bigint;
+    }>>`
+      SELECT
+        utmSource,
+        SUM(revenue) as totalRevenue,
+        COUNT(DISTINCT userId) as customers,
+        COUNT(*) as purchases
+      FROM AnalyticsEvent
+      WHERE eventName = 'purchase_complete'
+        AND createdAt >= ${startDate}
+      GROUP BY utmSource
+      ORDER BY totalRevenue DESC
+    `;
+
+    const attribution = attributionData.map(item => ({
+      utmSource: item.utmSource || 'Direct',
+      totalRevenue: Number(item.totalRevenue),
+      customers: Number(item.customers),
+      purchases: Number(item.purchases),
+    }));
+
+    // Recent Events (last 50)
+    const recentEvents = await prisma.analyticsEvent.findMany({
+      where: {
+        createdAt: { gte: startDate },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+      select: {
+        id: true,
+        eventName: true,
+        userId: true,
+        utmSource: true,
+        utmMedium: true,
+        utmCampaign: true,
+        revenue: true,
+        metadata: true,
+        createdAt: true,
+      },
+    });
+
+    return NextResponse.json({
+      ...analytics,
+      funnel,
+      attribution,
+      recentEvents,
+    });
   } catch (error) {
     console.error('Analytics error:', error);
     return NextResponse.json(

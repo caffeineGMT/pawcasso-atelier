@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { artworks } from "@/lib/data";
+import { generateProductSchema, renderStructuredData } from "@/lib/structured-data";
 import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
@@ -33,11 +34,27 @@ export const metadata: Metadata = {
   },
 };
 
+const productSchema = generateProductSchema({
+  name: "Pet Memorial Portrait - Beautiful Tribute",
+  price: 9,
+  image: "https://pawcasso-atelier.vercel.app/gallery/golden_retriever_ghibli.png",
+  description: "Honor your beloved pet with a timeless memorial portrait. Beautiful custom art in 17 styles. From $9. A heartfelt way to celebrate their memory.",
+  aggregateRating: {
+    ratingValue: 4.9,
+    reviewCount: 127,
+  },
+});
+
 export default function MemorialPortraitsPage() {
   const featured = [artworks[0], artworks[3], artworks[1], artworks[7], artworks[13], artworks[8]];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(productSchema)}
+      />
+
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Ambient glow */}

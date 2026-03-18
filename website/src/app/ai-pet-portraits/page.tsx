@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { artworks } from "@/lib/data";
+import { generateProductSchema, renderStructuredData } from "@/lib/structured-data";
 import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
@@ -32,11 +33,27 @@ export const metadata: Metadata = {
   },
 };
 
+const productSchema = generateProductSchema({
+  name: "AI Pet Portrait - Custom AI-Generated Art",
+  price: 9,
+  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
+  description: "Advanced AI transforms your pet photo into stunning custom artwork. 17 art styles, 4000x5000px resolution, delivered in 24 hours.",
+  aggregateRating: {
+    ratingValue: 4.9,
+    reviewCount: 127,
+  },
+});
+
 export default function AIPortraitsPage() {
   const featured = [artworks[0], artworks[4], artworks[6], artworks[7], artworks[11], artworks[13]];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(productSchema)}
+      />
+
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Ambient glow */}

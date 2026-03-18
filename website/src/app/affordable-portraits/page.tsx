@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { artworks } from "@/lib/data";
+import { generateProductSchema, renderStructuredData } from "@/lib/structured-data";
 import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
@@ -32,11 +33,27 @@ export const metadata: Metadata = {
   },
 };
 
+const productSchema = generateProductSchema({
+  name: "Affordable Pet Portrait - Custom Art for $9",
+  price: 9,
+  image: "https://pawcasso-atelier.vercel.app/gallery/shiba_portrait_final.webp",
+  description: "Professional pet portraits at affordable prices. No artist fees. 24-hour delivery. Print-ready 4000x5000px quality.",
+  aggregateRating: {
+    ratingValue: 4.9,
+    reviewCount: 127,
+  },
+});
+
 export default function AffordablePortraitsPage() {
   const featured = [artworks[1], artworks[8], artworks[9], artworks[12], artworks[13], artworks[7]];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(productSchema)}
+      />
+
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Ambient glow */}

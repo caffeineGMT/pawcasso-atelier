@@ -223,7 +223,7 @@ function OrderPageContent() {
       // Create a synthetic event to reuse handleFileChange logic
       const syntheticEvent = {
         target: { files: [file] }
-      } as React.ChangeEvent<HTMLInputElement>;
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
       await handleFileChange(syntheticEvent);
     }
   };
@@ -352,11 +352,11 @@ function OrderPageContent() {
       setUploadProgress(100);
 
       // Track successful upload
-      trackEngagement('photo_upload_success', {
-        tier: selectedTier,
-        file_size: file.size,
-        file_type: file.type,
-      });
+//       trackEngagement('photo_upload_start', {
+//         tier: selectedTier,
+//         file_size: file.size,
+//         file_type: file.type,
+//       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Upload failed";
       setUploadError(errorMessage);
@@ -364,10 +364,10 @@ function OrderPageContent() {
       setUploadProgress(0);
 
       // Track failed upload
-      trackEngagement('photo_upload_error', {
-        tier: selectedTier,
-        error: errorMessage,
-      });
+//       trackEngagement('photo_upload_error', {
+//         tier: selectedTier,
+//         error: errorMessage,
+//       });
     } finally {
       setUploading(false);
     }

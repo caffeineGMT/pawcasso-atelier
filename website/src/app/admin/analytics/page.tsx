@@ -29,6 +29,27 @@ interface AnalyticsData {
   totalCustomers: number;
   repeatCustomers: number;
   avgLtv: number;
+  funnel?: {
+    eventName: string;
+    count: number;
+  }[];
+  attribution?: {
+    utmSource: string;
+    totalRevenue: number;
+    customers: number;
+    purchases: number;
+  }[];
+  recentEvents?: {
+    id: string;
+    eventName: string;
+    userId: string | null;
+    utmSource: string | null;
+    utmMedium: string | null;
+    utmCampaign: string | null;
+    revenue: number;
+    metadata: string | null;
+    createdAt: string;
+  }[];
 }
 
 export default function AnalyticsPage() {
@@ -150,6 +171,82 @@ export default function AnalyticsPage() {
           />
         </div>
 
+        {/* Conversion Funnel */}
+        {analytics.funnel && analytics.funnel.length > 0 && (
+          <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6 mb-8">
+            <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Conversion Funnel</h2>
+            <div className="space-y-4">
+              {analytics.funnel.map((step, index) => {
+                const prevCount = index > 0 ? analytics.funnel![index - 1].count : step.count;
+                const dropoffPercent = index > 0 ? (((prevCount - step.count) / prevCount) * 100).toFixed(1) : '0';
+                const conversionPercent = ((step.count / (analytics.funnel![0]?.count || 1)) * 100).toFixed(1);
+                const maxCount = analytics.funnel![0]?.count || 1;
+                const widthPercent = (step.count / maxCount) * 100;
+
+                return (
+                  <div key={index}>
+                    <div className="flex items-center gap-4 mb-1">
+                      <div className="w-32 text-sm font-medium">{step.eventName.replace(/_/g, ' ')}</div>
+                      <div className="flex-1">
+                        <div className="h-10 bg-[#1d1d1f] rounded-lg overflow-hidden relative">
+                          <div
+                            className="h-full bg-gradient-to-r from-[#C9A96E] to-[#B89960] transition-all duration-500 flex items-center px-4"
+                            style={{ width: `${widthPercent}%`, opacity: 1 - index * 0.15 }}
+                          >
+                            <span className="text-sm font-bold text-black">
+                              {step.count} ({conversionPercent}%)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {index > 0 && parseFloat(dropoffPercent) > 0 && (
+                      <div className="text-xs text-red-400 ml-36">
+                        -{dropoffPercent}% drop-off from previous step
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Attribution by Source */}
+        {analytics.attribution && analytics.attribution.length > 0 && (
+          <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6 mb-8">
+            <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Revenue by Source</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left text-[#86868b] border-b border-[#1d1d1f]">
+                    <th className="pb-4 font-semibold">UTM Source</th>
+                    <th className="pb-4 font-semibold text-right">Revenue</th>
+                    <th className="pb-4 font-semibold text-right">Customers</th>
+                    <th className="pb-4 font-semibold text-right">Purchases</th>
+                    <th className="pb-4 font-semibold text-right">Avg/Customer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analytics.attribution.map((source, index) => (
+                    <tr key={index} className="border-b border-[#1d1d1f] last:border-0">
+                      <td className="py-4 font-medium capitalize">{source.utmSource}</td>
+                      <td className="py-4 text-right font-semibold text-[#C9A96E]">
+                        ${source.totalRevenue.toFixed(2)}
+                      </td>
+                      <td className="py-4 text-right">{source.customers}</td>
+                      <td className="py-4 text-right">{source.purchases}</td>
+                      <td className="py-4 text-right">
+                        ${(source.totalRevenue / source.customers).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* Acquisition Channel Breakdown */}
         <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6 mb-8">
           <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Acquisition Channels</h2>
@@ -189,7 +286,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Daily Revenue Chart (Simple Bar Chart) */}
-        <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6">
+        <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6 mb-8">
           <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Daily Performance (Last 30 Days)</h2>
           <div className="space-y-4">
             {analytics.dailyStats.slice(-14).reverse().map((day, index) => {
@@ -221,6 +318,66 @@ export default function AnalyticsPage() {
             })}
           </div>
         </div>
+
+        {/* Recent Events Stream */}
+        {analytics.recentEvents && analytics.recentEvents.length > 0 && (
+          <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6">
+            <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Recent Events (Last 50)</h2>
+            <div className="overflow-x-auto max-h-96 overflow-y-auto">
+              <table className="w-full text-sm font-mono">
+                <thead className="sticky top-0 bg-[#111] border-b border-[#1d1d1f]">
+                  <tr className="text-left text-[#86868b]">
+                    <th className="pb-3 font-semibold">Time</th>
+                    <th className="pb-3 font-semibold">Event</th>
+                    <th className="pb-3 font-semibold">User</th>
+                    <th className="pb-3 font-semibold">Source</th>
+                    <th className="pb-3 font-semibold text-right">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analytics.recentEvents.map((event) => {
+                    const eventColors: Record<string, string> = {
+                      page_view: 'text-[#86868b]',
+                      gallery_view: 'text-blue-400',
+                      order_start: 'text-yellow-400',
+                      checkout_start: 'text-orange-400',
+                      purchase_complete: 'text-green-400',
+                    };
+
+                    return (
+                      <tr key={event.id} className="border-b border-[#1d1d1f]/50 hover:bg-[#1d1d1f]/50">
+                        <td className="py-2 text-[#86868b]">
+                          {new Date(event.createdAt).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </td>
+                        <td className={`py-2 font-semibold ${eventColors[event.eventName] || 'text-[#F5F5F7]'}`}>
+                          {event.eventName}
+                        </td>
+                        <td className="py-2 text-[#86868b] truncate max-w-xs">
+                          {event.userId || 'Anonymous'}
+                        </td>
+                        <td className="py-2 text-[#86868b]">
+                          {event.utmSource || 'Direct'}
+                        </td>
+                        <td className="py-2 text-right">
+                          {event.revenue > 0 ? (
+                            <span className="text-green-400 font-semibold">
+                              ${event.revenue.toFixed(2)}
+                            </span>
+                          ) : (
+                            <span className="text-[#86868b]">-</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
