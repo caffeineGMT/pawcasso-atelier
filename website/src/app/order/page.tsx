@@ -13,7 +13,7 @@ const stylePreviewMap: Record<string, { image: string; title: string }> = {
   "art-nouveau": { image: "/gallery/owl_art_nouveau.png", title: "The Keeper of Pages" },
   "ukiyo-e": { image: "/gallery/pisces_zodiac_ukiyoe_portrait.png", title: "Pisces Rising" },
   cyberpunk: { image: "/gallery/the_catrix_poster.png", title: "The Catrix" },
-  "pixar-3d": { image: "/gallery/red_panda_pixar_chef.png", title: "Chef\u2019s Kiss" },
+  "pixar-3d": { image: "/gallery/red_panda_pixar_chef.png", title: "Chef's Kiss" },
   "needle-felt": { image: "/gallery/corgi_needle_felt.png", title: "Woolly Wanderer" },
   hyperrealism: { image: "/gallery/penguin_gala.png", title: "Black Tie Affair" },
   "art-deco": { image: "/gallery/the_great_catsby_poster.png", title: "The Great Catsby" },
@@ -53,9 +53,9 @@ export default function OrderPage() {
     }
 
     // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
-      setUploadError("Invalid file type. Please upload a JPEG, PNG, WebP, or HEIC image.");
+      setUploadError("Invalid file type. Please upload a JPEG, PNG, or WebP image.");
       setSelectedFile(null);
       setPreviewUrl(null);
       return;
@@ -160,11 +160,11 @@ export default function OrderPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Contact Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2">
+              <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
                 Your Name
               </label>
               <input
@@ -172,12 +172,12 @@ export default function OrderPage() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
+                className="w-full min-h-[44px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
                 placeholder="Jane Doe"
               />
             </div>
             <div>
-              <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2">
+              <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
                 Email
               </label>
               <input
@@ -185,7 +185,7 @@ export default function OrderPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
+                className="w-full min-h-[44px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
                 placeholder="jane@example.com"
               />
             </div>
@@ -193,7 +193,7 @@ export default function OrderPage() {
 
           {/* Pet Name */}
           <div>
-            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2">
+            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
               Pet&apos;s Name
             </label>
             <input
@@ -201,20 +201,20 @@ export default function OrderPage() {
               required
               value={petName}
               onChange={(e) => setPetName(e.target.value)}
-              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
+              className="w-full min-h-[44px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
               placeholder="Sir Woofington III"
             />
           </div>
 
           {/* Photo Upload */}
           <div>
-            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2">
+            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
               Pet Photo
             </label>
-            <div className="border border-dashed border-white/[0.12] hover:border-gold/40 transition-all rounded-2xl p-10 text-center cursor-pointer relative group">
+            <div className="border border-dashed border-white/[0.12] hover:border-gold/40 transition-all rounded-2xl p-8 sm:p-10 text-center cursor-pointer relative group min-h-[120px] flex flex-col items-center justify-center">
               <input
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/heic"
+                accept="image/jpeg,image/png,image/webp"
                 required
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -223,11 +223,11 @@ export default function OrderPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               {selectedFile ? (
-                <p className="text-gold text-sm font-medium">{selectedFile.name}</p>
+                <p className="text-gold text-base font-medium">{selectedFile.name}</p>
               ) : (
                 <>
-                  <p className="text-text-secondary text-sm">Click or drag to upload</p>
-                  <p className="text-white/20 text-xs mt-1">JPG, PNG, WebP, or HEIC — max 10MB</p>
+                  <p className="text-text-secondary text-base">Click or drag to upload</p>
+                  <p className="text-white/20 text-xs mt-1">JPG, PNG, or WebP — max 10MB</p>
                 </>
               )}
             </div>
@@ -262,23 +262,23 @@ export default function OrderPage() {
 
           {/* Style Selection */}
           <div>
-            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-4">
+            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
               Art Style
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
               {artStyleOptions.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
                   onClick={() => setStyle(opt.value)}
-                  className={`text-left p-4 rounded-xl border transition-all ${
+                  className={`text-left p-4 rounded-xl border transition-all min-h-[64px] ${
                     style === opt.value
                       ? "border-gold/60 bg-gold/10 ring-1 ring-gold/20"
                       : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
                   }`}
                 >
-                  <div className="text-sm font-medium text-text-primary">{opt.label}</div>
-                  <div className="text-[11px] text-text-secondary mt-1 leading-snug">{opt.description}</div>
+                  <div className="text-base font-medium text-text-primary">{opt.label}</div>
+                  <div className="text-xs text-text-secondary mt-1 leading-snug">{opt.description}</div>
                 </button>
               ))}
             </div>
@@ -306,14 +306,14 @@ export default function OrderPage() {
 
           {/* Notes */}
           <div>
-            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2">
+            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
               Special Requests <span className="normal-case text-white/20">(optional)</span>
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all resize-none placeholder:text-white/20"
+              rows={4}
+              className="w-full min-h-[100px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all resize-none placeholder:text-white/20"
               placeholder="Any specific requests? E.g., include a crown, specific background..."
             />
           </div>
@@ -322,7 +322,7 @@ export default function OrderPage() {
           <button
             type="submit"
             disabled={loading || !style || (uploadProgress > 0 && uploadProgress < 100)}
-            className="w-full py-4 bg-white text-black font-medium tracking-wide text-sm rounded-full hover:bg-white/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-full min-h-[48px] py-4 bg-white text-black font-medium tracking-wide text-base rounded-full hover:bg-white/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed sm:w-auto sm:px-12"
           >
             {uploadProgress > 0 && uploadProgress < 100
               ? "Uploading photo..."
