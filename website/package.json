@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "convert-images": "tsx scripts/convert-to-webp.ts"
+    "convert-images": "tsx scripts/convert-to-webp.ts",
+    "generate-pins": "tsx scripts/generate-pinterest-pins.ts",
+    "email:export": "tsx scripts/export-email-templates.ts",
+    "email:dev": "email dev"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
@@ -38,6 +41,7 @@
     "autoprefixer": "^10.4.27",
     "postcss": "^8.5.8",
     "prisma": "^7.5.0",
+    "react-email": "^3.0.3",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.1",
     "ts-node": "^10.9.2",
