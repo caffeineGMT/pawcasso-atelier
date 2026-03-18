@@ -221,3 +221,56 @@ model InstagramPost {
 
   @@index([featured])
 }
+
+// Order tracking for revenue analytics
+model Order {
+  id                    String    @id @default(cuid())
+  stripeSessionId       String    @unique
+  stripePaymentIntentId String?   @unique
+  customerEmail         String
+  customerName          String
+
+  // Order details
+  tier                  String    // basic, premium, deluxe, bundle
+  tierName              String
+  amount                Float     // Total amount in dollars
+  subtotal              Float     // Amount before discounts
+  discount              Float     @default(0) // Discount amount
+  tax                   Float     @default(0)
+
+  // Product details
+  petName               String
+  style                 String
+  notes                 String?
+  petPhotoUrl           String?
+  portraitUrls          String?   // Comma-separated URLs
+  portraitCount         Int       @default(1)
+
+  // Acquisition tracking
+  utmSource             String?
+  utmMedium             String?
+  utmCampaign           String?
+  referralCode          String?
+  discountCode          String?
+
+  // Status
+  status                String    @default("pending") // pending, completed, refunded, failed
+  deliveryStatus        String    @default("pending") // pending, completed, failed
+  deliveredAt           DateTime?
+
+  // Refund tracking
+  refunded              Boolean   @default(false)
+  refundedAt            DateTime?
+  refundAmount          Float     @default(0)
+
+  // Timestamps
+  createdAt             DateTime  @default(now())
+  paidAt                DateTime?
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([createdAt])
+  @@index([utmSource])
+  @@index([utmMedium])
+  @@index([referralCode])
+}

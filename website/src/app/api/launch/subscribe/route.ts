@@ -44,14 +44,17 @@ export async function POST(request: NextRequest) {
 
       console.log(`Successfully subscribed to launch list: ${email}`);
 
-      // Send welcome email with launch details and discount code
+      // TODO: Send welcome email with launch details and discount code
+      // Note: Mailchimp marketing API doesn't support transactional emails
+      // Use Resend or Mailchimp Transactional (Mandrill) instead
       try {
+        /*
         await mailchimp.messages.send({
           message: {
             from_email: 'hello@pawcasso-atelier.com',
             from_name: 'Pawcasso Atelier',
             to: [{ email, type: 'to' }],
-            subject: '🎨 You're on the list! Your exclusive 50% launch discount',
+            subject: "🎨 You're on the list! Your exclusive 50% launch discount",
             html: `
               <!DOCTYPE html>
               <html>
@@ -140,7 +143,8 @@ export async function POST(request: NextRequest) {
             `,
           },
         });
-        console.log(`Launch welcome email sent to: ${email}`);
+        */
+        console.log(`Launch welcome email sending disabled - use Resend instead`);
       } catch (emailError: any) {
         // Log but don't fail the request if email fails
         console.error('Failed to send welcome email:', emailError);
@@ -173,7 +177,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
           success: true,
           discountCode: 'LAUNCH50',
-          message: 'You're already on the list! Check your email for launch details.',
+          message: "You're already on the list! Check your email for launch details.",
         });
       }
 

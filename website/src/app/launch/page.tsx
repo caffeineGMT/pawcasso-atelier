@@ -255,16 +255,16 @@ export default function LaunchPage() {
                 a: 'We launch on ProductHunt Tuesday, March 25th at 12:01 AM Pacific Time. Be sure to sign up above to get your exclusive 50% discount code sent to your inbox!',
               },
               {
-                q: 'What's the launch discount?',
-                a: 'Early supporters who sign up before launch get an exclusive 50% OFF code. That's just $4.50 per portrait instead of $9 — valid for your first 5 portraits.',
+                q: "What's the launch discount?",
+                a: "Early supporters who sign up before launch get an exclusive 50% OFF code. That's just $4.50 per portrait instead of $9 — valid for your first 5 portraits.",
               },
               {
                 q: 'How does the process work?',
-                a: 'Upload your pet's photo, choose from 16 art styles (Renaissance, Pixar 3D, Needle Felt, Ukiyo-e, and more), and receive a stunning 4000×5000px digital portrait within 24 hours.',
+                a: "Upload your pet's photo, choose from 16 art styles (Renaissance, Pixar 3D, Needle Felt, Ukiyo-e, and more), and receive a stunning 4000×5000px digital portrait within 24 hours.",
               },
               {
                 q: 'What makes Pawcasso different?',
-                a: 'We combine cutting-edge AI with curated art direction. Every portrait is quality-checked by our team and you get unlimited revisions until it's perfect. Plus, we're the most affordable option at just $9.',
+                a: "We combine cutting-edge AI with curated art direction. Every portrait is quality-checked by our team and you get unlimited revisions until it's perfect. Plus, we're the most affordable option at just $9.",
               },
               {
                 q: 'Can I share my portrait on social media?',

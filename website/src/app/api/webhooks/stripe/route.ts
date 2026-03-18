@@ -4,6 +4,9 @@ import { put } from "@vercel/blob";
 import { Resend } from "resend";
 import { processReferralConversion, getOrCreateCustomer } from "@/lib/referral";
 import { generateOrderCompleteEmailWithReferral } from "@/lib/email-templates/order-complete-with-referral";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 function getStripeInstance() {
   return new Stripe(process.env.STRIPE_SECRET_KEY || "placeholder", {
@@ -196,6 +199,46 @@ export async function POST(req: NextRequest) {
     const petName = metadata.petName || "your pet";
     const style = metadata.style || "renaissance";
 
+    // Create order record in database
+    const amountTotal = session.amount_total || 0;
+    const discount = session.total_details?.amount_discount || 0;
+
+    try {
+      await prisma.order.create({
+        data: {
+          stripeSessionId: session.id,
+          stripePaymentIntentId: typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : null,
+          customerEmail,
+          customerName,
+          tier,
+          tierName: metadata.tierName || tier,
+          amount: amountTotal / 100,
+          subtotal: (amountTotal + discount) / 100,
+          discount: discount / 100,
+          tax: (session.total_details?.amount_tax || 0) / 100,
+          petName,
+          style,
+          notes: metadata.notes || '',
+          petPhotoUrl: metadata.petPhotoUrl || '',
+          portraitUrls: '',
+          portraitCount: tier === 'basic' ? 1 : tier === 'premium' ? 3 : tier === 'deluxe' ? 5 : 5,
+          utmSource: metadata.utmSource || null,
+          utmMedium: metadata.utmMedium || null,
+          utmCampaign: metadata.utmCampaign || null,
+          referralCode: metadata.referralCode || null,
+          discountCode: metadata.discountCode || null,
+          status: 'completed',
+          deliveryStatus: 'pending',
+          paidAt: new Date(),
+        },
+      });
+    } catch (dbError) {
+      console.error('Failed to create order in database:', dbError);
+      // Continue with order processing even if database save fails
+    }
+
     // Validate pet photo URL exists
     if (!petPhotoUrl) {
       console.error("Missing pet_photo_url in session metadata");
@@ -355,7 +398,21 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Step 8: Track influencer conversion (if applicable)
+      // Step 8: Update order with portrait URLs
+      try {
+        await prisma.order.update({
+          where: { stripeSessionId: session.id },
+          data: {
+            portraitUrls: portraitUrls.join(','),
+            deliveryStatus: 'completed',
+            deliveredAt: new Date(),
+          },
+        });
+      } catch (dbError) {
+        console.error('Failed to update order in database:', dbError);
+      }
+
+      // Step 9: Track influencer conversion (if applicable)
       const utmSource = metadata.utmSource;
       const utmMedium = metadata.utmMedium;
       const utmCampaign = metadata.utmCampaign;
@@ -404,13 +461,36 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Handle charge.refunded event
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge;
+
+    try {
+      const order = await prisma.order.findFirst({
+        where: { stripePaymentIntentId: charge.payment_intent as string },
+      });
+
+      if (order) {
+        const refundAmount = charge.amount_refunded / 100;
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            refunded: true,
+            refundAmount,
+            refundedAt: new Date(),
+            status: charge.amount_refunded === charge.amount ? 'refunded' : 'completed',
+          },
+        });
+        console.log(`Refund processed for order ${order.id}: $${refundAmount}`);
+      }
+    } catch (dbError) {
+      console.error('Failed to update refund in database:', dbError);
+    }
+  }
+
   // Return 200 for other event types
   return NextResponse.json({ received: true });
 }
 
-// Disable body parsing for webhook signature verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// Note: Body parsing is handled by Next.js App Router automatically
+// No need for config export in App Router

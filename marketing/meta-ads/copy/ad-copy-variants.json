@@ -1,0 +1,148 @@
+{
+  "campaign_name": "Pawcasso Atelier - Pet Portrait Launch Q1 2026",
+  "ad_variants": [
+    {
+      "id": "static_hero_001",
+      "type": "static",
+      "creative_name": "Hero Static - Transform Your Pet",
+      "image": "cat_vermeer.webp",
+      "headline": "Turn Your Pet into a Masterpiece – Just $9",
+      "primary_text": "Your pet isn't just a pet – they're family. Now you can immortalize them as a work of art.\n\nPawcasso Atelier uses AI to transform your pet's photo into stunning custom portraits in 30+ artistic styles. From Renaissance classics to Pixar-style 3D, choose the perfect style that captures their personality.\n\n✨ 30+ art styles to choose from\n🎨 High-resolution digital download\n⚡ Fast turnaround (24-48 hours)\n💰 Only $9 per portrait\n\nPerfect for gifts, home decor, or simply celebrating the furry friend who brightens your day.",
+      "description": "AI-generated custom pet portraits in 30+ artistic styles",
+      "cta": "Shop Now",
+      "link": "https://pawcasso-atelier.vercel.app/order"
+    },
+    {
+      "id": "static_grid_002",
+      "type": "static",
+      "creative_name": "Lifestyle Grid - Multiple Styles",
+      "image": "style_grid_2x2.jpg",
+      "headline": "Custom AI Pet Portraits in 30+ Artistic Styles",
+      "primary_text": "Custom pet portraits used to cost $100+. Not anymore.\n\nGet museum-quality AI-generated art of your dog, cat, or any pet for just $9. Choose from 30+ styles including Pixar 3D, Needle Felt, Renaissance, Cyberpunk, and more.\n\nWhy Pawcasso?\n✓ Professional AI trained on thousands of art styles\n✓ High-res digital file (perfect for printing)\n✓ 24-48 hour delivery\n✓ Satisfaction guaranteed\n\nTransform your pet into art today. Because they deserve it.",
+      "description": "30+ artistic styles for your pet portrait",
+      "cta": "Shop Now",
+      "link": "https://pawcasso-atelier.vercel.app/order"
+    },
+    {
+      "id": "carousel_styles_003",
+      "type": "carousel",
+      "creative_name": "Style Showcase Carousel",
+      "cards": [
+        {
+          "image": "alfie_portrait_final.webp",
+          "headline": "Pixar 3D Style",
+          "description": "Big eyes, chunky & adorable – Only $9"
+        },
+        {
+          "image": "border_collie_portrait_2048x2048.webp",
+          "headline": "Needle Felt Style",
+          "description": "Cozy wool texture – Only $9"
+        },
+        {
+          "image": "cat_vermeer.webp",
+          "headline": "Renaissance Style",
+          "description": "Classical art masterpiece – Only $9"
+        },
+        {
+          "image": "chihuahua_portrait_16x9.webp",
+          "headline": "Pixel Art Style",
+          "description": "Retro 8-bit aesthetic – Only $9"
+        },
+        {
+          "image": "shiba_inu_vinyl_toy_portrait_final.webp",
+          "headline": "Vinyl Toy Style",
+          "description": "Designer collectible look – Only $9"
+        },
+        {
+          "image": "alfie_border_collie_portrait_2048x2048.webp",
+          "headline": "Ink Wash Style",
+          "description": "Traditional Asian art – Only $9"
+        }
+      ],
+      "primary_text": "Can't decide on a style? We've got 30+ options.\n\nFrom Pixar 3D to Renaissance classics, from Pixel Art to Needle Felt – there's a perfect style for every pet's personality.\n\nSwipe through our most popular styles ➡️\n\n🎨 30+ artistic styles\n💵 Just $9 per portrait\n⚡ 24-48 hour delivery\n📥 High-res digital download\n\nYour pet deserves to be immortalized in art. Which style speaks to you?",
+      "cta": "Shop Now",
+      "link": "https://pawcasso-atelier.vercel.app/order"
+    },
+    {
+      "id": "carousel_process_004",
+      "type": "carousel",
+      "creative_name": "Before/After Process Carousel",
+      "cards": [
+        {
+          "image": "card_1_upload.jpg",
+          "headline": "Step 1: Upload Your Pet's Photo",
+          "description": "Any photo works – we'll handle the rest"
+        },
+        {
+          "image": "card_2_choose_style.jpg",
+          "headline": "Step 2: Choose Your Art Style",
+          "description": "30+ styles from Renaissance to Pixar 3D"
+        },
+        {
+          "image": "card_3_ai_magic.jpg",
+          "headline": "Step 3: Our AI Creates Your Masterpiece",
+          "description": "Professional quality in minutes"
+        },
+        {
+          "image": "alfie_portrait_final.webp",
+          "headline": "Step 4: Download & Enjoy!",
+          "description": "High-res file ready to print or share"
+        },
+        {
+          "image": "card_5_happy_customer.jpg",
+          "headline": "Join 500+ Happy Pet Parents",
+          "description": "Only $9 – Order yours today!"
+        }
+      ],
+      "primary_text": "It's this easy to turn your pet into art.\n\n1️⃣ Upload a photo of your pet\n2️⃣ Choose from 30+ artistic styles\n3️⃣ Let our AI work its magic\n4️⃣ Download your masterpiece in 24-48 hours\n\nNo complicated setup. No expensive custom artist fees. Just beautiful, one-of-a-kind pet art for $9.\n\n500+ pet parents have already transformed their fur babies into gallery-worthy portraits. Ready to see yours?",
+      "cta": "Order Now",
+      "link": "https://pawcasso-atelier.vercel.app/order"
+    },
+    {
+      "id": "video_slideshow_005",
+      "type": "video",
+      "creative_name": "Slideshow Video - 30 Styles Showcase",
+      "video_file": "slideshow_30_styles.mp4",
+      "video_specs": {
+        "duration": "15 seconds",
+        "format": "9:16 (Stories/Reels) and 1:1 (Feed)",
+        "fps": 30,
+        "resolution": "1080x1920 (9:16), 1080x1080 (1:1)",
+        "transitions": "Crossfade (0.5s)",
+        "text_overlay": "$9 • Fast Delivery • AI-Generated Masterpiece",
+        "background_music": "Upbeat, modern, pet-friendly (royalty-free)",
+        "images_featured": [
+          "cat_vermeer.webp",
+          "alfie_portrait_final.webp",
+          "shiba_portrait_final_2048x2048.webp",
+          "border_collie_portrait_2048x2048.webp",
+          "chihuahua_portrait_square_2048.jpg",
+          "golden_retriever_portrait_square.webp",
+          "pomeranian_portrait_final.webp",
+          "shiba_inu_felt_portrait_2048x2048.webp",
+          "shiba_inu_vinyl_toy_portrait_final.webp",
+          "white_pomeranian_portrait_final.webp"
+        ]
+      },
+      "headline": "Your Dog Deserves to Be Art (Cat Too!)",
+      "primary_text": "Over 500 pet parents have already turned their fur babies into art. Your turn! 🐾\n\nPawcasso Atelier makes it ridiculously easy (and affordable) to get custom pet portraits. Just upload a photo, pick from 30+ artistic styles, and boom – you've got a one-of-a-kind masterpiece.\n\n$9. That's it. No hidden fees. No waiting weeks.\n\n🖼️ Choose from Renaissance, Pixar 3D, Watercolor, Pixel Art & more\n📥 Instant digital download ready to print or share\n🎁 Perfect gift for pet lovers\n\nLimited-time pricing. Order yours now!",
+      "description": "AI pet portraits in 30+ styles – watch the transformation!",
+      "cta": "Shop Now",
+      "link": "https://pawcasso-atelier.vercel.app/order"
+    }
+  ],
+  "headline_variants": [
+    "Turn Your Pet into a Masterpiece – Just $9",
+    "Custom AI Pet Portraits in 30+ Artistic Styles",
+    "Your Dog Deserves to Be Art (Cat Too!)",
+    "AI-Generated Pet Portraits for Only $9",
+    "Renaissance, Pixar, Pixel Art – Pick Your Style"
+  ],
+  "cta_options": [
+    "Shop Now",
+    "Learn More",
+    "Order Now",
+    "Get Started",
+    "See Styles"
+  ]
+}

@@ -52,7 +52,6 @@ export async function POST(request: NextRequest) {
     const promotionCode = await stripe.promotionCodes.create({
       coupon: coupon.id,
       code: promoCode,
-      max_redemptions: undefined, // unlimited uses
       metadata: {
         influencer_id: influencer.id,
         influencer_handle: influencer.handle,
@@ -60,7 +59,7 @@ export async function POST(request: NextRequest) {
         influencer_name: influencer.name,
         commission_rate: "0.15", // 15% commission
       },
-    });
+    } as any);
 
     // Update influencer record with promo code info
     await prisma.influencer.update({
