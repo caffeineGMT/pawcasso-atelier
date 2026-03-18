@@ -488,7 +488,7 @@ export async function POST(req: NextRequest) {
         const recipientName = metadata.recipientName;
         const senderName = metadata.senderName;
         const senderEmail = metadata.senderEmail || session.customer_email || "";
-        const message = metadata.message || null;
+        const message = metadata.message && metadata.message !== 'null' ? metadata.message : undefined;
         const deliveryDate = metadata.deliveryDate
           ? new Date(metadata.deliveryDate)
           : new Date();
