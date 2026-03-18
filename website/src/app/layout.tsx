@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="flex-1 pt-[73px]">{children}</main>
         <Footer />
+        <EmailCaptureModal />
       </body>
     </html>
   );
