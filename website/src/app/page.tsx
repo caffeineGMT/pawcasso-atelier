@@ -6,6 +6,7 @@ import Testimonials from "@/components/Testimonials";
 import LiveOrderCounter from "@/components/LiveOrderCounter";
 import SocialProofStats from "@/components/SocialProofStats";
 import InstagramFeed from "@/components/InstagramFeed";
+import OrderActivityFeed from "@/components/OrderActivityFeed";
 import { trackEngagement } from "@/lib/analytics";
 
 export default function HomePage() {
@@ -14,6 +15,7 @@ export default function HomePage() {
   return (
     <>
       <LiveOrderCounter />
+      <OrderActivityFeed />
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Ambient glow */}

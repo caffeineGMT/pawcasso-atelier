@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useExperiment, useExperimentVariant, trackExperiment } from "@/lib/experiments";
 
 interface UpsellModalProps {
   sessionId: string;
@@ -9,6 +10,10 @@ interface UpsellModalProps {
 export default function UpsellModal({ sessionId }: UpsellModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
+
+  // Get experiment variant
+  const delay = useExperiment('upsell-modal-timing', 2000, sessionId);
+  const variant = useExperimentVariant('upsell-modal-timing', sessionId);
 
   useEffect(() => {
     // Check if user has already declined this session's upsell
@@ -19,16 +24,44 @@ export default function UpsellModal({ sessionId }: UpsellModalProps) {
       return;
     }
 
-    // Show modal after 2 seconds
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 2000);
+    // Handle exit-intent variant
+    if (delay === 'mouseleave') {
+      const handleMouseLeave = (e: MouseEvent) => {
+        // Trigger when mouse leaves viewport from the top
+        if (e.clientY <= 0) {
+          setIsOpen(true);
+          // Track impression
+          trackExperiment('upsell_shown', { variant, sessionId });
+          // Remove listener after first trigger
+          document.removeEventListener('mouseleave', handleMouseLeave);
+        }
+      };
 
-    return () => clearTimeout(timer);
-  }, [sessionId]);
+      document.addEventListener('mouseleave', handleMouseLeave);
+      return () => document.removeEventListener('mouseleave', handleMouseLeave);
+    }
+
+    // Handle timed variants (control, fast, delayed)
+    if (typeof delay === 'number') {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        // Track impression
+        trackExperiment('upsell_shown', { variant, sessionId });
+      }, delay);
+
+      return () => clearTimeout(timer);
+    }
+  }, [sessionId, delay, variant]);
 
   const handleUpsell = async (upsellType: 'print' | 'license') => {
     setLoading(upsellType);
+
+    // Track acceptance
+    trackExperiment('upsell_accepted', {
+      variant,
+      sessionId,
+      product: upsellType,
+    });
 
     try {
       const res = await fetch('/api/upsell', {
@@ -53,6 +86,9 @@ export default function UpsellModal({ sessionId }: UpsellModalProps) {
   };
 
   const handleDecline = () => {
+    // Track decline
+    trackExperiment('upsell_declined', { variant, sessionId });
+
     // Store decline in localStorage
     const declinedKey = `upsell_declined_${sessionId}`;
     localStorage.setItem(declinedKey, 'true');

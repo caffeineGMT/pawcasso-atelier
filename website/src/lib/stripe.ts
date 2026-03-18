@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { getActivePromotion } from "./promotions";
 
 let _stripe: Stripe | null = null;
 
@@ -158,15 +159,33 @@ export async function createCheckoutSession({
     cancel_url: `${baseUrl}/order?canceled=true`,
   };
 
-  // Add discount code if provided (Stripe coupon)
+  // Priority order for discounts:
+  // 1. Explicit discount code from user
+  // 2. Active seasonal promotion
+  // 3. Referral code discount
+
   if (discountCode) {
+    // User provided explicit discount code
     sessionParams.discounts = [{ coupon: discountCode }];
-  }
-  // OR apply referral discount (20% off for referred friend)
-  else if (referralCode) {
-    // Create or get the 20% referral discount coupon
-    const referralCoupon = await getOrCreateReferralCoupon(stripe);
-    sessionParams.discounts = [{ coupon: referralCoupon.id }];
+  } else {
+    // Check for active seasonal promotion
+    const activePromotion = getActivePromotion();
+
+    if (activePromotion && activePromotion.couponCode) {
+      // Apply active promotion discount
+      sessionParams.discounts = [{ coupon: activePromotion.couponCode }];
+      // Track promotion in metadata
+      sessionParams.metadata = {
+        ...sessionParams.metadata,
+        promotionId: activePromotion.id,
+        promotionName: activePromotion.name,
+        promotionDiscount: activePromotion.discountPercent.toString(),
+      };
+    } else if (referralCode) {
+      // Apply referral discount (20% off for referred friend)
+      const referralCoupon = await getOrCreateReferralCoupon(stripe);
+      sessionParams.discounts = [{ coupon: referralCoupon.id }];
+    }
   }
 
   const session = await stripe.checkout.sessions.create(sessionParams);
