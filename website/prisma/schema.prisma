@@ -53,3 +53,53 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Influencer {
+  id                String              @id @default(cuid())
+  name              String
+  handle            String              @unique
+  platform          String              // "instagram" or "tiktok"
+  followerCount     Int
+  email             String?
+  status            String              @default("identified") // identified, contacted, responded, agreed, posted, declined
+  discountCode      String?             @unique
+  affiliateLink     String?
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  contactedAt       DateTime?
+  respondedAt       DateTime?
+  agreedAt          DateTime?
+  postedAt          DateTime?
+  portraitSent      Boolean             @default(false)
+  notes             String?
+  profileUrl        String?
+  estimatedReach    Int?                // calculated from follower count
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  outreachMessages  OutreachMessage[]
+  conversions       InfluencerConversion[]
+}
+
+model OutreachMessage {
+  id            String      @id @default(cuid())
+  influencerId  String
+  influencer    Influencer  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  message       String
+  sentAt        DateTime    @default(now())
+  responseText  String?
+  respondedAt   DateTime?
+}
+
+model InfluencerConversion {
+  id            String      @id @default(cuid())
+  influencerId  String
+  influencer    Influencer  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  orderId       String
+  revenue       Float       // in dollars
+  commission    Float       // in dollars (15%)
+  conversionDate DateTime   @default(now())
+  utmSource     String?
+  utmMedium     String?
+  utmCampaign   String?
+}

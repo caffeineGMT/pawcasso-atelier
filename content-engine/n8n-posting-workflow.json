@@ -1,0 +1,110 @@
+{
+  "workflow_name": "Pawcasso - Automated TikTok/Instagram Reels Posting",
+  "description": "Schedule and auto-post videos to TikTok and Instagram Reels at 9am and 6pm PT daily",
+  "n8n_url": "https://n8n.aws.metafb.cloud",
+  "workflow_structure": {
+    "trigger": "Schedule Trigger (Cron)",
+    "cron_schedule": "0 9,18 * * * (9am and 6pm PT daily)",
+    "nodes": [
+      {
+        "node_type": "Schedule Trigger",
+        "name": "Daily Post Schedule",
+        "cron": "0 9,18 * * *",
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "node_type": "Get Calendar Entry",
+        "name": "Fetch Today's Content",
+        "description": "Read calendar-30day.json to get today's scheduled post",
+        "code": "const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD\nconst hour = new Date().getHours();\nconst slot = hour < 15 ? 'morning' : 'evening';\n\nconst calendar = JSON.parse($input.item.json.calendar);\nconst dayData = calendar.days.find(d => d.date === today);\nconst post = dayData?.posts.find(p => p.slot === slot);\n\nreturn { post };"
+      },
+      {
+        "node_type": "HTTP Request",
+        "name": "Upload to TikTok",
+        "method": "POST",
+        "url": "https://open-api.tiktok.com/share/video/upload/",
+        "authentication": "Header Auth (Bearer token)",
+        "body": {
+          "video": "{{$node['Get Calendar Entry'].json.post.video_url}}",
+          "caption": "{{$node['Get Calendar Entry'].json.post.caption}}",
+          "hashtags": "{{$node['Get Calendar Entry'].json.post.hashtags}}"
+        },
+        "note": "Requires TikTok API credentials - see docs/tiktok-api-setup.md"
+      },
+      {
+        "node_type": "HTTP Request",
+        "name": "Upload to Instagram Reels",
+        "method": "POST",
+        "url": "https://graph.instagram.com/{{IG_USER_ID}}/media",
+        "authentication": "Header Auth (Bearer token)",
+        "body": {
+          "video_url": "{{$node['Get Calendar Entry'].json.post.video_url}}",
+          "caption": "{{$node['Get Calendar Entry'].json.post.caption}}",
+          "media_type": "REELS"
+        },
+        "note": "Requires Instagram Graph API credentials - see docs/instagram-setup.md"
+      },
+      {
+        "node_type": "Publish Instagram Media",
+        "name": "Publish Reels",
+        "method": "POST",
+        "url": "https://graph.instagram.com/{{IG_USER_ID}}/media_publish",
+        "body": {
+          "creation_id": "{{$node['Upload to Instagram Reels'].json.id}}"
+        }
+      },
+      {
+        "node_type": "Update Tracker",
+        "name": "Log Post to Tracker",
+        "description": "Update engagement-tracker.json with new post entry",
+        "code": "const tracker = JSON.parse($input.item.json.tracker);\nconst post = $node['Get Calendar Entry'].json.post;\n\ntracker.posts.push({\n  post_id: post.post_id,\n  date: new Date().toISOString(),\n  platform: 'TikTok',\n  hook: post.hook,\n  tiktok_url: $node['Upload to TikTok'].json.share_url,\n  instagram_url: $node['Publish Reels'].json.permalink,\n  metrics_24h: { views: 0, likes: 0, comments: 0, shares: 0, saves: 0 }\n});\n\nreturn { tracker };"
+      },
+      {
+        "node_type": "Send GChat Notification",
+        "name": "Notify Posted",
+        "message": "✅ Posted: {{$node['Get Calendar Entry'].json.post.hook}}\n\n📱 TikTok: {{$node['Upload to TikTok'].json.share_url}}\n📱 Instagram: {{$node['Publish Reels'].json.permalink}}\n\n⏰ Check metrics in 1 hour!"
+      }
+    ]
+  },
+  "setup_instructions": {
+    "step_1": "Go to https://n8n.aws.metafb.cloud",
+    "step_2": "Create new workflow → Import JSON",
+    "step_3": "Add credentials for TikTok API and Instagram Graph API",
+    "step_4": "Configure file paths to calendar-30day.json and engagement-tracker.json",
+    "step_5": "Test workflow manually before enabling schedule",
+    "step_6": "Enable workflow → Posts will auto-publish at 9am and 6pm PT"
+  },
+  "manual_posting_alternative": {
+    "description": "If n8n automation isn't working, use manual posting workflow",
+    "tools": ["Later.com (free for 10 posts/month)", "Buffer (free tier)", "TikTok native scheduler (Creator account required)"],
+    "process": [
+      "Sunday: Batch create 7 videos for the week",
+      "Sunday: Upload all 7 to Later.com",
+      "Sunday: Schedule posts for 9am and 6pm PT each day",
+      "Daily: Check analytics at 10am and 7pm",
+      "Daily: Respond to comments within 1 hour of posting"
+    ]
+  },
+  "video_hosting": {
+    "option_1": "Google Drive (public share links)",
+    "option_2": "Vimeo (embed URLs)",
+    "option_3": "AWS S3 + CloudFront (fastest, requires setup)",
+    "recommended": "Google Drive - easiest for n8n to access"
+  },
+  "error_handling": {
+    "if_tiktok_upload_fails": "Send error notification to GChat, retry in 10 minutes",
+    "if_instagram_upload_fails": "Continue with TikTok only, manual post to Instagram later",
+    "if_calendar_file_missing": "Send urgent notification, pause workflow"
+  },
+  "monitoring": {
+    "gchat_notifications": "Sent on success, failure, and daily summary",
+    "execution_logs": "Check n8n workflow executions tab for errors",
+    "manual_check": "Review TikTok/Instagram apps daily to ensure posts went live"
+  },
+  "advanced_features": {
+    "auto_reply_to_comments": "n8n workflow polls TikTok comments every hour, auto-replies with link for keywords: 'link?', 'where?', 'buy?'",
+    "engagement_tracking": "n8n workflow fetches TikTok Analytics API every 6 hours, updates engagement-tracker.json automatically",
+    "viral_detector": "If post hits 50k views in first 24h, send urgent GChat notification + auto-create Spark Ad"
+  },
+  "note": "Full n8n workflow JSON can be exported from n8n.aws.metafb.cloud once configured. This is a blueprint for manual setup."
+}
