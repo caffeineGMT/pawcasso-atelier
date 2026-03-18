@@ -50,6 +50,8 @@ export default function Lightbox({ artwork, onClose }: LightboxProps) {
             quality={90}
             priority
             className="w-full h-auto max-h-[75vh] object-contain"
+            placeholder="blur"
+            blurDataURL={artwork.blurDataURL}
           />
         </div>
         <div className="mt-6 text-center">
