@@ -1,19 +1,53 @@
+'use client';
+
+import { useState } from 'react';
+
 export const PricingComparison = () => {
+  const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null);
+
   const TIERS = [
-    { name: 'Basic', price: 9, popular: false },
-    { name: 'Premium', price: 29, popular: true },
-    { name: 'Deluxe', price: 49, popular: false },
-    { name: 'Bundle', price: 79, popular: false },
+    { name: 'Basic', price: 9, originalPrice: 15, popular: false },
+    { name: 'Premium', price: 29, originalPrice: 49, popular: true },
+    { name: 'Deluxe', price: 49, originalPrice: 82, popular: false },
+    { name: 'Bundle', price: 79, originalPrice: 132, popular: false },
   ];
 
   const FEATURES = [
-    { label: 'Number of portraits', values: ['1', '1 + 2 variations', '3', '5'] },
-    { label: 'Delivery time', values: ['24hr', '12hr', '6hr', 'Instant'] },
-    { label: 'Resolution', values: ['Standard', 'High-res', 'Ultra HD', 'Ultra HD'] },
-    { label: 'File formats', values: ['JPG', 'JPG, PNG', 'JPG, PNG, TIFF', 'All formats'] },
-    { label: 'Revisions included', values: ['1', '2', '3', 'Unlimited'] },
-    { label: 'Commercial use', values: ['✗', '✗', '✗', '✓'] },
-    { label: 'Print-ready files', values: ['✗', '✗', '✓', '✓'] },
+    {
+      label: 'Number of portraits',
+      values: ['1', '1 + 2 variations', '3', '5'],
+      tooltip: 'Get multiple artistic variations to choose from'
+    },
+    {
+      label: 'Delivery time',
+      values: ['24hr', '12hr', '6hr', 'Instant'],
+      tooltip: 'Faster delivery means you get your portrait sooner'
+    },
+    {
+      label: 'Resolution',
+      values: ['Standard', 'High-res', 'Ultra HD', 'Ultra HD'],
+      tooltip: 'Higher resolution allows for larger prints'
+    },
+    {
+      label: 'File formats',
+      values: ['JPG', 'JPG, PNG', 'JPG, PNG, TIFF', 'All formats'],
+      tooltip: 'More formats give you flexibility for different uses'
+    },
+    {
+      label: 'Revisions included',
+      values: ['1', '2', '3', 'Unlimited'],
+      tooltip: 'Free revisions to ensure you love your portrait'
+    },
+    {
+      label: 'Commercial use',
+      values: ['✗', '✗', '✗', '✓'],
+      tooltip: 'Use your portrait for business purposes'
+    },
+    {
+      label: 'Print-ready files',
+      values: ['✗', '✗', '✓', '✓'],
+      tooltip: 'Perfect for printing up to 24x36 inches'
+    },
   ];
 
   return (

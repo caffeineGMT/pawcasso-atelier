@@ -388,15 +388,23 @@ function OrderPageContent() {
                   setSelectedTier(tier.id);
                   trackEngagement('tier_selection', { tier: tier.id, price: tier.price });
                 }}
-                className={`text-left p-5 rounded-2xl border transition-all min-h-[200px] flex flex-col ${
+                className={`relative text-left p-5 rounded-2xl border transition-all min-h-[200px] flex flex-col ${
                   selectedTier === tier.id
                     ? "border-gold bg-gold/10 ring-2 ring-gold/40 shadow-lg shadow-gold/20"
                     : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
                 }`}
               >
+                {/* Most Popular Badge for Premium */}
+                {tier.id === 'premium' && (
+                  <div className="absolute -top-3 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                    Most Popular
+                  </div>
+                )}
+
                 <div className="flex items-baseline justify-between mb-3">
                   <h3 className="text-lg font-semibold text-text-primary">{tier.name}</h3>
                   <div className="text-right">
+                    <div className="line-through text-gray-400 text-sm">${getOriginalPrice(tier.id)}</div>
                     <div className="text-2xl font-bold text-text-primary">{tier.priceDisplay}</div>
                   </div>
                 </div>
@@ -684,17 +692,10 @@ function OrderPageContent() {
               >
                 <span className="text-lg font-bold tracking-tight text-text-primary">TechCrunch</span>
               </a>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-  );
-}
-
 export default function OrderPage() {
   return (
     <>
+      <OrderActivityFeed />
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-text-primary">Loading...</div></div>}>
         <OrderPageContent />
       </Suspense>
