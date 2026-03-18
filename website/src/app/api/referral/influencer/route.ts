@@ -207,15 +207,15 @@ export async function GET(request: NextRequest) {
         });
 
         if (promotionCodes.data.length > 0) {
-          const promoCode = promotionCodes.data[0];
+          const promoCode = promotionCodes.data[0] as any;
           stripeData = {
             id: promoCode.id,
             code: promoCode.code,
             timesRedeemed: promoCode.times_redeemed,
             active: promoCode.active,
             coupon: {
-              percentOff: promoCode.coupon.percent_off,
-              amountOff: promoCode.coupon.amount_off,
+              percentOff: promoCode.coupon?.percent_off,
+              amountOff: promoCode.coupon?.amount_off,
             },
           };
         }
