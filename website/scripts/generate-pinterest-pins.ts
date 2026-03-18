@@ -10,10 +10,10 @@
 import sharp from "sharp";
 import fs from "fs";
 import path from "path";
-import { artworks } from "../website/src/lib/data";
+import { artworks } from "../src/lib/data";
 
-const GALLERY_DIR = path.join(process.cwd(), "website", "public", "gallery");
-const OUTPUT_DIR = path.join(process.cwd(), "website", "public", "pinterest-pins");
+const GALLERY_DIR = path.join(process.cwd(), "public", "gallery");
+const OUTPUT_DIR = path.join(process.cwd(), "public", "pinterest-pins");
 
 // Pinterest recommended sizes
 const PIN_SIZES = {

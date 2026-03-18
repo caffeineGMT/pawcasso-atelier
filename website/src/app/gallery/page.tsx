@@ -32,7 +32,7 @@ export default function GalleryPage() {
     trackEvent('view_gallery');
     trackViewContent({
       content_type: ContentType.GALLERY,
-      content_ids: artworks.map(a => a.id),
+      content_ids: artworks.map(a => String(a.id)),
       content_name: 'Gallery - All Artworks',
       content_category: 'gallery',
       value: 9,

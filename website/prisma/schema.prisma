@@ -170,3 +170,54 @@ model MilestoneAchievement {
 
   @@unique([customerEmail, milestone])
 }
+
+// Customer Reviews & UGC
+model CustomerReview {
+  id                String    @id @default(cuid())
+  customerEmail     String
+  customerName      String
+  petName           String
+  rating            Int       // 1-5 stars
+  reviewText        String    // Written review
+  petPhotoUrl       String?   // Original pet photo customer uploaded
+  portraitUrl       String?   // Final portrait we delivered
+  instagramHandle   String?   // Customer's Instagram handle
+  instagramPostUrl  String?   // Link to their Instagram post if they shared
+  featured          Boolean   @default(false)  // Admin can feature on homepage
+  approved          Boolean   @default(false)  // Admin approval before showing publicly
+  submittedAt       DateTime  @default(now())
+  approvedAt        DateTime?
+
+  // Metadata
+  artStyle          String?   // Which art style they ordered
+  orderValue        Float?    // Order value in dollars
+
+  @@index([approved])
+  @@index([featured])
+  @@index([customerEmail])
+}
+
+model SocialProofStats {
+  id                String    @id @default(cuid())
+  totalCustomers    Int       @default(0)
+  totalPortraits    Int       @default(0)
+  averageRating     Float     @default(4.9)
+  totalReviews      Int       @default(0)
+  instagramFollowers Int      @default(0)
+  updatedAt         DateTime  @updatedAt
+}
+
+model InstagramPost {
+  id                String    @id @default(cuid())
+  instagramPostId   String    @unique  // Instagram post ID
+  customerEmail     String?
+  imageUrl          String    // Instagram image URL
+  caption           String?
+  likes             Int       @default(0)
+  comments          Int       @default(0)
+  postedAt          DateTime
+  featured          Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+
+  @@index([featured])
+}

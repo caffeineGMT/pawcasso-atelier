@@ -8,6 +8,7 @@ import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
 import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, ContentType } from "@/lib/analytics";
 import { trackPinterestAddToCart, trackPinterestCheckout } from "@/lib/pinterest";
+import CrispChat from "@/components/CrispChat";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -508,8 +509,18 @@ function OrderPageContent() {
 
 export default function OrderPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-text-primary">Loading...</div></div>}>
-      <OrderPageContent />
-    </Suspense>
+    <>
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-text-primary">Loading...</div></div>}>
+        <OrderPageContent />
+      </Suspense>
+
+      {/* Live Chat for Conversion Optimization */}
+      {process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID && (
+        <CrispChat
+          websiteId={process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID}
+          enableConversionTriggers={true}
+        />
+      )}
+    </>
   );
 }

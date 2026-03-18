@@ -4,6 +4,8 @@ import GalleryGrid from "@/components/GalleryGrid";
 import StyleShowcase from "@/components/StyleShowcase";
 import Testimonials from "@/components/Testimonials";
 import LiveOrderCounter from "@/components/LiveOrderCounter";
+import SocialProofStats from "@/components/SocialProofStats";
+import InstagramFeed from "@/components/InstagramFeed";
 import { trackEngagement } from "@/lib/analytics";
 
 export default function HomePage() {
@@ -59,24 +61,8 @@ export default function HomePage() {
           </div>
 
           {/* Social proof stats */}
-          <div
-            className="flex items-center justify-center gap-8 mt-16 animate-slide-up"
-            style={{ animationDelay: "500ms" }}
-          >
-            <div className="text-center">
-              <div className="text-2xl font-semibold text-text-primary">34+</div>
-              <div className="text-xs text-text-secondary mt-1">Artworks</div>
-            </div>
-            <div className="w-[1px] h-8 bg-white/[0.08]" />
-            <div className="text-center">
-              <div className="text-2xl font-semibold text-text-primary">19</div>
-              <div className="text-xs text-text-secondary mt-1">Art Styles</div>
-            </div>
-            <div className="w-[1px] h-8 bg-white/[0.08]" />
-            <div className="text-center">
-              <div className="text-2xl font-semibold text-text-primary">24h</div>
-              <div className="text-xs text-text-secondary mt-1">Delivery</div>
-            </div>
+          <div className="mt-16">
+            <SocialProofStats />
           </div>
         </div>
 
@@ -274,6 +260,15 @@ export default function HomePage() {
               View all questions &rarr;
             </Link>
           </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Instagram Feed */}
+      <section className="py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <InstagramFeed />
         </div>
       </section>
 

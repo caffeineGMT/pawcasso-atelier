@@ -10,7 +10,8 @@
     "convert-images": "tsx scripts/convert-to-webp.ts",
     "generate-pins": "tsx scripts/generate-pinterest-pins.ts",
     "email:export": "tsx scripts/export-email-templates.ts",
-    "email:dev": "email dev"
+    "email:dev": "email dev",
+    "testimonials:export": "tsx scripts/export-testimonial-cards.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",
