@@ -1,0 +1,355 @@
+{
+  "long_form_tutorials_overview": {
+    "format": "Horizontal 16:9 (1920x1080) or Vertical 9:16 (can be watched as Shorts or full videos)",
+    "duration": "5-8 minutes (sweet spot for retention + watch time)",
+    "upload_frequency": "1x per week (Sunday at 10 AM PT)",
+    "goal": "Build authority, drive deep engagement, monetization-ready content (4K watch hours)",
+    "seo_strategy": "Target long-tail keywords with low competition, high buyer intent"
+  },
+  "tutorial_scripts": {
+    "tutorial_1_perfect_pet_photo": {
+      "title": "How to Take the Perfect Pet Photo for AI Portraits (5 Pro Tips)",
+      "duration": "6-7 minutes",
+      "target_keywords": [
+        "how to photograph pets",
+        "pet photography tips",
+        "best pet photos for ai art",
+        "pet portrait photography"
+      ],
+      "description_seo": "Learn how to take stunning pet photos that create amazing AI portraits. Professional pet photography tips for beginners. Get perfect lighting, angles, and composition for your dog or cat photos. Transform your pet into art with Pawcasso Atelier.",
+      "script_outline": [
+        {
+          "section": "Hook & Intro",
+          "timestamp": "0:00-0:30",
+          "content": "Hook: 'The difference between a good AI portrait and a GREAT one? It starts with your photo.'\n\nVisuals: Split screen showing bad pet photo → mediocre AI portrait vs good pet photo → stunning AI portrait\n\nIntro: 'I've generated over 1,000 AI pet portraits, and I've learned exactly what makes a photo work. In this video, I'll show you 5 pro tips that will transform your results.'\n\nCTA: 'Stick around until the end for a bonus tip that most people miss.'"
+        },
+        {
+          "section": "Tip 1: Natural Lighting is Everything",
+          "timestamp": "0:30-2:00",
+          "content": "Explanation: 'Harsh flash creates shadows, red-eye, and flat features. Natural light brings out texture and depth.'\n\nVisuals:\n- Bad example: Flash photo (flat, harsh shadows)\n- Good example: Window light photo (soft, dimensional)\n- Screen recording: Same pet, both photos through AI, show dramatic difference\n\nPro tip: 'Best times: Golden hour (1 hour after sunrise / before sunset) or overcast days. If indoors, position your pet near a large window.'\n\nB-roll: You photographing a dog next to window, adjusting position for best light"
+        },
+        {
+          "section": "Tip 2: Eye-Level Angles",
+          "timestamp": "2:00-3:15",
+          "content": "Explanation: 'Top-down shots make pets look distorted. Eye-level creates connection and captures personality.'\n\nVisuals:\n- Bad example: Photo taken from above (unflattering)\n- Good example: Crouching down, eye-level with pet (engaging)\n- Side-by-side AI results\n\nPro tip: 'Literally get on the floor. Use treats or toys to get your pet to look at the camera naturally.'\n\nB-roll: You lying on floor, photographing a cat at eye level, using treat to get attention"
+        },
+        {
+          "section": "Tip 3: Clean, Simple Backgrounds",
+          "timestamp": "3:15-4:30",
+          "content": "Explanation: 'Busy backgrounds distract the AI. Plain walls, grass, or solid colors work best.'\n\nVisuals:\n- Bad example: Cluttered living room (AI struggles with background)\n- Good example: Plain wall or park (AI focuses on pet)\n- Show AI-generated portraits from both\n\nPro tip: 'If you can't find a clean background, use portrait mode on your phone to blur the background. Works 90% of the time.'\n\nB-roll: You setting up a plain backdrop (bedsheet against wall), positioning pet"
+        },
+        {
+          "section": "Tip 4: Capture Personality (Expressions Matter)",
+          "timestamp": "4:30-5:30",
+          "content": "Explanation: 'A bored or stressed pet creates a boring portrait. Aim for alert, happy, or calm expressions.'\n\nVisuals:\n- Bad example: Pet mid-yawn, eyes half-closed\n- Good example: Alert, ears up, engaged expression\n- Show how AI translates expressions to art\n\nPro tip: 'Take 20-30 photos in burst mode. You only need ONE great shot. Use squeaky toys, treat sounds, or call their name to get that head tilt.'\n\nB-roll: You photographing a dog, using squeaky toy, showing burst mode on camera screen"
+        },
+        {
+          "section": "Tip 5: High Resolution (No Blurry Photos)",
+          "timestamp": "5:30-6:15",
+          "content": "Explanation: 'AI can't add detail that doesn't exist. Use your phone's highest resolution setting.'\n\nVisuals:\n- Bad example: Low-res, blurry photo → pixelated AI portrait\n- Good example: Sharp, high-res photo → crisp AI portrait\n\nPro tip: 'Check your photo settings: iPhone (Settings → Camera → Formats → Most Compatible + 12MP or higher). Android (Camera → Settings → Picture Quality → High).'\n\nScreen recording: Navigate through phone settings showing where to change resolution"
+        },
+        {
+          "section": "Bonus Tip: Rule of Thirds",
+          "timestamp": "6:15-7:00",
+          "content": "Explanation: 'Don't center your pet perfectly. Use your camera's grid (Rule of Thirds) to position their eyes on upper intersection points. Creates dynamic composition.'\n\nVisuals:\n- Side-by-side: Centered pet vs Rule of Thirds\n- Show AI portraits from both (subtle but pro-looking difference)\n\nB-roll: Camera screen with grid overlay, positioning pet along gridlines"
+        },
+        {
+          "section": "Recap & CTA",
+          "timestamp": "7:00-7:30",
+          "content": "Recap: 'Let's review: Natural light, eye-level angles, clean backgrounds, capture personality, high resolution, and bonus — Rule of Thirds.'\n\nCTA 1: 'Try these tips on your next pet photo and drop it in the comments! I'll tell you if it's AI-ready.'\n\nCTA 2: 'When you're ready to create your portrait, head to pawcasso-atelier.vercel.app — 17 styles, $9, 24-hour delivery.'\n\nCTA 3: 'Subscribe for more tutorials every Sunday. Next week: Art Styles Explained — which style suits your pet best?'\n\nEnd screen: Subscribe button, link to order page, link to next video (auto-play)"
+        }
+      ],
+      "b_roll_needed": [
+        "Photographing pets at home (window light setup)",
+        "Using treats/toys to get pet's attention",
+        "Floor-level POV shots",
+        "Setting up plain backdrop",
+        "Phone camera settings screens",
+        "Before/after photo comparisons",
+        "AI generation process screen recordings"
+      ],
+      "voiceover_tone": "Friendly, instructional, enthusiastic. Think Casey Neistat energy but focused.",
+      "music": "Upbeat background music (YouTube Audio Library: 'Creative Minds' or similar)",
+      "editing_notes": "Add text overlays for each tip (on-screen checklist). Use zoom-ins on key details. Keep pacing fast — cut out pauses and filler words."
+    },
+    "tutorial_2_art_styles_explained": {
+      "title": "AI Pet Portrait Styles Explained — Which One Suits Your Pet? (17 Styles Reviewed)",
+      "duration": "7-8 minutes",
+      "target_keywords": [
+        "ai art styles",
+        "pet portrait styles",
+        "renaissance vs baroque art",
+        "best ai art style for pets"
+      ],
+      "description_seo": "Complete guide to AI pet portrait styles. See 17 artistic styles side-by-side: Renaissance, Baroque, Pixar 3D, Cyberpunk, Watercolor, and more. Find the perfect style for your dog or cat. Includes before/after examples and style recommendations.",
+      "script_outline": [
+        {
+          "section": "Hook & Intro",
+          "timestamp": "0:00-0:30",
+          "content": "Hook: 'Same golden retriever. 17 completely different masterpieces. Which one would you choose?'\n\nVisuals: Rapid montage of same dog in all 17 styles (1 second each)\n\nIntro: 'Today I'm breaking down every art style we offer — what makes each unique, which pets they suit best, and how to choose. Let's start with the classics.'"
+        },
+        {
+          "section": "Category 1: Classical Art (Renaissance, Baroque, Classical)",
+          "timestamp": "0:30-2:00",
+          "content": "Renaissance:\n- Visual: Show 3 examples (cat, dog, rabbit)\n- Explanation: 'Think Mona Lisa vibes. Soft lighting, rich colors, timeless elegance. Perfect for: Regal breeds (Golden Retrievers, Persian cats, horses). Best for gifts or memorial tributes.'\n- Recommendation: 'If your pet has a calm, noble personality — this is it.'\n\nBaroque:\n- Visual: 3 examples\n- Explanation: 'More dramatic than Renaissance. Think Rembrandt — dark backgrounds, spotlight on your pet, intense shadows. Perfect for: Older pets, serious expressions, dramatic breeds (Huskies, Maine Coons).'\n\nClassical:\n- Visual: 3 examples\n- Explanation: 'Balanced, harmonious, idealized proportions. Think Roman statues but painted. Perfect for: Any breed, safe choice if unsure.'"
+        },
+        {
+          "section": "Category 2: Modern & Abstract (Cubism, Pop Art, Expressionism)",
+          "timestamp": "2:00-3:30",
+          "content": "Cubism:\n- Visual: 3 examples\n- Explanation: 'Picasso-inspired geometric shapes. Quirky, conversation-starter. Perfect for: Playful pets, modern home decor, art enthusiasts.'\n\nPop Art:\n- Visual: 3 examples (think Warhol-style bright colors)\n- Explanation: 'Bold, vibrant, Andy Warhol vibes. High contrast, neon colors. Perfect for: Energetic pets, kids' rooms, Instagram-worthy.'\n\nExpressionism:\n- Visual: 3 examples\n- Explanation: 'Emotional, bold brush strokes, intense colors. Think Edvard Munch. Perfect for: Pets with big personalities, unique breeds.'"
+        },
+        {
+          "section": "Category 3: Digital & Fantasy (Pixar 3D, Cyberpunk, Pixel Art)",
+          "timestamp": "3:30-5:00",
+          "content": "Pixar 3D:\n- Visual: 3 examples\n- Explanation: 'Disney/Pixar animation style. Huge eyes, expressive, adorable. Perfect for: Young pets, gift for kids, social media profile pics.'\n- Fun fact: 'This is our #1 best-seller.'\n\nCyberpunk:\n- Visual: 3 examples (neon, futuristic)\n- Explanation: 'Blade Runner meets your pet. Neon lights, sci-fi aesthetic. Perfect for: Tech enthusiasts, gamer pet parents, unique wall art.'\n\nPixel Art:\n- Visual: 3 examples (8-bit style)\n- Explanation: 'Retro video game aesthetic. Nostalgic, playful. Perfect for: 90s kids, gamers, minimalist decor.'"
+        },
+        {
+          "section": "Category 4: Textural & Unique (Needle Felt, Watercolor, Ink Wash)",
+          "timestamp": "5:00-6:30",
+          "content": "Needle Felt:\n- Visual: 3 examples\n- Explanation: 'Looks like soft, felted wool sculpture. Cozy, handmade feel. Perfect for: Small pets (rabbits, guinea pigs), nursery decor, gifts for crafty friends.'\n\nWatercolor:\n- Visual: 3 examples\n- Explanation: 'Soft, dreamy, pastel tones. Delicate and elegant. Perfect for: Female pets, light-colored animals, minimalist aesthetics.'\n\nInk Wash:\n- Visual: 3 examples\n- Explanation: 'Traditional Asian painting style. Minimalist, zen, flowing brushstrokes. Perfect for: Calico cats, border collies, sophisticated decor.'"
+        },
+        {
+          "section": "How to Choose the Right Style",
+          "timestamp": "6:30-7:15",
+          "content": "Decision Framework:\n\n1. Match your home decor:\n   - Modern/minimalist home → Watercolor, Ink Wash, Pixel Art\n   - Traditional/elegant home → Renaissance, Baroque, Classical\n   - Eclectic/bold home → Pop Art, Cubism, Cyberpunk\n\n2. Match your pet's personality:\n   - Calm, regal → Renaissance, Classical\n   - Playful, energetic → Pixar 3D, Pop Art\n   - Unique, quirky → Cubism, Needle Felt\n\n3. Match the occasion:\n   - Gift for a child → Pixar 3D\n   - Memorial tribute → Renaissance, Watercolor\n   - Just for fun → Any! Try 3-style bundle ($25)\n\nVisuals: Flowchart or decision tree animation"
+        },
+        {
+          "section": "Recap & CTA",
+          "timestamp": "7:15-8:00",
+          "content": "Recap: 'We covered 17 styles across 4 categories. Still can't decide? Order our 3-style bundle — we'll create your pet in your top 3 picks.'\n\nCTA 1: 'Comment your pet's breed and I'll recommend the perfect style!'\n\nCTA 2: 'Head to pawcasso-atelier.vercel.app to see all styles and order. Code YOUTUBE10 for 10% off.'\n\nCTA 3: 'Subscribe for next week's tutorial: Unboxing Customer Orders — real reactions!'\n\nEnd screen: Links to order page, gallery page, subscribe button"
+        }
+      ],
+      "b_roll_needed": [
+        "Gallery screenshots (all 17 styles)",
+        "Same pet transformed into multiple styles (side-by-side comparisons)",
+        "Home decor mockups (portraits on walls)",
+        "Scrolling through website gallery",
+        "Customer testimonials/reviews"
+      ],
+      "voiceover_tone": "Educational but fun. Like a museum tour guide who's actually entertaining.",
+      "music": "Cinematic background music with classical undertones",
+      "editing_notes": "Use split-screen heavily. Label each style with text overlay. Add smooth transitions between categories."
+    },
+    "tutorial_3_unboxing_customer_orders": {
+      "title": "Unboxing 10 Real Customer Pet Portraits (Reactions Included!)",
+      "duration": "8-10 minutes",
+      "target_keywords": [
+        "pet portrait unboxing",
+        "customer reactions",
+        "ai pet portrait review",
+        "custom dog portrait delivery"
+      ],
+      "description_seo": "Watch me unbox and review 10 real customer pet portrait orders. See the before photos, AI-generated art, and customer reactions. Includes Golden Retrievers, cats, rabbits, and more. Real reviews, real transformations.",
+      "script_outline": [
+        {
+          "section": "Hook & Intro",
+          "timestamp": "0:00-0:30",
+          "content": "Hook: 'These 10 customers ordered pet portraits. Let's see if the AI delivered.'\n\nVisuals: Show stack of 10 customer photos on desk\n\nIntro: 'I'm going through real orders from this week. You'll see the original photos customers sent, the portraits we created, and their actual reactions. No filter, no cherry-picking. Let's start.'"
+        },
+        {
+          "section": "Order 1: Golden Retriever (Renaissance)",
+          "timestamp": "0:30-1:30",
+          "content": "Setup: 'First up — Sarah from Vancouver ordered a Renaissance portrait of her Golden Retriever, Max.'\n\nOriginal photo reveal: Show customer's photo (good quality, window lighting)\n\nPortrait reveal: Show AI-generated Renaissance portrait\n\nAnalysis: 'This turned out beautiful. The soft lighting in her original photo translated perfectly to the Renaissance style. Notice how the AI captured the gentle expression.'\n\nCustomer reaction: Show screenshot of email/DM: '⭐⭐⭐⭐⭐ I cried when I saw it. Thank you!'\n\nRating: '10/10 — Perfect execution.'"
+        },
+        {
+          "section": "Order 2: Cat (Pixar 3D) — Challenging Photo",
+          "timestamp": "1:30-2:30",
+          "content": "Setup: 'Next — James ordered a Pixar 3D portrait of his cat, Luna. But here's the challenge...'\n\nOriginal photo reveal: Show photo (slightly blurry, top-down angle)\n\nExplanation: 'This photo breaks two rules from last week's tutorial: blurry and top-down. Let's see how the AI handled it.'\n\nPortrait reveal: Show result (decent but not great)\n\nAnalysis: 'It worked, but it's not our best. The blurriness made the AI struggle with facial details. The top-down angle made the proportions a bit off.'\n\nCustomer reaction: 'James said: \"Good, but wish I'd sent a better photo.\"'\n\nRating: '6/10 — Photo quality matters.'\n\nLesson: 'This is why I made the Perfect Pet Photo tutorial. Link in description.'"
+        },
+        {
+          "section": "Orders 3-8 (Montage)",
+          "timestamp": "2:30-6:30",
+          "content": "Faster pace for variety. Each order gets 30-40 seconds:\n\nOrder 3: Border Collie (Watercolor) — 9/10\nOrder 4: Persian Cat (Baroque) — 10/10\nOrder 5: Rabbit (Needle Felt) — 8/10 (unique animal, AI handled well)\nOrder 6: Husky (Cyberpunk) — 10/10 (dramatic style match)\nOrder 7: Pomeranian (Pop Art) — 7/10 (busy background caused issues)\nOrder 8: Maine Coon (Classical) — 9/10\n\nFormat for each:\n- Quick intro (name, style choice)\n- Original photo (3 seconds)\n- Portrait reveal (5 seconds)\n- Quick analysis (10 seconds)\n- Customer quote (5 seconds)\n- Rating (2 seconds)"
+        },
+        {
+          "section": "Order 9: Memorial Tribute (Emotional)",
+          "timestamp": "6:30-7:30",
+          "content": "Setup: 'This one's special. Emma ordered a Renaissance portrait of her dog who passed away last month.'\n\nOriginal photo: Show old photo of elderly dog\n\nExplanation: 'Memorial portraits are personal. We take extra care with these.'\n\nPortrait reveal: Show Renaissance portrait (dignified, beautiful)\n\nCustomer reaction: Read full email testimonial (emotional, heartfelt)\n\nRating: 'Not rating this one. Some things are bigger than numbers.'\n\nTone shift: Slower pace, emotional music"
+        },
+        {
+          "section": "Order 10: Surprise Gift Success",
+          "timestamp": "7:30-8:30",
+          "content": "Setup: 'Last one — David ordered a Pixar portrait of his girlfriend's cat as a surprise birthday gift.'\n\nOriginal photo: Show cat selfie\n\nPortrait reveal: Show adorable Pixar-style result\n\nCustomer reaction: Show video screenshot of girlfriend opening gift (if permission granted) or testimonial quote\n\nAnalysis: 'This is what we love to see. Perfect gift execution.'\n\nRating: '10/10 for making someone's day.'"
+        },
+        {
+          "section": "Recap & Learnings",
+          "timestamp": "8:30-9:15",
+          "content": "Summary: 'So out of 10 orders:\n- 5 were perfect (10/10)\n- 3 were great (8-9/10)\n- 2 had issues (6-7/10) due to photo quality'\n\nKey lesson: 'Photo quality determines outcome. Nail the photo, you'll love the portrait.'\n\nCTA: 'Want to make sure your order turns out perfect? Watch my Perfect Pet Photo tutorial next.'"
+        },
+        {
+          "section": "CTA & Outro",
+          "timestamp": "9:15-10:00",
+          "content": "CTA 1: 'If you want to order your own pet portrait, head to pawcasso-atelier.vercel.app.'\n\nCTA 2: 'Use code YOUTUBE10 for 10% off your first order.'\n\nCTA 3: 'Drop a photo of your pet in the comments and I'll tell you which style suits them best!'\n\nCTA 4: 'Subscribe for more unboxings and tutorials every Sunday.'\n\nEnd screen: Order link, gallery link, Perfect Pet Photo tutorial link, subscribe button"
+        }
+      ],
+      "b_roll_needed": [
+        "Customer photos (get permission via email)",
+        "Screen recordings of email testimonials",
+        "AI-generated portraits (all 10)",
+        "Website order dashboard",
+        "Reaction video screenshots (if customers share)",
+        "Close-ups of portrait details"
+      ],
+      "voiceover_tone": "Honest, transparent, conversational. Like unboxing videos but for art.",
+      "music": "Upbeat for most, emotional piano for memorial tribute section",
+      "editing_notes": "Use consistent format for each order. Add 'Order #X' title cards. Zoom in on portrait details.",
+      "legal_note": "Get written permission from all customers before featuring their photos/names. Offer 50% off next order as incentive."
+    },
+    "tutorial_4_ai_art_comparison": {
+      "title": "Pawcasso vs Midjourney vs DALL-E 3 — Best AI for Pet Portraits?",
+      "duration": "6-7 minutes",
+      "target_keywords": [
+        "best ai for pet portraits",
+        "midjourney vs dalle pet art",
+        "ai art comparison",
+        "pawcasso review"
+      ],
+      "description_seo": "I tested Pawcasso, Midjourney, DALL-E 3, and Stable Diffusion for pet portraits. See the results side-by-side. Which AI creates the best custom dog and cat art? Includes pricing, quality, and ease-of-use comparison.",
+      "script_outline": [
+        {
+          "section": "Hook & Setup",
+          "timestamp": "0:00-0:45",
+          "content": "Hook: 'I generated the same Golden Retriever portrait in 4 different AIs. The results might surprise you.'\n\nVisuals: Show 4 portraits side-by-side (unlabeled)\n\nSetup: 'Today I'm comparing Pawcasso (ours), Midjourney (most popular), DALL-E 3 (ChatGPT's AI), and Stable Diffusion (open-source). Same photo, same Renaissance style prompt. Let's see who wins.'"
+        },
+        {
+          "section": "The Test",
+          "timestamp": "0:45-1:30",
+          "content": "Original photo: Show Golden Retriever photo\n\nPrompt used (consistent across all 4):\n'Renaissance oil painting portrait of a Golden Retriever, soft lighting, rich colors, classical composition, masterpiece quality, detailed fur texture, 16th century style'\n\nGoal: 'Fair comparison — same input, same style, same quality expectations.'"
+        },
+        {
+          "section": "Result 1: Pawcasso",
+          "timestamp": "1:30-2:30",
+          "content": "Reveal: Show Pawcasso result\n\nAnalysis:\n- Pros: 'Specialized for pets, handles fur texture beautifully, consistent quality, fast (2 min generation)'\n- Cons: 'Limited to 17 preset styles (can't do custom prompts)'\n- Pricing: '$9 per portrait, no subscription needed'\n- Ease of use: '10/10 — upload, click, done'\n\nRating: 'Quality: 9/10 | Price: 10/10 | Ease: 10/10'"
+        },
+        {
+          "section": "Result 2: Midjourney",
+          "timestamp": "2:30-3:30",
+          "content": "Reveal: Show Midjourney result\n\nAnalysis:\n- Pros: 'Incredible detail, artistic, highly customizable prompts'\n- Cons: 'Learning curve steep, sometimes over-stylizes pets (adds fantasy elements), requires Discord account, prompt engineering needed'\n- Pricing: '$10/month subscription (not per image)'\n- Ease of use: '5/10 — requires prompt expertise'\n\nRating: 'Quality: 10/10 | Price: 7/10 | Ease: 5/10'"
+        },
+        {
+          "section": "Result 3: DALL-E 3 (ChatGPT)",
+          "timestamp": "3:30-4:30",
+          "content": "Reveal: Show DALL-E result\n\nAnalysis:\n- Pros: 'Accessible (ChatGPT Plus), understands natural language prompts, no prompt engineering needed'\n- Cons: 'Hit or miss on pet likeness, sometimes adds weird elements, lower resolution than competitors'\n- Pricing: '$20/month ChatGPT Plus subscription'\n- Ease of use: '8/10 — conversational, but can be inconsistent'\n\nRating: 'Quality: 7/10 | Price: 6/10 | Ease: 8/10'"
+        },
+        {
+          "section": "Result 4: Stable Diffusion",
+          "timestamp": "4:30-5:15",
+          "content": "Reveal: Show Stable Diffusion result\n\nAnalysis:\n- Pros: 'Free (if self-hosted), open-source, fully customizable'\n- Cons: 'Requires technical setup (Python, GPU), inconsistent quality, long learning curve'\n- Pricing: 'Free (self-hosted) or $0.01-0.05 per image (cloud providers like Replicate)'\n- Ease of use: '2/10 — for developers only'\n\nRating: 'Quality: 6/10 | Price: 10/10 (if free) | Ease: 2/10'"
+        },
+        {
+          "section": "Side-by-Side Comparison",
+          "timestamp": "5:15-6:00",
+          "content": "Visuals: Show all 4 results side-by-side\n\nComparison table:\n| AI | Quality | Price | Ease | Best For |\n|-----|---------|-------|------|----------|\n| Pawcasso | 9/10 | $9 one-time | 10/10 | Quick pet portraits, gifts |\n| Midjourney | 10/10 | $10/mo | 5/10 | Artists, customization lovers |\n| DALL-E 3 | 7/10 | $20/mo | 8/10 | ChatGPT users, casual use |\n| Stable Diffusion | 6/10 | Free* | 2/10 | Developers, hobbyists |\n\nVerdict: 'If you want a beautiful pet portrait without the hassle — Pawcasso wins on ease + price. If you're an artist who wants full control — Midjourney. For tinkerers — Stable Diffusion.'"
+        },
+        {
+          "section": "CTA & Outro",
+          "timestamp": "6:00-7:00",
+          "content": "Summary: 'All 4 AIs are powerful, but they serve different needs. For most pet parents who just want a stunning portrait without learning prompts — Pawcasso is built for you.'\n\nCTA 1: 'Try Pawcasso at pawcasso-atelier.vercel.app — code YOUTUBE10 for 10% off.'\n\nCTA 2: 'Comment which AI you'd use and why!'\n\nCTA 3: 'Subscribe for more AI art experiments and tutorials.'\n\nEnd screen: Order link, AI comparison chart (downloadable PDF in description), subscribe button"
+        }
+      ],
+      "b_roll_needed": [
+        "Screen recordings of using each AI platform",
+        "All 4 portrait results (high-res)",
+        "Pricing comparison graphics",
+        "Ease-of-use demonstrations (upload flows, prompts)"
+      ],
+      "voiceover_tone": "Objective reviewer, tech YouTuber vibe (like Marques Brownlee but for AI art)",
+      "music": "Tech review background music (neutral, modern)",
+      "editing_notes": "Use clean graphics for comparison tables. Zoom in on portrait details. Add timestamps in description for each AI."
+    }
+  },
+  "additional_tutorial_ideas": [
+    {
+      "title": "I Tried 30 AI Art Generators So You Don't Have To (Pet Portrait Edition)",
+      "duration": "10-12 min",
+      "hook": "Comprehensive roundup, SEO goldmine"
+    },
+    {
+      "title": "Turn Your Pet Into a Movie Poster (AI Art Tutorial)",
+      "duration": "5-6 min",
+      "hook": "Fun, shareable, showcases creativity"
+    },
+    {
+      "title": "Pet Memorial Portraits: How to Honor Your Pet's Memory with AI Art",
+      "duration": "6-7 min",
+      "hook": "Emotional, high-value audience, drives orders"
+    },
+    {
+      "title": "The Ultimate Guide to Ordering Custom Pet Art (Avoid These Mistakes!)",
+      "duration": "7-8 min",
+      "hook": "Buyer's guide, high purchase intent keywords"
+    },
+    {
+      "title": "I Recreated Famous Paintings with My Pets (Mona Lisa, Starry Night, The Scream)",
+      "duration": "8-10 min",
+      "hook": "Viral potential, art history angle"
+    },
+    {
+      "title": "Pet Photography Lighting Setup (Under $50)",
+      "duration": "6-7 min",
+      "hook": "Practical, drives better customer photos"
+    }
+  ],
+  "seo_optimization": {
+    "title_best_practices": [
+      "Include main keyword in first 5 words",
+      "Keep under 60 characters (mobile truncation)",
+      "Use numbers and brackets for CTR boost (e.g., '[2026 Guide]', '(5 Pro Tips)')",
+      "Promise clear value ('How to', 'Step-by-Step', 'Complete Guide')"
+    ],
+    "description_template": "{{HOOK_SENTENCE}}\n\n📌 Timestamps:\n0:00 Intro\n{{CHAPTER_TIMESTAMPS}}\n\n🎨 Order Your Pet Portrait:\nhttps://pawcasso-atelier.vercel.app/order?utm_source=youtube&utm_medium=tutorial&utm_campaign={{VIDEO_SLUG}}\nUse code YOUTUBE10 for 10% off!\n\n📚 Resources Mentioned:\n{{LINKS_TO_TOOLS_OR_RELATED_VIDEOS}}\n\n🐾 Follow Pawcasso Atelier:\n• Instagram: @pawcasso.atelier\n• TikTok: @pawcassoatelier\n• Gallery: https://pawcasso-atelier.vercel.app/gallery\n\n💬 Questions? Drop a comment below!\n\n#petportrait #aipetart #dogportrait #catportrait #petphotography #custompetar #aiart #tutorial #howto #petlovers",
+    "tags": [
+      "pet portrait",
+      "ai pet art",
+      "custom dog portrait",
+      "cat portrait",
+      "ai art tutorial",
+      "pet photography",
+      "digital art",
+      "ai generated art",
+      "pet memorial",
+      "pet gifts",
+      "how to photograph pets",
+      "dog photography",
+      "cat photography",
+      "ai portrait generator",
+      "pawcasso atelier"
+    ],
+    "thumbnail_formula": [
+      "Before/after split screen (works for 70% of videos)",
+      "Big, bold text (3-5 words max): 'PERFECT PET PHOTO', 'AI ART SECRETS', '17 STYLES'",
+      "High contrast colors (avoid muddy midtones)",
+      "Your face (if doing voiceover on camera) with expressive reaction",
+      "Arrow or circle highlighting key element",
+      "Consistent branding (Pawcasso logo in corner)"
+    ]
+  },
+  "production_workflow": {
+    "pre_production": [
+      "Script writing (2-3 hours per tutorial)",
+      "B-roll shot list",
+      "Gather assets (customer photos, AI results, screen recordings)",
+      "Legal clearances (customer permissions)"
+    ],
+    "production": [
+      "Film A-roll (talking head or voiceover): 1-2 hours",
+      "Capture B-roll: 1-2 hours",
+      "Screen recordings: 30 min"
+    ],
+    "post_production": [
+      "Edit video (DaVinci Resolve or Premiere): 4-6 hours",
+      "Add music, text overlays, transitions: 1-2 hours",
+      "Color grading: 30 min",
+      "Export (1080p, 30fps, MP4): 15 min"
+    ],
+    "total_time_per_tutorial": "10-15 hours (including script to upload)",
+    "batch_strategy": "Film 4 tutorials in one weekend (batch A-roll), edit one per week"
+  },
+  "monetization_readiness": {
+    "watch_time_goal": "4,000 hours in 12 months",
+    "strategy": "8-minute videos × 1,000 views/video × 24 videos = 3,200 hours (80% of goal from tutorials alone)",
+    "supplement_with_shorts": "Shorts can drive 10M views in 90 days for alternative monetization path",
+    "estimated_rpm": "$5-12 per 1,000 views (pet niche has decent CPM)",
+    "revenue_projection_month_12": "$500-1,500/month from AdSense + $2,000-5,000 from direct orders"
+  }
+}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getReferralStats, getStripeCustomerId } from "@/lib/stripe";
+import { getReferralStats } from "@/lib/referral";
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -11,8 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const customerId = await getStripeCustomerId(session.user.email);
-    const stats = await getReferralStats(customerId);
+    const stats = await getReferralStats(session.user.email);
     return NextResponse.json(stats);
   } catch (error) {
     console.error("Failed to fetch referral stats:", error);

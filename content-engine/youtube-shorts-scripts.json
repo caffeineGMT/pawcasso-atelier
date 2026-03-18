@@ -1,0 +1,525 @@
+{
+  "youtube_shorts_overview": {
+    "format": "Vertical 9:16 (1080x1920)",
+    "duration": "60 seconds max (optimal: 45-55 seconds)",
+    "upload_frequency": "3x per week (Monday, Wednesday, Friday at 7 AM PT)",
+    "goal": "Drive traffic to main channel + website, maximize watch time",
+    "cta_strategy": "Pin comment with order link + end screen card to longer tutorial"
+  },
+  "shorts_templates": {
+    "template_1_before_after_reveal": {
+      "name": "Before/After Transformation Reveal",
+      "duration": "45-50 seconds",
+      "hook_variants": [
+        "POV: Your dog becomes a Renaissance masterpiece",
+        "What if your cat was painted by Vermeer?",
+        "I turned my border collie into a $10K oil painting",
+        "This AI can turn your pet into museum-quality art",
+        "Watch this Golden Retriever transform into a Pixar character"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text overlay on black screen",
+          "example": "POV: Your dog becomes a Renaissance painting",
+          "visual": "Bold white text, gold accent (#C9A96E), fade in animation"
+        },
+        {
+          "timestamp": "3-8s",
+          "content": "Show original pet photo (full screen)",
+          "visual": "Clean pet photo, minimal background, center-framed"
+        },
+        {
+          "timestamp": "8-10s",
+          "content": "Transition effect (swipe, dissolve, or AI 'processing' animation)",
+          "visual": "Glitch effect or pixel-to-paint transition"
+        },
+        {
+          "timestamp": "10-40s",
+          "content": "Reveal AI-generated portrait (slow zoom in)",
+          "visual": "High-quality portrait, dramatic music swell, slow 1.2x zoom"
+        },
+        {
+          "timestamp": "40-45s",
+          "content": "Text overlay: Style name + CTA",
+          "example": "Renaissance Style | $9 • 24hr Delivery",
+          "visual": "Bottom third text overlay, website URL fades in"
+        },
+        {
+          "timestamp": "45-50s",
+          "content": "End screen: Logo + 'Link in bio' + Subscribe button",
+          "visual": "Pawcasso logo, paw icon, gold CTA button"
+        }
+      ],
+      "music": "Dramatic orchestral build (royalty-free from YouTube Audio Library)",
+      "editing_notes": "Keep original photo visible for 5+ seconds so viewers emotionally connect with pet before reveal",
+      "variations": [
+        "Side-by-side split screen (before left, after right)",
+        "Before in background (blurred), after slides over from right",
+        "Circle wipe transition (like Instagram Stories)"
+      ]
+    },
+    "template_2_style_comparison": {
+      "name": "Same Pet, 5 Different Styles",
+      "duration": "50-60 seconds",
+      "hook_variants": [
+        "5 art styles, 1 dog — which is your favorite?",
+        "Renaissance vs Pixar vs Cyberpunk — you decide",
+        "Watch this cat transform into 5 different masterpieces",
+        "Same golden retriever, 5 universes",
+        "Which art style suits your pet best?"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text + original pet photo",
+          "example": "5 styles, 1 dog — which wins?"
+        },
+        {
+          "timestamp": "3-13s",
+          "content": "Style 1: Renaissance (2 seconds display)",
+          "visual": "Portrait fills screen, style name overlay: 'Renaissance'"
+        },
+        {
+          "timestamp": "13-23s",
+          "content": "Style 2: Pixar 3D (2 seconds)",
+          "visual": "Quick cut transition, 'Pixar 3D' text"
+        },
+        {
+          "timestamp": "23-33s",
+          "content": "Style 3: Cyberpunk (2 seconds)",
+          "visual": "'Cyberpunk' text with neon glow effect"
+        },
+        {
+          "timestamp": "33-43s",
+          "content": "Style 4: Needle Felt (2 seconds)",
+          "visual": "'Needle Felt' cozy font style"
+        },
+        {
+          "timestamp": "43-53s",
+          "content": "Style 5: Watercolor (2 seconds)",
+          "visual": "'Watercolor' delicate font"
+        },
+        {
+          "timestamp": "53-60s",
+          "content": "CTA: 'All 17 styles • $9 each • Link in bio'",
+          "visual": "Grid of all 5 styles shrinks to thumbnail size, website URL appears"
+        }
+      ],
+      "music": "Upbeat electronic (builds energy with each style reveal)",
+      "editing_notes": "Use quick cuts (no transitions) to maintain fast pace. Add 'whoosh' sound effect between styles.",
+      "engagement_hook": "Pin comment: 'Comment your favorite number (1-5) and I'll tell you which style matches your pet's personality!'"
+    },
+    "template_3_process_reveal": {
+      "name": "Watch AI Create Art in Real-Time",
+      "duration": "40-50 seconds",
+      "hook_variants": [
+        "Watch AI paint your dog in 60 seconds",
+        "This is how AI turns pets into art",
+        "The most satisfying AI transformation you'll see today",
+        "From photo to masterpiece in under 1 minute",
+        "AI art generation process revealed"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text",
+          "example": "Watch AI paint your dog in 60 seconds"
+        },
+        {
+          "timestamp": "3-8s",
+          "content": "Upload animation (pet photo uploads to 'canvas')",
+          "visual": "Screen recording style or animated mockup of upload flow"
+        },
+        {
+          "timestamp": "8-12s",
+          "content": "Style selection (rapid scroll through style options)",
+          "visual": "Renaissance selected, glows gold"
+        },
+        {
+          "timestamp": "12-35s",
+          "content": "AI 'painting' process (timelapse or simulated)",
+          "visual": "Portrait appears in layers: sketch → colors → details → final",
+          "note": "Use Runway ML or similar tool to create paint-stroke-by-stroke animation, or fake it with opacity fade-ins"
+        },
+        {
+          "timestamp": "35-40s",
+          "content": "Final portrait reveal (full screen)",
+          "visual": "Music crescendo, portrait zooms out slightly"
+        },
+        {
+          "timestamp": "40-50s",
+          "content": "CTA: 'Create yours • Link in bio'",
+          "visual": "Order button animation, website URL"
+        }
+      ],
+      "music": "Ambient electronic with gradual build (like ODESZA or Tycho)",
+      "editing_notes": "Speed up middle section (2x speed) so full process fits in 25 seconds. Add subtle particle effects (sparkles) during generation.",
+      "filming_option": "Screen record actual Manus API generation (with permission) for authentic behind-the-scenes feel"
+    },
+    "template_4_viral_hook": {
+      "name": "Scroll-Stopping Viral Hook",
+      "duration": "30-45 seconds",
+      "hook_variants": [
+        "POV: You're scrolling and see your dog as a Renaissance painting",
+        "This will change how you see your pet forever",
+        "I paid $9 for this and it's better than a $500 commission",
+        "Your dog deserves to be in a museum",
+        "Stop scrolling — is that a Vermeer or a Golden Retriever?"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-2s",
+          "content": "Extreme close-up of portrait detail (eyes or brushstrokes)",
+          "visual": "Tight crop, mysterious, makes viewer ask 'what is this?'"
+        },
+        {
+          "timestamp": "2-5s",
+          "content": "Hook text appears",
+          "example": "Stop scrolling — is that a Vermeer or a dog?"
+        },
+        {
+          "timestamp": "5-10s",
+          "content": "Slow zoom out reveals full portrait",
+          "visual": "1.5x zoom out, dramatic music"
+        },
+        {
+          "timestamp": "10-15s",
+          "content": "Cut to original pet photo (surprise reveal)",
+          "visual": "Quick cut, upbeat music shift"
+        },
+        {
+          "timestamp": "15-25s",
+          "content": "Side-by-side comparison (split screen)",
+          "visual": "Left: original, Right: portrait, labels appear"
+        },
+        {
+          "timestamp": "25-30s",
+          "content": "Text overlay: 'AI-Generated • $9 • 24hrs'",
+          "visual": "Bold stats, gold accent color"
+        },
+        {
+          "timestamp": "30-45s",
+          "content": "CTA: 'Turn your pet into art • Link in bio'",
+          "visual": "Website URL, subscribe button reminder"
+        }
+      ],
+      "music": "Orchestral strings (mysterious intro) → upbeat pop (reveal)",
+      "editing_notes": "First 2 seconds are CRITICAL. Must be visually intriguing enough to stop mid-scroll. Test multiple crops.",
+      "a_b_testing": "Try 3 different opening crops (eyes, full face, brushstroke detail) and compare retention rates"
+    },
+    "template_5_customer_testimonial": {
+      "name": "Real Customer Reaction",
+      "duration": "40-50 seconds",
+      "hook_variants": [
+        "Her reaction when she saw her dog as art 🥺",
+        "I surprised my mom with this AI portrait",
+        "Watch her open the portrait reveal",
+        "Customer reactions hit different",
+        "This is why we do what we do"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text",
+          "example": "Her reaction when she saw her dog as art 🥺"
+        },
+        {
+          "timestamp": "3-8s",
+          "content": "Customer testimonial quote on screen",
+          "example": "'I literally cried when I saw it' — Sarah M., Vancouver",
+          "visual": "Quote text with quotation marks, customer first name only"
+        },
+        {
+          "timestamp": "8-15s",
+          "content": "Show original pet photo customer submitted",
+          "visual": "Photo appears with label 'What Sarah sent us:'"
+        },
+        {
+          "timestamp": "15-35s",
+          "content": "Reveal the portrait we created",
+          "visual": "Slow zoom, dramatic music, 'What we delivered:' label"
+        },
+        {
+          "timestamp": "35-40s",
+          "content": "Text overlay: 5-star review snippet",
+          "example": "⭐⭐⭐⭐⭐ 'Better than I imagined' — Sarah M."
+        },
+        {
+          "timestamp": "40-50s",
+          "content": "CTA: 'Get yours for $9 • Link in bio'",
+          "visual": "Order button, website URL"
+        }
+      ],
+      "music": "Emotional indie folk or piano (like Sleeping At Last)",
+      "filming_notes": "If possible, film actual customer unboxing/reaction (with permission). Otherwise, use quote + portraits only.",
+      "legal_note": "Always get written permission from customers before using their photos/testimonials. Offer 50% off next order as incentive."
+    },
+    "template_6_trending_sound": {
+      "name": "Trending Audio Mashup",
+      "duration": "15-30 seconds (shorter for trending audio)",
+      "hook_variants": [
+        "[Use trending audio lyric as hook]",
+        "[Lip sync to trending dialogue]",
+        "[React to trending meme format]"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-2s",
+          "content": "Trending audio starts (first 2 seconds MUST match trend)",
+          "visual": "Copy exact format of trending videos"
+        },
+        {
+          "timestamp": "2-10s",
+          "content": "Show pet transformation synced to audio beat/dialogue",
+          "visual": "Cut on beat, match transitions to trending format"
+        },
+        {
+          "timestamp": "10-15s",
+          "content": "Reveal final portrait",
+          "visual": "Satisfying 'drop' moment if audio has one"
+        },
+        {
+          "timestamp": "15-30s",
+          "content": "Quick CTA (text only, don't disrupt audio)",
+          "visual": "Bottom corner: 'Link in bio' or website URL"
+        }
+      ],
+      "music": "ALWAYS use current trending sound (check TikTok Creative Center daily)",
+      "editing_notes": "Do NOT modify trending audio (no cuts, speed changes, or volume adjustments). Ride the trend wave.",
+      "discovery_tools": [
+        "TikTok Creative Center: https://ads.tiktok.com/business/creativecenter",
+        "YouTube Shorts Trends: Check 'Shorts' tab on competitor channels",
+        "Instagram Reels Audio: Look for 'Trending' tag on audio pages"
+      ],
+      "example_trends": [
+        "Little Miss [X] trend → 'Little Miss turns her dog into Renaissance art'",
+        "Before you go / After you leave → Before AI / After AI transformation",
+        "POV: You're a [X] → POV: You're a pet in the Louvre"
+      ]
+    },
+    "template_7_educational_hook": {
+      "name": "Quick Tutorial/Tip",
+      "duration": "45-60 seconds",
+      "hook_variants": [
+        "3 tips for the perfect pet photo (for AI portraits)",
+        "Why your AI portrait looks bad (and how to fix it)",
+        "The secret to getting museum-quality AI art",
+        "Photographers HATE this one AI trick",
+        "How to take a pet photo that generates stunning art"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text (numbered list)",
+          "example": "3 tips for perfect pet photos"
+        },
+        {
+          "timestamp": "3-18s",
+          "content": "Tip 1 with visual example",
+          "example": "1. Use natural light (not flash)",
+          "visual": "Split screen: Bad (flash) vs Good (window light)"
+        },
+        {
+          "timestamp": "18-33s",
+          "content": "Tip 2 with visual example",
+          "example": "2. Get eye-level with your pet",
+          "visual": "Split screen: Bad (top-down) vs Good (eye-level)"
+        },
+        {
+          "timestamp": "33-48s",
+          "content": "Tip 3 with visual example",
+          "example": "3. Clean background (no clutter)",
+          "visual": "Split screen: Bad (messy room) vs Good (plain wall)"
+        },
+        {
+          "timestamp": "48-55s",
+          "content": "Show final portrait created using these tips",
+          "visual": "Good photo → Stunning portrait transformation"
+        },
+        {
+          "timestamp": "55-60s",
+          "content": "CTA: 'Use these tips • Order your portrait • Link in bio'",
+          "visual": "Website URL, subscribe button"
+        }
+      ],
+      "music": "Upbeat background music (not too loud, voiceover-friendly)",
+      "editing_notes": "Text overlays are CRITICAL. Many viewers watch muted. Use large, readable font.",
+      "voiceover_option": "Add professional voiceover (use ElevenLabs AI voice or record yourself) for better retention"
+    },
+    "template_8_behind_the_scenes": {
+      "name": "Behind the Scenes / Process",
+      "duration": "40-50 seconds",
+      "hook_variants": [
+        "Behind the scenes: How we create your pet portrait",
+        "A day in the life of an AI pet artist",
+        "This is what happens after you order",
+        "Here's how we generate 100+ portraits per day",
+        "The AI art studio you didn't know existed"
+      ],
+      "structure": [
+        {
+          "timestamp": "0-3s",
+          "content": "Hook text",
+          "example": "Behind the scenes: How we create your pet portrait"
+        },
+        {
+          "timestamp": "3-12s",
+          "content": "Show order coming in (screen record or animation)",
+          "visual": "Email notification, order dashboard, customer photo appears"
+        },
+        {
+          "timestamp": "12-25s",
+          "content": "Show Manus API generation process",
+          "visual": "Screen record of prompt engineering, style selection, generation"
+        },
+        {
+          "timestamp": "25-35s",
+          "content": "Quality check / human review",
+          "visual": "You reviewing portrait on screen, approving or regenerating"
+        },
+        {
+          "timestamp": "35-40s",
+          "content": "Email delivery / happy customer",
+          "visual": "Email sent animation, mock testimonial quote"
+        },
+        {
+          "timestamp": "40-50s",
+          "content": "CTA: 'Order yours today • 24hr delivery • Link in bio'",
+          "visual": "Website URL, subscribe button"
+        }
+      ],
+      "music": "Lo-fi beats or chill electronic (like 'productive work vibes')",
+      "editing_notes": "Speed up boring parts (2x speed). Add subtle text labels for each step. Humanize the process.",
+      "authenticity_note": "Show real workspace, real orders. Viewers love authentic behind-the-scenes content."
+    }
+  },
+  "batch_production_workflow": {
+    "goal": "Create 12 Shorts (1 month supply) in one 4-hour session",
+    "preparation": [
+      "Select 12 gallery images from website/public/gallery/ (diverse styles and animals)",
+      "Download 12 original pet photos (from Instagram DMs, email submissions, or stock)",
+      "Install CapCut Desktop (free) or DaVinci Resolve",
+      "Download trending audio tracks from YouTube Audio Library or Epidemic Sound",
+      "Create thumbnail template in Canva (1080x1920, vertical)"
+    ],
+    "production_steps": [
+      {
+        "step": 1,
+        "action": "Template Selection",
+        "details": "Choose 2 templates (e.g., 6x Before/After Reveal + 6x Style Comparison). Repetition builds pattern recognition."
+      },
+      {
+        "step": 2,
+        "action": "Batch Import Assets",
+        "details": "Import all 12 images + original photos into editing software"
+      },
+      {
+        "step": 3,
+        "action": "Create First Video (Template Master)",
+        "details": "Spend 30-40 minutes perfecting Template 1 Video 1. This becomes the blueprint."
+      },
+      {
+        "step": 4,
+        "action": "Duplicate & Swap Assets",
+        "details": "Duplicate project 5 times, swap images only. Maintains consistent pacing/transitions."
+      },
+      {
+        "step": 5,
+        "action": "Customize Text Overlays",
+        "details": "Update hook text for each video (use hook_variants from templates above)"
+      },
+      {
+        "step": 6,
+        "action": "Export Batch 1 (6 videos)",
+        "details": "Export all 6 videos: 1080x1920, 30fps, MP4, high quality"
+      },
+      {
+        "step": 7,
+        "action": "Repeat for Template 2",
+        "details": "Build second template, duplicate 5 times, export remaining 6 videos"
+      },
+      {
+        "step": 8,
+        "action": "File Naming Convention",
+        "details": "Save as: YYYYMMDD_short_hookKeyword.mp4 (e.g., 20260322_short_renaissanceDog.mp4)"
+      }
+    ],
+    "time_estimate": "4 hours for 12 Shorts (20 min per video)",
+    "pro_tips": [
+      "Use CapCut's 'Template' feature to save your custom layouts",
+      "Create a 'Shorts Assets' folder with pre-sized logos, CTAs, end screens",
+      "Batch export overnight if rendering takes long",
+      "Schedule all 12 uploads at once (Mon/Wed/Fri for 4 weeks)"
+    ]
+  },
+  "upload_optimization": {
+    "title_formulas": [
+      "[Hook] + [Animal] + [Style] + [Emotion/Outcome]",
+      "POV: Your Golden Retriever Becomes a Renaissance Masterpiece",
+      "Watch This Border Collie Transform Into Pixar Art (So Cute!)",
+      "I Turned My Cat Into a Vermeer Painting Using AI",
+      "Before & After: AI Pet Portrait Transformation (Mind-Blowing)"
+    ],
+    "title_rules": [
+      "Front-load keywords (first 3 words are most important for search)",
+      "Keep under 60 characters (mobile truncation)",
+      "Include numbers ('5 Styles', '60 Seconds', '$9')",
+      "Use emotion words (Stunning, Adorable, Mind-Blowing, Heartwarming)",
+      "Avoid clickbait (YouTube penalizes misleading titles)"
+    ],
+    "description_template": "{{HOOK_SENTENCE}}\n\n🎨 Transform your pet into art: https://pawcasso-atelier.vercel.app/order?utm_source=youtube&utm_medium=shorts&utm_campaign={{VIDEO_TITLE_SLUG}}\n\n17 artistic styles available:\n✨ Renaissance\n✨ Baroque\n✨ Pixar 3D\n✨ Cyberpunk\n✨ Watercolor\n✨ Needle Felt\n...and 11 more!\n\n💰 Pricing: $9 for 1 portrait\n⏱️ Delivery: 24 hours or less\n🐾 Perfect for: Pet memorials, gifts, home decor\n\n📷 Follow for daily transformations:\n• Instagram: @pawcasso.atelier\n• TikTok: @pawcassoatelier\n\n#aipetportrait #customdogart #petart #aiart #dogportrait #catportrait #aiartcommunity #petlovers #dogsofyoutube #catsofyoutube",
+    "hashtags": [
+      "#aipetportrait",
+      "#petart",
+      "#aiart",
+      "#dogportrait",
+      "#catportrait",
+      "#custompetar",
+      "#aiartcommunity",
+      "#petlovers",
+      "#dogsofyoutube",
+      "#catsofyoutube",
+      "#petmemorial",
+      "#petgifts",
+      "#digitalart",
+      "#aiartist",
+      "#petphotography"
+    ],
+    "thumbnail_checklist": [
+      "Use bold, high-contrast text (white with black stroke)",
+      "Show before/after split if space allows",
+      "Include pet's face (close-up, expressive)",
+      "Add visual intrigue (frame, sparkles, arrows)",
+      "Test on mobile (thumbnail is tiny in feed)",
+      "Match thumbnail to video content (no bait-and-switch)"
+    ]
+  },
+  "pinned_comment_templates": [
+    "🎨 Order your pet portrait here: [LINK]\n💰 Use code YOUTUBE10 for 10% off!",
+    "Which style is your favorite? Comment 1-5 and I'll tell you which matches your pet's vibe! 🐾",
+    "Full tutorial on this transformation: [LINK TO LONG-FORM VIDEO]",
+    "Want to see YOUR pet transformed? Send me a DM on Instagram @pawcasso.atelier!",
+    "Fun fact: This portrait took the AI 2 minutes to generate. Comment your guess on how many brush strokes! 🎨"
+  ],
+  "analytics_tracking": {
+    "key_metrics": [
+      "Average view duration (goal: 70%+ retention)",
+      "Click-through rate on pinned comment link (goal: 5%+)",
+      "Subscriber conversion rate (views → subs, goal: 1%)",
+      "Traffic to website from Shorts (track via UTM params)"
+    ],
+    "tools": [
+      "YouTube Studio Analytics (built-in)",
+      "Google Analytics 4 (for website conversions)",
+      "TubeBuddy or VidIQ (for keyword research and competitor analysis)"
+    ]
+  },
+  "content_calendar_strategy": {
+    "week_1": "Before/After Reveals (high engagement, establishes format)",
+    "week_2": "Style Comparisons (educate viewers on variety)",
+    "week_3": "Customer Testimonials (build trust, social proof)",
+    "week_4": "Trending Audio (ride viral wave, maximize reach)",
+    "ongoing": "Mix of all templates, 60% proven formats + 40% experimental"
+  }
+}

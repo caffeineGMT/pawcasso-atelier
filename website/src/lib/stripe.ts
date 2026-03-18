@@ -96,6 +96,7 @@ export async function createCheckoutSession({
   notes,
   petPhotoUrl,
   discountCode,
+  referralCode,
   utmSource,
   utmMedium,
   utmCampaign,
@@ -108,6 +109,7 @@ export async function createCheckoutSession({
   notes?: string;
   petPhotoUrl?: string;
   discountCode?: string;
+  referralCode?: string;
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
@@ -145,6 +147,7 @@ export async function createCheckoutSession({
       notes: notes || "",
       petPhotoUrl: petPhotoUrl || "",
       discountCode: discountCode || "",
+      referralCode: referralCode || "",
       utmSource: utmSource || "",
       utmMedium: utmMedium || "",
       utmCampaign: utmCampaign || "",
@@ -155,14 +158,39 @@ export async function createCheckoutSession({
     cancel_url: `${baseUrl}/order?canceled=true`,
   };
 
-  // Add discount code if provided
+  // Add discount code if provided (Stripe coupon)
   if (discountCode) {
     sessionParams.discounts = [{ coupon: discountCode }];
+  }
+  // OR apply referral discount (20% off for referred friend)
+  else if (referralCode) {
+    // Create or get the 20% referral discount coupon
+    const referralCoupon = await getOrCreateReferralCoupon(stripe);
+    sessionParams.discounts = [{ coupon: referralCoupon.id }];
   }
 
   const session = await stripe.checkout.sessions.create(sessionParams);
 
   return session;
+}
+
+// Helper function to create/get the standard referral discount coupon
+async function getOrCreateReferralCoupon(stripe: Stripe) {
+  const couponId = "REFERRAL20";
+
+  try {
+    // Try to retrieve existing coupon
+    const coupon = await stripe.coupons.retrieve(couponId);
+    return coupon;
+  } catch (error) {
+    // Create new coupon if it doesn't exist
+    return await stripe.coupons.create({
+      id: couponId,
+      percent_off: 20,
+      duration: "once",
+      name: "Friend Referral 20% Off",
+    });
+  }
 }
 
 export async function getStripeCustomerId(email: string): Promise<string> {

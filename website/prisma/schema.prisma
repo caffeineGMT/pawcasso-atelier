@@ -103,3 +103,70 @@ model InfluencerConversion {
   utmMedium     String?
   utmCampaign   String?
 }
+
+// Customer Referral Program
+model Customer {
+  id                  String              @id @default(cuid())
+  email               String              @unique
+  name                String?
+  referralCode        String              @unique  // Unique referral code (e.g., "FLUFFY2024")
+  stripeCustomerId    String?             @unique
+  creditBalance       Float               @default(0)  // Credit balance in dollars
+  totalReferrals      Int                 @default(0)  // Total successful referrals
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  referralsGiven      Referral[]          @relation("ReferrerCustomer")
+  referralsReceived   Referral[]          @relation("ReferredCustomer")
+  creditTransactions  CreditTransaction[]
+  milestones          MilestoneAchievement[]
+}
+
+model Referral {
+  id                String    @id @default(cuid())
+  referrerEmail     String    // Email of person who referred
+  referredEmail     String    // Email of person who was referred
+  referralCode      String    // The code that was used
+  clickedAt         DateTime? // When the referral link was first clicked
+  convertedAt       DateTime? // When the referred person made a purchase
+  orderId           String?   // Stripe session ID of the purchase
+  orderValue        Float?    // Value of the order in dollars
+  referrerCredit    Float     @default(5.0)  // $5 credit for referrer
+  referredDiscount  Float     @default(0.2)  // 20% discount for referred
+  status            String    @default("pending")  // pending, clicked, converted
+  createdAt         DateTime  @default(now())
+
+  referrer          Customer  @relation("ReferrerCustomer", fields: [referrerEmail], references: [email])
+  referred          Customer? @relation("ReferredCustomer", fields: [referredEmail], references: [email])
+
+  @@index([referralCode])
+  @@index([referrerEmail])
+  @@index([referredEmail])
+}
+
+model CreditTransaction {
+  id            String    @id @default(cuid())
+  customerEmail String
+  amount        Float     // Positive for credit, negative for spend
+  type          String    // "referral_bonus", "credit_applied", "milestone_reward"
+  description   String
+  referralId    String?   // Link to referral if applicable
+  orderId       String?   // Link to order if applicable
+  createdAt     DateTime  @default(now())
+
+  customer      Customer  @relation(fields: [customerEmail], references: [email])
+
+  @@index([customerEmail])
+}
+
+model MilestoneAchievement {
+  id            String    @id @default(cuid())
+  customerEmail String
+  milestone     String    // "5_referrals", "10_referrals", etc.
+  reward        String    // Description of reward
+  achievedAt    DateTime  @default(now())
+  claimed       Boolean   @default(false)
+
+  customer      Customer  @relation(fields: [customerEmail], references: [email])
+
+  @@unique([customerEmail, milestone])
+}

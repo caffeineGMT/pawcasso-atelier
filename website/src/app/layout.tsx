@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   description:
     "Transform your pet into stunning AI-generated art. Custom portraits for $9. Renaissance, Baroque, Impressionist, Ghibli, and 12+ other art styles.",
-  keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "AI pet portrait", "pet commission"],
+  keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "AI pet portrait", "pet commission", "custom dog portrait", "custom cat portrait", "affordable pet portrait"],
   icons: {
     icon: "/favicon.svg",
   },
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     siteName: "Pawcasso Atelier",
     title: "Pawcasso Atelier - Custom AI Pet Portraits",
     description:
-      "Transform your pet into stunning AI-generated art for $9. Choose from 16+ art styles.",
+      "Transform your pet into stunning AI-generated art for $9. Choose from 16+ art styles including Renaissance, Baroque, Impressionist, Ghibli, Pixar 3D, and Needle Felt.",
     images: [
       {
-        url: "/gallery/cat_vermeer.png",
+        url: "/gallery/cat_vermeer.webp",
         width: 2048,
         height: 2048,
         alt: "Cat with a Pearl Earring - Renaissance pet portrait by Pawcasso Atelier",
@@ -39,8 +39,16 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pawcasso Atelier - Custom AI Pet Portraits",
     description:
-      "Transform your pet into stunning AI-generated art for $9",
-    images: ["/gallery/cat_vermeer.png"],
+      "Transform your pet into stunning AI-generated art for $9. 16+ artistic styles, 24-hour delivery.",
+    images: ["/gallery/cat_vermeer.webp"],
+  },
+  other: {
+    // Pinterest Rich Pin metadata
+    "pinterest-rich-pin": "true",
+    "og:type": "product",
+    "og:price:amount": "9.00",
+    "og:price:currency": "USD",
+    "og:availability": "instock",
   },
 };
 
@@ -121,6 +129,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             alt=""
           />
         </noscript>
+
+        {/* Pinterest Tag */}
+        <Script id="pinterest-tag" strategy="afterInteractive">
+          {`
+            !function(e){if(!window.pintrk){window.pintrk = function () {
+            window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+              n=window.pintrk;n.queue=[],n.version="3.0";var
+              t=document.createElement("script");t.async=!0,t.src=e;var
+              r=document.getElementsByTagName("script")[0];
+              r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+            pintrk('load', '${process.env.NEXT_PUBLIC_PINTEREST_TAG_ID || ""}', {em: '<user_email_address>'});
+            pintrk('page');
+          `}
+        </Script>
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            alt=""
+            src={`https://ct.pinterest.com/v3/?event=init&tid=${process.env.NEXT_PUBLIC_PINTEREST_TAG_ID || ""}&noscript=1`}
+          />
+        </noscript>
+
+        {/* Pinterest Domain Verification */}
+        <meta name="p:domain_verify" content="PINTEREST_VERIFICATION_CODE_HERE" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <SessionProvider>

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { put } from "@vercel/blob";
 import { Resend } from "resend";
+import { processReferralConversion, getOrCreateCustomer } from "@/lib/referral";
+import { generateOrderCompleteEmailWithReferral } from "@/lib/email-templates/order-complete-with-referral";
 
 function getStripeInstance() {
   return new Stripe(process.env.STRIPE_SECRET_KEY || "placeholder", {
@@ -251,86 +253,22 @@ export async function POST(req: NextRequest) {
         console.log(`Portrait ${i + 1} uploaded: ${blob.url}`);
       }
 
-      // Step 3: Build email HTML with download links
-      const portraitLinksHtml = portraitUrls
-        .map(
-          (url, index) =>
-            `<a href="${url}" style="display: inline-block; background: #C9A96E; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 10px 5px;">Download Portrait ${
-              index + 1
-            }</a>`
-        )
-        .join("\n");
+      // Step 3: Create customer and get referral code
+      const customer = await getOrCreateCustomer(customerEmail, customerName);
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-      const emailHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #000;
-      color: #F5F5F7;
-      padding: 40px;
-      margin: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #111;
-      border-radius: 16px;
-      padding: 40px;
-      border: 1px solid #1d1d1f;
-    }
-    h1 {
-      color: #C9A96E;
-      margin-bottom: 20px;
-      font-size: 28px;
-    }
-    .portrait {
-      margin: 30px 0;
-      text-align: center;
-    }
-    .download-btn {
-      display: inline-block;
-      background: #C9A96E;
-      color: #000;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      margin: 10px 5px;
-    }
-    .download-btn:hover {
-      background: #E8D5A8;
-    }
-    p {
-      line-height: 1.6;
-      margin: 15px 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Your Pawcasso Portrait is Ready! 🎨</h1>
-    <p>Hi ${customerName},</p>
-    <p>We're thrilled to deliver ${petName}'s stunning AI-generated portrait${
-        portraitCount > 1 ? "s" : ""
-      } in the <strong>${style}</strong> style!</p>
-    <div class="portrait">
-      <h3 style="color: #C9A96E; margin-bottom: 20px;">Download Your Portrait${
-        portraitCount > 1 ? "s" : ""
-      }:</h3>
-      ${portraitLinksHtml}
-    </div>
-    <p>These high-resolution files are ready for printing or sharing on social media.</p>
-    <p><strong>Pro tip:</strong> Tag us <a href="https://instagram.com/pawcasso.atelier" style="color: #C9A96E;">@pawcasso.atelier</a> on Instagram and get featured in our gallery!</p>
-    <p style="margin-top: 30px;">With love,<br/><strong>The Pawcasso Atelier Team</strong></p>
-  </div>
-</body>
-</html>
-      `;
+      // Step 4: Build email HTML with download links and referral program
+      const emailHtml = generateOrderCompleteEmailWithReferral({
+        customerName,
+        petName,
+        style,
+        portraitUrls,
+        portraitCount,
+        referralCode: customer.referralCode,
+        baseUrl,
+      });
 
-      // Step 4: Send email via Resend
+      // Step 5: Send email via Resend
       console.log(`Sending email to: ${customerEmail}`);
       await resend.emails.send({
         from: "portraits@pawcasso-atelier.com",
@@ -339,7 +277,7 @@ export async function POST(req: NextRequest) {
         html: emailHtml,
       });
 
-      // Step 5: Update Stripe session metadata
+      // Step 6: Update Stripe session metadata
       console.log("Updating Stripe session metadata...");
       await stripe.checkout.sessions.update(session.id, {
         metadata: {
@@ -350,12 +288,78 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Step 6: Track influencer conversion (if applicable)
+      // Step 7: Process referral conversion (if applicable)
+      const referralCode = metadata.referralCode;
+      const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
+
+      if (referralCode) {
+        try {
+          console.log(`Processing referral conversion for code: ${referralCode}`);
+          const referral = await processReferralConversion(
+            referralCode,
+            customerEmail,
+            session.id,
+            amountTotal
+          );
+
+          if (referral) {
+            console.log(`Referral conversion processed. Referrer earned $5 credit.`);
+
+            // Get customer record to include referral link in referrer notification
+            const referrerCustomer = await getOrCreateCustomer(referral.referrerEmail);
+
+            // Send notification email to referrer about the credit
+            try {
+              await resend.emails.send({
+                from: "portraits@pawcasso-atelier.com",
+                to: referral.referrerEmail,
+                subject: "🎉 You earned $5 credit from your referral!",
+                html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #1d1d1f; }
+    h1 { color: #C9A96E; margin-bottom: 20px; font-size: 28px; }
+    .credit-box { background: #51cf66; color: #000; padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; }
+    .credit-amount { font-size: 48px; font-weight: 700; }
+    p { line-height: 1.6; margin: 15px 0; }
+    .btn { display: inline-block; background: #C9A96E; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>You Earned a Referral Bonus! 🎉</h1>
+    <div class="credit-box">
+      <div class="credit-amount">$5.00</div>
+      <div>Added to your account</div>
+    </div>
+    <p>Great news! Someone just purchased a portrait using your referral link.</p>
+    <p>Your $5 credit has been automatically added to your account and can be used on your next order.</p>
+    <p style="margin-top: 30px;"><a href="${baseUrl}/portal" class="btn">View Referral Dashboard</a></p>
+    <p>Keep sharing your link to earn more credits and unlock milestone rewards!</p>
+    <p style="margin-top: 30px; color: #86868b; font-size: 14px;">Current balance: $${referrerCustomer.creditBalance.toFixed(2)}</p>
+  </div>
+</body>
+</html>
+                `,
+              });
+            } catch (emailError) {
+              console.error("Failed to send referral credit notification:", emailError);
+            }
+          }
+        } catch (referralError) {
+          console.error("Failed to process referral conversion:", referralError);
+          // Don't fail the order if referral tracking fails
+        }
+      }
+
+      // Step 8: Track influencer conversion (if applicable)
       const utmSource = metadata.utmSource;
       const utmMedium = metadata.utmMedium;
       const utmCampaign = metadata.utmCampaign;
       const discountCode = metadata.discountCode;
-      const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
 
       if (utmMedium === "influencer" || (discountCode && discountCode.endsWith("20"))) {
         try {

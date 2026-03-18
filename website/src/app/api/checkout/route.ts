@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession, type TierId } from "@/lib/stripe";
+import { validateReferralCode, trackReferralClick } from "@/lib/referral";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,6 +14,7 @@ export async function POST(req: NextRequest) {
       petPhotoUrl,
       tier,
       discountCode,
+      referralCode,
       utmSource,
       utmMedium,
       utmCampaign
@@ -25,6 +27,17 @@ export async function POST(req: NextRequest) {
     // Default to 'basic' tier if not provided
     const selectedTier: TierId = tier || 'basic';
 
+    // Validate and track referral code if provided
+    let validatedReferralCode: string | undefined;
+    if (referralCode) {
+      const validation = await validateReferralCode(referralCode);
+      if (validation.valid) {
+        validatedReferralCode = referralCode;
+        // Track the referral conversion attempt
+        await trackReferralClick(referralCode, email);
+      }
+    }
+
     const session = await createCheckoutSession({
       tier: selectedTier,
       customerEmail: email,
@@ -34,6 +47,7 @@ export async function POST(req: NextRequest) {
       notes,
       petPhotoUrl,
       discountCode,
+      referralCode: validatedReferralCode,
       utmSource,
       utmMedium,
       utmCampaign,
