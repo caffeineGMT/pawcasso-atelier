@@ -173,6 +173,56 @@ export default function InfluencersPage() {
     return `Hi ${influencer.handle}! Love ${petName}'s content 🐾 We make AI pet portraits and would love to send you a free one + feature you in our gallery. Interested?\n\nYou'll get:\n✨ Free portrait in 3 styles\n💰 20% discount code for your audience (${influencer.discountCode})\n🎁 15% commission on all sales\n\nYour affiliate link: ${influencer.affiliateLink}`;
   };
 
+  const handleExportCSV = () => {
+    // Prepare CSV data
+    const csvHeaders = [
+      'Name',
+      'Handle',
+      'Platform',
+      'Followers',
+      'Status',
+      'Discount Code',
+      'Sales Count',
+      'Total Revenue',
+      'Commission Owed',
+      'Email',
+      'Profile URL',
+    ];
+
+    const csvRows = influencers.map(influencer => {
+      const revenue = influencer.conversions.reduce((sum, conv) => sum + conv.revenue, 0);
+      const commission = influencer.conversions.reduce((sum, conv) => sum + conv.commission, 0);
+      const salesCount = influencer.conversions.length;
+
+      return [
+        `"${influencer.name}"`,
+        `"@${influencer.handle}"`,
+        influencer.platform,
+        influencer.followerCount,
+        influencer.status,
+        influencer.discountCode || '',
+        salesCount,
+        revenue.toFixed(2),
+        commission.toFixed(2),
+        influencer.email || '',
+        influencer.profileUrl || '',
+      ].join(',');
+    });
+
+    const csvContent = [csvHeaders.join(','), ...csvRows].join('\n');
+
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `influencer-commissions-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black text-white p-8">
@@ -187,6 +237,12 @@ export default function InfluencersPage() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-[#C9A96E]">Influencer Seeding Program</h1>
           <div className="space-x-4">
+            <button
+              onClick={handleExportCSV}
+              className="px-6 py-2 bg-[#51cf66] text-black font-semibold rounded-lg hover:bg-[#40b354] transition"
+            >
+              Export CSV
+            </button>
             <button
               onClick={() => setShowAddForm(true)}
               className="px-6 py-2 bg-[#C9A96E] text-black font-semibold rounded-lg hover:bg-[#a07830] transition"
