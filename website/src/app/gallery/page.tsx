@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { artworks, styles, animals } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import GallerySkeleton from "@/components/GallerySkeleton";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackViewContent, trackSearch, trackEngagement, ContentType } from "@/lib/analytics";
 
 export default function GalleryPage() {
   const [styleFilter, setStyleFilter] = useState("All");
@@ -30,6 +30,14 @@ export default function GalleryPage() {
   // Track view_gallery event on page load
   useEffect(() => {
     trackEvent('view_gallery');
+    trackViewContent({
+      content_type: ContentType.GALLERY,
+      content_ids: artworks.map(a => a.id),
+      content_name: 'Gallery - All Artworks',
+      content_category: 'gallery',
+      value: 9,
+      currency: 'USD',
+    });
   }, []);
 
   return (
@@ -73,7 +81,12 @@ export default function GalleryPage() {
                 {styles.map((s) => (
                   <button
                     key={s}
-                    onClick={() => setStyleFilter(s)}
+                    onClick={() => {
+                      setStyleFilter(s);
+                      if (s !== 'All') {
+                        trackSearch(`style:${s}`);
+                      }
+                    }}
                     className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
                       styleFilter === s
                         ? "bg-white text-black font-medium"
@@ -95,7 +108,12 @@ export default function GalleryPage() {
                 {animals.map((a) => (
                   <button
                     key={a}
-                    onClick={() => setAnimalFilter(a)}
+                    onClick={() => {
+                      setAnimalFilter(a);
+                      if (a !== 'All') {
+                        trackSearch(`animal:${a}`);
+                      }
+                    }}
                     className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
                       animalFilter === a
                         ? "bg-white text-black font-medium"
@@ -148,6 +166,7 @@ export default function GalleryPage() {
             href="https://instagram.com/pawcasso.atelier"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackEngagement('instagram_click', { source: 'gallery_cta' })}
             className="inline-flex items-center gap-2 px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-text-primary text-sm tracking-wide rounded-full hover:bg-white/[0.1] transition-all"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

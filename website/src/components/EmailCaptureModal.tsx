@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { trackLead } from '@/lib/analytics';
 
 const STORAGE_KEY = 'emailCaptured';
 const SUPPRESSION_DAYS = 7;
@@ -87,6 +88,13 @@ export default function EmailCaptureModal() {
         localStorage.setItem(STORAGE_KEY, Date.now().toString());
         setDiscountCode(data.discountCode || 'FIRST15');
         setSubmitted(true);
+
+        // Track Lead event for Meta Pixel (creates "leads" retargeting audience)
+        trackLead({
+          content_name: 'Email Signup - Exit Intent Modal',
+          value: 9, // Estimated lifetime value
+          currency: 'USD',
+        });
 
         // Auto-close after 3 seconds
         setTimeout(() => {
