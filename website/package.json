@@ -11,7 +11,9 @@
     "generate-pins": "tsx scripts/generate-pinterest-pins.ts",
     "email:export": "tsx scripts/export-email-templates.ts",
     "email:dev": "email dev",
-    "testimonials:export": "tsx scripts/export-testimonial-cards.ts"
+    "testimonials:export": "tsx scripts/export-testimonial-cards.ts",
+    "caption:generate": "tsx scripts/generate-captions.ts",
+    "outreach": "tsx scripts/influencer-outreach.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",

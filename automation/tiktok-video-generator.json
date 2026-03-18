@@ -1,0 +1,274 @@
+{
+  "name": "Pawcasso Atelier - TikTok/Reels Video Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
+            },
+            {
+              "triggerAtHour": 18,
+              "triggerAtMinute": 0
+            }
+          ]
+        },
+        "timezone": "America/Los_Angeles"
+      },
+      "id": "cron_trigger",
+      "name": "Daily 9 AM & 6 PM PT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select random gallery image\nconst galleryImages = [\n  { file: 'alfie_border_collie_portrait_2048x2048.webp', animal: 'Border Collie', breed: 'Border Collie', style: 'Ink Wash' },\n  { file: 'alfie_imperial_portrait_2048x2048.webp', animal: 'Border Collie', breed: 'Border Collie', style: 'Chinese Classical' },\n  { file: 'alfie_portrait_final.webp', animal: 'Border Collie', breed: 'Border Collie', style: 'Pixar 3D' },\n  { file: 'border_collie_portrait_2048x2048.webp', animal: 'Border Collie', breed: 'Border Collie', style: 'Needle Felt' },\n  { file: 'cat_vermeer.webp', animal: 'Cat', breed: 'Cat', style: 'Renaissance' },\n  { file: 'chihuahua_portrait_16x9.webp', animal: 'Chihuahua', breed: 'Chihuahua', style: 'Pixel Art' },\n  { file: 'chihuahua_portrait_square_2048.jpg', animal: 'Chihuahua', breed: 'Chihuahua', style: 'Pixar 3D' },\n  { file: 'golden_retriever_portrait_square.webp', animal: 'Golden Retriever', breed: 'Golden Retriever', style: 'Pixar 3D' },\n  { file: 'pomeranian_portrait_final.webp', animal: 'Pomeranian', breed: 'Pomeranian', style: 'Needle Felt' },\n  { file: 'shiba_inu_felt_portrait_2048x2048.webp', animal: 'Shiba Inu', breed: 'Shiba Inu', style: 'Needle Felt' },\n  { file: 'shiba_inu_vinyl_toy_portrait_final.webp', animal: 'Shiba Inu', breed: 'Shiba Inu', style: 'Vinyl Toy' },\n  { file: 'shiba_portrait_final_2048x2048.webp', animal: 'Shiba Inu', breed: 'Shiba Inu', style: 'Pixar 3D' },\n  { file: 'shiba_portrait_final.webp', animal: 'Shiba Inu', breed: 'Shiba Inu', style: 'Needle Felt' },\n  { file: 'white_pomeranian_portrait_final.webp', animal: 'Pomeranian', breed: 'Pomeranian', style: 'Pixar 3D' }\n];\n\nconst selectedImage = galleryImages[Math.floor(Math.random() * galleryImages.length)];\nconst timestamp = new Date().toISOString();\n\nreturn [{\n  json: {\n    selectedImage: selectedImage.file,\n    animal: selectedImage.animal,\n    breed: selectedImage.breed,\n    style: selectedImage.style,\n    timestamp: timestamp,\n    imagePath: `/Users/michaelguo/pawcasso-atelier/website/public/gallery/${selectedImage.file}`,\n    imageUrl: `https://pawcasso-atelier.vercel.app/gallery/${selectedImage.file}`\n  }\n}];"
+      },
+      "id": "select_image",
+      "name": "Select Random Gallery Image",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.tiktok.com/api/discover/music/?aid=1988&count=30&scene=0",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "trending_audio",
+      "name": "Fetch Trending Audio (Placeholder)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0],
+      "notes": "TikTok API requires authentication. Replace with joyodream/tiktok-api or use manual audio selection for MVP. Search #petportrait tag for trending sounds."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse trending audio or use default\nconst audioData = $input.first().json;\nlet selectedAudio = {\n  url: 'https://example.com/default-trending-sound.mp3',\n  title: 'Trending Pet Sound',\n  id: 'default'\n};\n\n// If API returns valid data, extract top trending sound\nif (audioData && audioData.music_list && audioData.music_list.length > 0) {\n  const topMusic = audioData.music_list[0];\n  selectedAudio = {\n    url: topMusic.play_url?.uri || selectedAudio.url,\n    title: topMusic.title || selectedAudio.title,\n    id: topMusic.id || selectedAudio.id\n  };\n}\n\n// Merge with previous data\nconst previousData = $('Select Random Gallery Image').first().json;\n\nreturn [{\n  json: {\n    ...previousData,\n    audio: selectedAudio\n  }\n}];"
+      },
+      "id": "parse_audio",
+      "name": "Parse Audio Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.remotion.dev/v1/renders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Remotion-Token",
+              "value": "={{ $credentials.remotionApiKey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"composition\": \"PetPortraitTransform\",\n  \"inputProps\": {\n    \"originalImageUrl\": \"{{ $json.imageUrl }}\",\n    \"breed\": \"{{ $json.breed }}\",\n    \"style\": \"{{ $json.style }}\",\n    \"audioUrl\": \"{{ $json.audio.url }}\",\n    \"ctaText\": \"Link in bio - $9\",\n    \"overlayText\": \"POV: Your {{ $json.breed }} becomes a {{ $json.style }} painting\"\n  },\n  \"codec\": \"h264\",\n  \"imageFormat\": \"jpeg\",\n  \"fps\": 30,\n  \"height\": 1920,\n  \"width\": 1080,\n  \"durationInFrames\": 450\n}"
+      },
+      "id": "remotion_render",
+      "name": "Remotion: Render Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0],
+      "notes": "Requires Remotion template at remotion.dev with composition 'PetPortraitTransform'. Template should: show original photo (left) → morphing transition → AI portrait (right) → end card with CTA. 15 seconds (450 frames @ 30fps)."
+    },
+    {
+      "parameters": {
+        "amount": 180,
+        "unit": "seconds"
+      },
+      "id": "wait_remotion",
+      "name": "Wait for Remotion Render",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.remotion.dev/v1/renders/{{ $('Remotion: Render Video').item.json.renderId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Remotion-Token",
+              "value": "={{ $credentials.remotionApiKey }}"
+            }
+          ]
+        }
+      },
+      "id": "check_render_status",
+      "name": "Check Render Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.outputUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "download_video",
+      "name": "Download Rendered Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://{{ $env.VERCEL_BLOB_STORE_ID }}.public.blob.vercel-storage.com/tiktok-videos/{{ $('Select Random Gallery Image').item.json.timestamp }}-{{ $('Select Random Gallery Image').item.json.selectedImage.replace('.webp', '.mp4').replace('.jpg', '.mp4') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.BLOB_READ_WRITE_TOKEN }}"
+            },
+            {
+              "name": "x-content-type",
+              "value": "video/mp4"
+            },
+            {
+              "name": "x-add-random-suffix",
+              "value": "false"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ $binary.data }}"
+            }
+          ]
+        }
+      },
+      "id": "upload_vercel_blob",
+      "name": "Upload to Vercel Blob",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate caption using the caption generator script\nconst { execSync } = require('child_process');\nconst breed = $('Select Random Gallery Image').first().json.breed;\nconst style = $('Select Random Gallery Image').first().json.style;\n\n// Call the caption generator script\ntry {\n  const caption = execSync(\n    `cd /Users/michaelguo/pawcasso-atelier/website && npx tsx scripts/generate-captions.ts \"${breed}\" \"${style}\"`,\n    { encoding: 'utf-8' }\n  ).trim();\n  \n  return [{\n    json: {\n      ...($input.first().json),\n      caption: caption\n    }\n  }];\n} catch (error) {\n  // Fallback caption if script fails\n  const fallbackCaption = `✨ POV: Your ${breed} becomes a ${style} masterpiece! 🎨\\n\\nCustom AI pet portraits just $9 💫\\nLink in bio 👆\\n\\n#petportrait #${breed.toLowerCase().replace(' ', '')} #aiart #petlovers #doglovers #customart #petparent #dogsoftiktok`;\n  \n  return [{\n    json: {\n      ...($input.first().json),\n      caption: fallbackCaption\n    }\n  }];\n}"
+      },
+      "id": "generate_caption",
+      "name": "Generate AI Caption",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"🎬 New TikTok/Reels Video Ready!\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \"🎬 TikTok/Reels Video Generated\"\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"fields\": [\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Animal:*\\n{{ $('Select Random Gallery Image').item.json.breed }}\"\n        },\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Style:*\\n{{ $('Select Random Gallery Image').item.json.style }}\"\n        },\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Video URL:*\\n{{ $json.url }}\"\n        },\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Timestamp:*\\n{{ $('Select Random Gallery Image').item.json.timestamp }}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*📝 Caption:*\\n```{{ $json.caption }}```\"\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*📋 Next Steps:*\\n1. Download video from Vercel Blob URL\\n2. Copy caption above\\n3. Post to TikTok/Instagram Reels via Buffer or Hootsuite\\n4. Monitor engagement\"\n      }\n    },\n    {\n      \"type\": \"actions\",\n      \"elements\": [\n        {\n          \"type\": \"button\",\n          \"text\": {\n            \"type\": \"plain_text\",\n            \"text\": \"Download Video\"\n          },\n          \"url\": \"{{ $json.url }}\",\n          \"style\": \"primary\"\n        }\n      ]\n    }\n  ]\n}"
+      },
+      "id": "slack_notification",
+      "name": "Send Slack Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@pawcasso-atelier.vercel.app",
+        "toEmail": "{{ $env.NOTIFICATION_EMAIL }}",
+        "subject": "=🎬 New TikTok/Reels Video Ready - {{ $('Select Random Gallery Image').item.json.breed }} {{ $('Select Random Gallery Image').item.json.style }}",
+        "emailFormat": "html",
+        "html": "=<html>\n<body style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;\">\n  <h1 style=\"color: #C9A96E;\">🎬 New TikTok/Reels Video Ready!</h1>\n  \n  <div style=\"background: #111; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n    <h2 style=\"color: #F5F5F7; margin-top: 0;\">Video Details</h2>\n    <p style=\"color: #86868b;\"><strong>Animal:</strong> {{ $('Select Random Gallery Image').item.json.breed }}</p>\n    <p style=\"color: #86868b;\"><strong>Style:</strong> {{ $('Select Random Gallery Image').item.json.style }}</p>\n    <p style=\"color: #86868b;\"><strong>Generated:</strong> {{ $('Select Random Gallery Image').item.json.timestamp }}</p>\n    <p style=\"color: #86868b;\"><strong>Video URL:</strong> <a href=\"{{ $('Upload to Vercel Blob').item.json.url }}\" style=\"color: #C9A96E;\">Download</a></p>\n  </div>\n  \n  <div style=\"background: #111; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n    <h2 style=\"color: #F5F5F7; margin-top: 0;\">📝 Caption</h2>\n    <pre style=\"color: #F5F5F7; background: #000; padding: 15px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap;\">{{ $('Generate AI Caption').item.json.caption }}</pre>\n  </div>\n  \n  <div style=\"background: #111; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n    <h2 style=\"color: #F5F5F7; margin-top: 0;\">📋 Next Steps</h2>\n    <ol style=\"color: #86868b;\">\n      <li>Download video from the URL above</li>\n      <li>Copy the caption</li>\n      <li>Post to TikTok/Instagram Reels via Buffer or Hootsuite scheduler</li>\n      <li>Monitor engagement and adjust strategy</li>\n    </ol>\n  </div>\n  \n  <p style=\"color: #86868b; font-size: 12px; margin-top: 40px; text-align: center;\">Pawcasso Atelier | Automated Content Pipeline</p>\n</body>\n</html>"
+      },
+      "id": "email_notification",
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [2200, 200],
+      "credentials": {
+        "smtp": {
+          "id": "smtp",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "cron_trigger": {
+      "main": [[{ "node": "select_image", "type": "main", "index": 0 }]]
+    },
+    "select_image": {
+      "main": [[{ "node": "trending_audio", "type": "main", "index": 0 }]]
+    },
+    "trending_audio": {
+      "main": [[{ "node": "parse_audio", "type": "main", "index": 0 }]]
+    },
+    "parse_audio": {
+      "main": [[{ "node": "remotion_render", "type": "main", "index": 0 }]]
+    },
+    "remotion_render": {
+      "main": [[{ "node": "wait_remotion", "type": "main", "index": 0 }]]
+    },
+    "wait_remotion": {
+      "main": [[{ "node": "check_render_status", "type": "main", "index": 0 }]]
+    },
+    "check_render_status": {
+      "main": [[{ "node": "download_video", "type": "main", "index": 0 }]]
+    },
+    "download_video": {
+      "main": [[{ "node": "upload_vercel_blob", "type": "main", "index": 0 }]]
+    },
+    "upload_vercel_blob": {
+      "main": [[{ "node": "generate_caption", "type": "main", "index": 0 }]]
+    },
+    "generate_caption": {
+      "main": [
+        [
+          { "node": "slack_notification", "type": "main", "index": 0 },
+          { "node": "email_notification", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-18T00:00:00.000Z",
+  "versionId": "1"
+}
