@@ -25,7 +25,7 @@ export default function InstagramShareDiscount({
   return (
     <Html>
       <Head />
-      <Preview>Thank you for sharing! Here's your {discountPercentage}% discount code 🎉</Preview>
+      <Preview>Thank you for sharing! Here&apos;s your {String(discountPercentage)}% discount code 🎉</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
