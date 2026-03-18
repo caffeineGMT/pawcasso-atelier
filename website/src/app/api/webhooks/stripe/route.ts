@@ -7,6 +7,7 @@ import { generateOrderCompleteEmailWithReferral } from "@/lib/email-templates/or
 import { PrismaClient } from "@prisma/client";
 import { createGiftCard, markGiftCardAsSent } from "@/lib/gift-cards";
 import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
+import { trackServerSideConversion } from "@/lib/google-ads-config";
 
 const prisma = new PrismaClient();
 
@@ -28,12 +29,72 @@ const TIER_PORTRAIT_COUNT: Record<string, number> = {
   bundle: 5,
 };
 
+// Polling timeout by tier (ms) - higher tiers get more time for multiple portraits
+const TIER_POLL_TIMEOUT: Record<string, number> = {
+  basic: 5 * 60 * 1000,    // 5 minutes
+  premium: 8 * 60 * 1000,  // 8 minutes
+  deluxe: 10 * 60 * 1000,  // 10 minutes
+  bundle: 10 * 60 * 1000,  // 10 minutes
+};
+
+// Exponential backoff intervals for polling (ms)
+const POLL_INTERVALS = [5000, 10000, 15000, 20000, 30000]; // 5s, 10s, 15s, 20s, 30s
+
 // Retry configuration
 const MAX_RETRIES = 3;
 const RETRY_DELAYS = [10000, 30000, 90000]; // 10s, 30s, 90s
 
+// Fulfillment delivery status steps
+type DeliveryStep = 'pending' | 'downloading_photo' | 'generating' | 'uploading' | 'sending_email' | 'completed' | 'failed';
+
 // Helper function to sleep
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Helper function to update order delivery status
+async function updateDeliveryStatus(stripeSessionId: string, status: DeliveryStep) {
+  try {
+    await prisma.order.update({
+      where: { stripeSessionId },
+      data: { deliveryStatus: status },
+    });
+  } catch (err) {
+    console.error(`Failed to update delivery status to ${status}:`, err);
+  }
+}
+
+// Helper function to log fulfillment errors to database
+async function logFulfillmentError(params: {
+  stripeSessionId: string;
+  customerEmail: string;
+  errorType: string;
+  errorMessage: string;
+  stackTrace?: string;
+  step: string;
+  metadata?: Record<string, unknown>;
+  retryCount?: number;
+}) {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { stripeSessionId: params.stripeSessionId },
+    });
+
+    await prisma.fulfillmentErrorLog.create({
+      data: {
+        orderId: order?.id || null,
+        stripeSessionId: params.stripeSessionId,
+        customerEmail: params.customerEmail,
+        errorType: params.errorType,
+        errorMessage: params.errorMessage,
+        stackTrace: params.stackTrace || null,
+        step: params.step,
+        metadata: params.metadata ? JSON.stringify(params.metadata) : null,
+        retryCount: params.retryCount || 0,
+      },
+    });
+  } catch (err) {
+    console.error('Failed to log fulfillment error:', err);
+  }
+}
 
 // Helper function to download file from URL
 async function downloadFile(url: string): Promise<Buffer> {
@@ -56,6 +117,7 @@ async function generatePortrait(
   petPhotoBuffer: Buffer,
   petName: string,
   style: string,
+  tier: string = 'basic',
   retryCount = 0
 ): Promise<string> {
   try {
@@ -87,12 +149,16 @@ async function generatePortrait(
 
     const { task_id } = await createResponse.json();
 
-    // Poll for completion (max 5 minutes)
-    const maxPollTime = 5 * 60 * 1000; // 5 minutes
-    const pollInterval = 10000; // 10 seconds
+    // Poll with exponential backoff - timeout scales with tier
+    const maxPollTime = TIER_POLL_TIMEOUT[tier] || TIER_POLL_TIMEOUT.basic;
     const startTime = Date.now();
+    let pollAttempt = 0;
 
     while (Date.now() - startTime < maxPollTime) {
+      const interval = POLL_INTERVALS[Math.min(pollAttempt, POLL_INTERVALS.length - 1)];
+      await sleep(interval);
+      pollAttempt++;
+
       const statusResponse = await fetch(
         `https://manus.aws.metafb.cloud/api/v1/tasks/${task_id}/status`,
         {
@@ -114,10 +180,10 @@ async function generatePortrait(
         throw new Error("Manus generation failed");
       }
 
-      await sleep(pollInterval);
+      console.log(`Poll attempt ${pollAttempt} for task ${task_id}: ${statusData.status} (next in ${interval / 1000}s)`);
     }
 
-    throw new Error("Manus generation timed out after 5 minutes");
+    throw new Error(`Manus generation timed out after ${maxPollTime / 60000} minutes (tier: ${tier})`);
   } catch (error) {
     // Retry logic with exponential backoff
     if (retryCount < MAX_RETRIES) {
@@ -125,32 +191,81 @@ async function generatePortrait(
         `Manus generation failed, retrying (${retryCount + 1}/${MAX_RETRIES})...`
       );
       await sleep(RETRY_DELAYS[retryCount]);
-      return generatePortrait(petPhotoBuffer, petName, style, retryCount + 1);
+      return generatePortrait(petPhotoBuffer, petName, style, tier, retryCount + 1);
     }
     throw error;
   }
 }
 
-// Helper function to send failure notification email
+// Helper function to send failure notification email with retry button
 async function sendFailureNotification(
   sessionId: string,
   customerEmail: string,
-  error: string
+  error: string,
+  step: string = 'unknown',
+  errorType: string = 'unknown'
 ) {
   try {
     const resend = getResend();
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const retryUrl = `${baseUrl}/api/retry-failed-order`;
+
     await resend.emails.send({
       from: "alerts@pawcasso-atelier.com",
       to: "michaelguo@meta.com",
-      subject: `[CRITICAL] Portrait Generation Failed - Session ${sessionId}`,
+      subject: `[CRITICAL] Portrait Generation Failed - ${step} - Session ${sessionId}`,
       html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h2 style="color: #ff6b6b;">Portrait Generation Failed</h2>
-          <p><strong>Session ID:</strong> ${sessionId}</p>
-          <p><strong>Customer Email:</strong> ${customerEmail}</p>
-          <p><strong>Error:</strong> ${error}</p>
-          <p>Action required: Manual fulfillment needed.</p>
-        </div>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #ff6b6b; }
+    h1 { color: #ff6b6b; margin-bottom: 20px; font-size: 24px; }
+    .detail-box { background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 15px 0; }
+    .label { color: #86868b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .value { color: #F5F5F7; font-size: 14px; margin-bottom: 12px; word-break: break-all; }
+    .error-text { color: #ff6b6b; font-family: 'Courier New', monospace; font-size: 13px; background: #1a0000; padding: 12px; border-radius: 8px; overflow-x: auto; }
+    .retry-btn { display: inline-block; background: #C9A96E; color: #000; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; margin: 20px 0; }
+    .retry-btn:hover { background: #b8944e; }
+    .stripe-btn { display: inline-block; background: #635bff; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 10px 10px 10px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Portrait Fulfillment Failed</h1>
+
+    <div class="detail-box">
+      <div class="label">Session ID</div>
+      <div class="value">${sessionId}</div>
+
+      <div class="label">Customer Email</div>
+      <div class="value">${customerEmail}</div>
+
+      <div class="label">Failed Step</div>
+      <div class="value">${step}</div>
+
+      <div class="label">Error Type</div>
+      <div class="value">${errorType}</div>
+    </div>
+
+    <div class="label">Error Details</div>
+    <div class="error-text">${error}</div>
+
+    <div style="margin-top: 24px;">
+      <a href="${retryUrl}?sessionId=${sessionId}" class="retry-btn" onclick="fetch('${retryUrl}', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer ${process.env.ADMIN_API_KEY || ''}'},body:JSON.stringify({sessionId:'${sessionId}'})})">Retry This Order</a>
+    </div>
+
+    <div>
+      <a href="https://dashboard.stripe.com/checkout/sessions/${sessionId}" class="stripe-btn">View in Stripe</a>
+    </div>
+
+    <p style="color: #86868b; font-size: 12px; margin-top: 20px;">
+      To retry via API: <code>curl -X POST ${retryUrl} -H "Content-Type: application/json" -H "Authorization: Bearer $ADMIN_API_KEY" -d '{"sessionId":"${sessionId}"}'</code>
+    </p>
+  </div>
+</body>
+</html>
       `,
     });
   } catch (emailError) {
@@ -654,13 +769,47 @@ export async function POST(req: NextRequest) {
     const petName = metadata.petName || "your pet";
     const style = metadata.style || "renaissance";
 
-    // Create order record in database
+    // --- Idempotency check: skip if already processed ---
+    try {
+      const existingOrder = await prisma.order.findUnique({
+        where: { stripeSessionId: session.id },
+      });
+
+      if (existingOrder && existingOrder.deliveryStatus === 'completed') {
+        console.log(`Order ${session.id} already completed, skipping duplicate webhook`);
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          reason: 'already_completed',
+          session_id: session.id,
+        });
+      }
+
+      if (existingOrder && ['downloading_photo', 'generating', 'uploading', 'sending_email'].includes(existingOrder.deliveryStatus)) {
+        console.log(`Order ${session.id} currently processing (${existingOrder.deliveryStatus}), skipping duplicate`);
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          reason: 'in_progress',
+          current_status: existingOrder.deliveryStatus,
+          session_id: session.id,
+        });
+      }
+    } catch (idempotencyError) {
+      console.error('Idempotency check failed, continuing:', idempotencyError);
+    }
+
+    // Create or update order record in database (upsert handles retries gracefully)
     const amountTotal = session.amount_total || 0;
     const discount = session.total_details?.amount_discount || 0;
 
     try {
-      await prisma.order.create({
-        data: {
+      await prisma.order.upsert({
+        where: { stripeSessionId: session.id },
+        update: {
+          deliveryStatus: 'pending',
+        },
+        create: {
           stripeSessionId: session.id,
           stripePaymentIntentId: typeof session.payment_intent === 'string'
             ? session.payment_intent
@@ -686,7 +835,7 @@ export async function POST(req: NextRequest) {
           discountCode: metadata.discountCode || null,
           pricingBadge: metadata.badge || null,
           giftCardCode: metadata.giftCardCode || null,
-          giftCardAmount: 0, // Will be updated if gift card was used
+          giftCardAmount: 0,
           status: 'completed',
           deliveryStatus: 'pending',
           paidAt: new Date(),
@@ -840,10 +989,21 @@ export async function POST(req: NextRequest) {
     // Validate pet photo URL exists
     if (!petPhotoUrl) {
       console.error("Missing pet_photo_url in session metadata");
+      await updateDeliveryStatus(session.id, 'failed');
+      await logFulfillmentError({
+        stripeSessionId: session.id,
+        customerEmail,
+        errorType: 'missing_photo',
+        errorMessage: 'Missing pet photo URL in order metadata',
+        step: 'pending',
+        metadata: { tier, petName, style },
+      });
       await sendFailureNotification(
         session.id,
         customerEmail,
-        "Missing pet photo URL in order metadata"
+        "Missing pet photo URL in order metadata",
+        'pending',
+        'missing_photo'
       );
       return NextResponse.json(
         { error: "Missing pet photo URL" },
@@ -851,12 +1011,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let currentStep: DeliveryStep = 'downloading_photo';
+
     try {
       // Step 1: Download pet photo from Blob storage
+      currentStep = 'downloading_photo';
+      await updateDeliveryStatus(session.id, currentStep);
       console.log(`Downloading pet photo from: ${petPhotoUrl}`);
       const petPhotoBuffer = await downloadFile(petPhotoUrl);
 
       // Step 2: Generate portraits based on tier
+      currentStep = 'generating';
+      await updateDeliveryStatus(session.id, currentStep);
       const portraitCount = TIER_PORTRAIT_COUNT[tier] || 1;
       console.log(`Generating ${portraitCount} portrait(s) for tier: ${tier}`);
 
@@ -865,12 +1031,17 @@ export async function POST(req: NextRequest) {
       for (let i = 0; i < portraitCount; i++) {
         console.log(`Generating portrait ${i + 1}/${portraitCount}...`);
 
-        // Generate portrait via Manus
+        // Generate portrait via Manus (tier controls polling timeout)
         const outputUrl = await generatePortrait(
           petPhotoBuffer,
           petName,
-          style
+          style,
+          tier
         );
+
+        // Step 3: Upload generated portraits to Vercel Blob
+        currentStep = 'uploading';
+        await updateDeliveryStatus(session.id, currentStep);
 
         // Download generated image
         const generatedImageResponse = await fetch(outputUrl);
@@ -892,13 +1063,21 @@ export async function POST(req: NextRequest) {
 
         portraitUrls.push(blob.url);
         console.log(`Portrait ${i + 1} uploaded: ${blob.url}`);
+
+        // Set back to generating if more portraits remain
+        if (i < portraitCount - 1) {
+          currentStep = 'generating';
+          await updateDeliveryStatus(session.id, currentStep);
+        }
       }
 
-      // Step 3: Create customer and get referral code
+      // Step 4: Send delivery email
+      currentStep = 'sending_email';
+      await updateDeliveryStatus(session.id, currentStep);
+
       const customer = await getOrCreateCustomer(customerEmail, customerName);
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-      // Step 4: Build email HTML with download links and referral program
       const emailHtml = generateOrderCompleteEmailWithReferral({
         customerName,
         petName,
@@ -909,7 +1088,6 @@ export async function POST(req: NextRequest) {
         baseUrl,
       });
 
-      // Step 5: Send email via Resend
       console.log(`Sending email to: ${customerEmail}`);
       await resend.emails.send({
         from: "portraits@pawcasso-atelier.com",
@@ -918,7 +1096,7 @@ export async function POST(req: NextRequest) {
         html: emailHtml,
       });
 
-      // Step 6: Update Stripe session metadata
+      // Step 5: Update Stripe session metadata
       console.log("Updating Stripe session metadata...");
       await stripe.checkout.sessions.update(session.id, {
         metadata: {
@@ -929,7 +1107,21 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Step 7: Process referral conversion (if applicable)
+      // Step 7: Track Google Ads purchase conversion (server-side)
+      const purchaseAmount = session.amount_total ? session.amount_total / 100 : 0;
+      try {
+        await trackServerSideConversion({
+          type: 'purchase',
+          value: purchaseAmount,
+          transactionId: session.id,
+          currency: session.currency?.toUpperCase() || 'USD',
+        });
+        console.log(`Google Ads purchase conversion tracked: $${purchaseAmount}`);
+      } catch (convErr) {
+        console.error('Google Ads conversion tracking failed:', convErr);
+      }
+
+      // Step 8: Process referral conversion (if applicable)
       const referralCode = metadata.referralCode;
       const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
 
@@ -1048,12 +1240,42 @@ export async function POST(req: NextRequest) {
       console.error("Error processing portrait generation:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
+      const stackTrace =
+        error instanceof Error ? error.stack : undefined;
 
-      // Send failure notification to admin
-      await sendFailureNotification(session.id, customerEmail, errorMessage);
+      // Classify the error type
+      let errorType = 'unknown';
+      if (errorMessage.includes('download') || errorMessage.includes('Download')) {
+        errorType = 'download_failed';
+      } else if (errorMessage.includes('Manus') || errorMessage.includes('generation')) {
+        errorType = 'generation_failed';
+      } else if (errorMessage.includes('upload') || errorMessage.includes('Blob')) {
+        errorType = 'upload_failed';
+      } else if (errorMessage.includes('email') || errorMessage.includes('Resend')) {
+        errorType = 'email_failed';
+      } else if (errorMessage.includes('timed out') || errorMessage.includes('timeout')) {
+        errorType = 'timeout';
+      }
+
+      // Update order status to failed
+      await updateDeliveryStatus(session.id, 'failed');
+
+      // Log structured error to database
+      await logFulfillmentError({
+        stripeSessionId: session.id,
+        customerEmail,
+        errorType,
+        errorMessage,
+        stackTrace,
+        step: currentStep,
+        metadata: { tier, petName, style, petPhotoUrl },
+      });
+
+      // Send failure notification to admin with retry button
+      await sendFailureNotification(session.id, customerEmail, errorMessage, currentStep, errorType);
 
       return NextResponse.json(
-        { error: "Portrait generation failed", details: errorMessage },
+        { error: "Portrait generation failed", details: errorMessage, step: currentStep },
         { status: 500 }
       );
     }

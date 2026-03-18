@@ -9,6 +9,7 @@ import { PricingComparison } from "@/components/PricingComparison";
 import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, trackAnalyticsEvent, ContentType } from "@/lib/analytics";
 import { trackPinterestAddToCart, trackPinterestCheckout } from "@/lib/pinterest";
 import { trackAddToCartAds, trackBeginCheckoutAds } from "@/lib/google-ads";
+import { trackSubscriptionConversion } from "@/lib/google-ads-config";
 import { captureUTMParams } from "@/lib/utm-tracker";
 import CrispChat from "@/components/CrispChat";
 import TrustBadges from "@/components/TrustBadges";
@@ -494,6 +495,13 @@ function OrderPageContent() {
           style,
           petName,
         }, selectedTierConfig?.price || 0);
+
+        // Track Google Ads subscription/tier conversion
+        trackSubscriptionConversion({
+          tier: selectedTier,
+          value: selectedTierConfig?.price || 9,
+          orderId: data.sessionId,
+        });
 
         window.location.href = data.url;
       } else {

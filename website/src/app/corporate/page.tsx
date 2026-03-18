@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
+import { trackQuoteRequestConversion } from "@/lib/google-ads-config";
 
 const USE_CASE_OPTIONS = [
   { value: "holiday_gifts", label: "Holiday Gifts for Team" },
@@ -113,6 +114,9 @@ export default function CorporatePage() {
         team_size: parseInt(teamSize) || 0,
         estimated_value: data.inquiry.estimatedValue,
       });
+
+      // Track Google Ads quote request conversion
+      trackQuoteRequestConversion(data.inquiry.id);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Something went wrong";
       setError(errorMessage);
