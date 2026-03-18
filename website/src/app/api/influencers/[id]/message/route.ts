@@ -3,9 +3,10 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { message } = body;
 
@@ -15,14 +16,14 @@ export async function POST(
 
     const outreachMessage = await prisma.outreachMessage.create({
       data: {
-        influencerId: params.id,
+        influencerId: id,
         message,
       },
     });
 
     // Update influencer status to "contacted" if not already
     await prisma.influencer.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: "contacted",
         contactedAt: new Date(),

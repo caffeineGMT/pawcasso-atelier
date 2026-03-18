@@ -96,6 +96,9 @@ export async function createCheckoutSession({
   notes,
   petPhotoUrl,
   discountCode,
+  utmSource,
+  utmMedium,
+  utmCampaign,
 }: {
   tier: TierId;
   customerEmail: string;
@@ -105,6 +108,9 @@ export async function createCheckoutSession({
   notes?: string;
   petPhotoUrl?: string;
   discountCode?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
 }) {
   const stripe = getStripe();
   const tierConfig = TIER_CONFIG.find((t) => t.id === tier);
@@ -138,6 +144,10 @@ export async function createCheckoutSession({
       style,
       notes: notes || "",
       petPhotoUrl: petPhotoUrl || "",
+      discountCode: discountCode || "",
+      utmSource: utmSource || "",
+      utmMedium: utmMedium || "",
+      utmCampaign: utmCampaign || "",
     },
     // Expire session after 24 hours to trigger abandoned cart webhook
     expires_at: Math.floor(Date.now() / 1000) + (24 * 60 * 60),

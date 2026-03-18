@@ -21,6 +21,11 @@ export default function Header() {
             </Link>
           </li>
           <li>
+            <Link href="/blog" className="text-text-secondary hover:text-text-primary transition-colors duration-300">
+              Blog
+            </Link>
+          </li>
+          <li>
             <Link href="/about" className="text-text-secondary hover:text-text-primary transition-colors duration-300">
               About
             </Link>
@@ -63,6 +68,11 @@ export default function Header() {
             <li>
               <Link href="/gallery" onClick={() => setMobileOpen(false)} className="text-text-secondary hover:text-text-primary transition-colors">
                 Gallery
+              </Link>
+            </li>
+            <li>
+              <Link href="/blog" onClick={() => setMobileOpen(false)} className="text-text-secondary hover:text-text-primary transition-colors">
+                Blog
               </Link>
             </li>
             <li>

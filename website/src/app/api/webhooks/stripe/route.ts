@@ -350,6 +350,34 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      // Step 6: Track influencer conversion (if applicable)
+      const utmSource = metadata.utmSource;
+      const utmMedium = metadata.utmMedium;
+      const utmCampaign = metadata.utmCampaign;
+      const discountCode = metadata.discountCode;
+      const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
+
+      if (utmMedium === "influencer" || (discountCode && discountCode.endsWith("20"))) {
+        try {
+          console.log("Tracking influencer conversion...");
+          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/track-conversion`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: session.id,
+              revenue: amountTotal,
+              utmSource,
+              utmMedium,
+              utmCampaign,
+              discountCode,
+            }),
+          });
+        } catch (conversionError) {
+          console.error("Failed to track influencer conversion:", conversionError);
+          // Don't fail the order if conversion tracking fails
+        }
+      }
+
       console.log(`Successfully processed order for session: ${session.id}`);
 
       return NextResponse.json({

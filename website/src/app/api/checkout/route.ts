@@ -4,7 +4,19 @@ import { createCheckoutSession, type TierId } from "@/lib/stripe";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, style, petName, notes, petPhotoUrl, tier, discountCode } = body;
+    const {
+      name,
+      email,
+      style,
+      petName,
+      notes,
+      petPhotoUrl,
+      tier,
+      discountCode,
+      utmSource,
+      utmMedium,
+      utmCampaign
+    } = body;
 
     if (!name || !email || !style) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -22,6 +34,9 @@ export async function POST(req: NextRequest) {
       notes,
       petPhotoUrl,
       discountCode,
+      utmSource,
+      utmMedium,
+      utmCampaign,
     });
 
     return NextResponse.json({ url: session.url });
