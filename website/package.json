@@ -13,7 +13,10 @@
     "email:dev": "email dev",
     "testimonials:export": "tsx scripts/export-testimonial-cards.ts",
     "caption:generate": "tsx scripts/generate-captions.ts",
-    "outreach": "tsx scripts/influencer-outreach.ts"
+    "outreach": "tsx scripts/influencer-outreach.ts",
+    "tiktok:batch": "tsx scripts/generate-video-batch.ts",
+    "tiktok:schedule": "tsx scripts/schedule-tiktok-batch.ts",
+    "tiktok:process": "tsx scripts/process-tiktok-queue.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",

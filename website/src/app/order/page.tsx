@@ -28,6 +28,14 @@ const stylePreviewMap: Record<string, { image: string; title: string }> = {
   "art-deco": { image: "/gallery/the_great_catsby_poster.png", title: "The Great Catsby" },
 };
 
+// Badge configuration for A/B testing
+const TIER_BADGES: Record<TierId, string | null> = {
+  basic: null,
+  premium: 'Most Popular',
+  deluxe: 'Best Value',
+  bundle: null,
+};
+
 function OrderPageContent() {
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);

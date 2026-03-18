@@ -231,7 +231,7 @@ async function main() {
   const batch = await generateBatch(count);
 
   // Save to file
-  const outputPath = path.join(process.cwd(), 'website', outputFile);
+  const outputPath = path.join(process.cwd(), outputFile);
   fs.writeFileSync(outputPath, JSON.stringify(batch, null, 2));
 
   console.log(`\n✅ Batch generated successfully!`);
