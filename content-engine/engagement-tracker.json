@@ -1,0 +1,248 @@
+{
+  "tracker_version": "1.0",
+  "tracking_period": "2026-03-19 to 2026-04-17",
+  "platforms": ["TikTok", "Instagram Reels"],
+  "metrics_to_track": {
+    "engagement_metrics": [
+      "Views",
+      "Likes",
+      "Comments",
+      "Shares",
+      "Saves",
+      "Profile visits",
+      "Link clicks (bio)",
+      "Engagement rate (%)"
+    ],
+    "conversion_metrics": [
+      "Website visits (from link in bio)",
+      "Order page visits",
+      "Add to cart events",
+      "Checkout initiated",
+      "Purchases completed",
+      "Revenue attributed",
+      "Cost per acquisition (CPA)"
+    ],
+    "audience_metrics": [
+      "Follower growth",
+      "Demographics (age, gender, location)",
+      "Watch time",
+      "Completion rate (%)",
+      "Average watch time"
+    ]
+  },
+  "posts": [],
+  "example_post_entry": {
+    "post_id": "unique_identifier",
+    "date": "2026-03-19",
+    "day": 1,
+    "slot": "morning",
+    "platform": "TikTok",
+    "hook": "POV: Your dog becomes a Renaissance painting for $9",
+    "image_used": "border_collie_portrait_2048x2048.webp",
+    "video_template": "template_1_before_after_split",
+    "trending_audio": "emotional_piano_v3",
+    "caption": "Full caption text here...",
+    "hashtags": "#petportrait #dogportrait #aiart #pettok #dogsoftiktok",
+    "cta": "Link in bio",
+    "posted_at": "2026-03-19T09:00:00-07:00",
+    "metrics_24h": {
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saves": 0,
+      "profile_visits": 0,
+      "link_clicks": 0,
+      "engagement_rate": 0,
+      "completion_rate": 0
+    },
+    "metrics_48h": {
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saves": 0,
+      "profile_visits": 0,
+      "link_clicks": 0,
+      "engagement_rate": 0
+    },
+    "metrics_7d": {
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saves": 0,
+      "profile_visits": 0,
+      "link_clicks": 0,
+      "engagement_rate": 0
+    },
+    "metrics_30d": {
+      "views": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saves": 0,
+      "profile_visits": 0,
+      "link_clicks": 0,
+      "engagement_rate": 0
+    },
+    "conversion_data": {
+      "website_visits": 0,
+      "order_page_visits": 0,
+      "add_to_cart": 0,
+      "checkout_initiated": 0,
+      "purchases": 0,
+      "revenue": 0,
+      "conversion_rate": 0
+    },
+    "performance_category": "baseline",
+    "viral_status": false,
+    "boosted": false,
+    "ad_spend": 0,
+    "notes": ""
+  },
+  "performance_categories": {
+    "viral": {
+      "threshold": "100k+ views in 48h",
+      "action": "Create variant videos, post follow-up content, boost with $100/day"
+    },
+    "high": {
+      "threshold": "50k-100k views",
+      "action": "Boost with $50/day, analyze what worked"
+    },
+    "medium": {
+      "threshold": "10k-50k views",
+      "action": "Monitor for 48h, consider $20/day boost if trending upward"
+    },
+    "baseline": {
+      "threshold": "5k-10k views",
+      "action": "No ad spend, keep posting organic"
+    },
+    "underperforming": {
+      "threshold": "Below 5k views",
+      "action": "Analyze failure - was it hook, audio, timing, or image? Adjust next post."
+    }
+  },
+  "daily_tracking_checklist": [
+    "Log into TikTok Analytics at 10am PT (1 hour after morning post)",
+    "Log into Instagram Insights at 10am PT",
+    "Record 24h metrics for previous day's posts",
+    "Update engagement tracker JSON file",
+    "Check Google Analytics for website traffic spikes",
+    "Review top-performing post and identify why it worked",
+    "Adjust next day's content based on learnings",
+    "Check TikTok Creative Center for new trending audio"
+  ],
+  "weekly_analysis_tasks": [
+    "Calculate average engagement rate across all posts",
+    "Identify top 3 performing hooks",
+    "Identify top 3 performing video templates",
+    "Identify top 3 performing image styles (Renaissance, Pixar, etc.)",
+    "Calculate total website traffic from social media",
+    "Calculate conversion rate (visitors → purchases)",
+    "Calculate revenue per post",
+    "Decide which posts to boost with ad spend"
+  ],
+  "analytics_integrations": {
+    "google_analytics": {
+      "utm_parameters": "?utm_source=[platform]&utm_medium=social&utm_campaign=viral_30day&utm_content=[post_id]",
+      "events_to_track": [
+        "page_view",
+        "order_page_view",
+        "add_to_cart",
+        "begin_checkout",
+        "purchase"
+      ],
+      "dashboard_url": "https://analytics.google.com/analytics/web/#/p[PROPERTY_ID]/reports/explorer"
+    },
+    "tiktok_analytics": {
+      "access": "TikTok app → Profile → Menu → Analytics (requires Pro account)",
+      "key_metrics": "Video views, Profile views, Followers, Content insights"
+    },
+    "instagram_insights": {
+      "access": "Instagram app → Profile → Insights",
+      "key_metrics": "Reach, Engagement, Follower demographics, Content performance"
+    },
+    "stripe_dashboard": {
+      "url": "https://dashboard.stripe.com",
+      "track": "Revenue, Order volume, Customer acquisition cost"
+    }
+  },
+  "engagement_rate_formula": {
+    "calculation": "(Likes + Comments + Shares + Saves) / Views * 100",
+    "good_rate": "5-10%",
+    "excellent_rate": "10%+",
+    "viral_indicator": "If engagement rate > 15% in first 2 hours, post is likely to go viral"
+  },
+  "hook_performance_tracker": {
+    "POV_your_pet_becomes": {
+      "times_used": 0,
+      "avg_views": 0,
+      "avg_engagement_rate": 0,
+      "best_performing_variant": ""
+    },
+    "I_turned_my_pet_into": {
+      "times_used": 0,
+      "avg_views": 0,
+      "avg_engagement_rate": 0,
+      "best_performing_variant": ""
+    },
+    "comparison_etsy_vs_me": {
+      "times_used": 0,
+      "avg_views": 0,
+      "avg_engagement_rate": 0,
+      "best_performing_variant": ""
+    },
+    "memorial_tribute_angle": {
+      "times_used": 0,
+      "avg_views": 0,
+      "avg_engagement_rate": 0,
+      "best_performing_variant": "",
+      "note": "Sensitive content - use sparingly, only when authentic"
+    }
+  },
+  "style_performance_tracker": {
+    "Renaissance": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Pixar_3D": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Needle_Felt": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Pixel_Art": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Chinese_Classical": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Vinyl_Toy": {"posts": 0, "avg_views": 0, "avg_engagement": 0}
+  },
+  "breed_performance_tracker": {
+    "Border_Collie": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Shiba_Inu": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Chihuahua": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Golden_Retriever": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Pomeranian": {"posts": 0, "avg_views": 0, "avg_engagement": 0},
+    "Cat": {"posts": 0, "avg_views": 0, "avg_engagement": 0}
+  },
+  "time_slot_performance": {
+    "morning_9am_PT": {
+      "posts": 0,
+      "avg_views": 0,
+      "avg_engagement": 0,
+      "note": "Captures East Coast lunch scroll, West Coast morning coffee"
+    },
+    "evening_6pm_PT": {
+      "posts": 0,
+      "avg_views": 0,
+      "avg_engagement": 0,
+      "note": "Captures East Coast evening wind-down, West Coast after-work"
+    }
+  },
+  "optimization_insights": {
+    "rules": [
+      "If Pixar 3D consistently outperforms other styles, increase Pixar posts to 40% of calendar",
+      "If morning slot underperforms, shift one post to lunch (12pm PT) or late night (9pm PT)",
+      "If memorial/tribute hooks spike engagement, create dedicated series but space out (max 1 per week)",
+      "If TikTok outperforms Instagram Reels by 2x, prioritize TikTok and cross-post to Reels",
+      "If video template 1 (before/after split) gets 2x views vs template 2, use template 1 for 60% of content"
+    ]
+  },
+  "reporting_dashboard": {
+    "daily_snapshot": "Top post of the day, total views, total revenue",
+    "weekly_summary": "Total views, total followers gained, total revenue, top 5 posts, key insights",
+    "monthly_summary": "Campaign ROI, cost per acquisition, customer lifetime value, viral hits count, overall learnings"
+  }
+}

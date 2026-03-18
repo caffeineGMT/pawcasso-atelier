@@ -3,11 +3,15 @@ import Stripe from "stripe";
 import { put } from "@vercel/blob";
 import { Resend } from "resend";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+function getStripeInstance() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY || "placeholder", {
+    apiVersion: "2026-02-25.clover",
+  });
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY || "placeholder");
+}
 
 // Tier configuration for portrait counts
 const TIER_PORTRAIT_COUNT: Record<string, number> = {
@@ -127,6 +131,7 @@ async function sendFailureNotification(
   error: string
 ) {
   try {
+    const resend = getResend();
     await resend.emails.send({
       from: "alerts@pawcasso-atelier.com",
       to: "michaelguo@meta.com",
@@ -147,6 +152,9 @@ async function sendFailureNotification(
 }
 
 export async function POST(req: NextRequest) {
+  const stripe = getStripeInstance();
+  const resend = getResend();
+
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 

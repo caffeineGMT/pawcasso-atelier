@@ -1,0 +1,199 @@
+{
+  "campaign_name": "Pawcasso Viral 30-Day Launch",
+  "total_budget": 1500,
+  "budget_allocation": {
+    "organic_baseline": "Days 1-7: $0/day - Let organic performance guide ad spend",
+    "boosted_content": "Days 8-30: Up to $50/day on top performers",
+    "viral_amplification": "Unlimited spend on posts that hit 100k+ views (cap at $200/day per post)",
+    "platform_ads": "Optional: $100/day on TikTok Spark Ads or Instagram Reels Ads for top 3 posts"
+  },
+  "daily_budget_cap": 150,
+  "spend_strategy": {
+    "phase_1_days_1_7": {
+      "strategy": "Organic only - test hooks, templates, timing",
+      "budget": 0,
+      "goal": "Identify top-performing content patterns"
+    },
+    "phase_2_days_8_14": {
+      "strategy": "Boost top 3 performers from Week 1",
+      "budget": 350,
+      "allocation": "$50/day split across 2-3 posts"
+    },
+    "phase_3_days_15_21": {
+      "strategy": "Scale winners, test new hooks with small budgets",
+      "budget": 500,
+      "allocation": "$70/day - 60% to proven winners, 40% to new tests"
+    },
+    "phase_4_days_22_30": {
+      "strategy": "All-in on viral content, maximize reach before campaign end",
+      "budget": 650,
+      "allocation": "$100/day - prioritize posts with highest conversion rates"
+    }
+  },
+  "boosted_posts": [],
+  "example_boosted_post": {
+    "post_id": "20260325_morning_etsycomparison",
+    "platform": "TikTok",
+    "boost_start_date": "2026-03-26",
+    "boost_end_date": "2026-03-28",
+    "daily_budget": 50,
+    "total_budget": 150,
+    "objective": "Traffic (drive to website)",
+    "targeting": {
+      "demographics": "Women 25-45",
+      "interests": ["Pet owners", "Dog lovers", "Home decor", "Art & design", "DIY", "Etsy shoppers"],
+      "behaviors": ["Engaged shoppers", "Online purchasers"],
+      "locations": ["United States", "Canada", "United Kingdom", "Australia"]
+    },
+    "creative_specs": {
+      "video_file": "20260325_morning_etsycomparison_template1.mp4",
+      "caption": "Etsy: $500 + 6 weeks. Me: $9 + 24 hours ⚡",
+      "cta_button": "Shop Now",
+      "destination_url": "https://pawcasso-atelier.vercel.app/order?utm_source=tiktok&utm_medium=paid&utm_campaign=viral_30day&utm_content=20260325_etsycomparison"
+    },
+    "performance": {
+      "impressions": 0,
+      "clicks": 0,
+      "click_through_rate": 0,
+      "cost_per_click": 0,
+      "website_visits": 0,
+      "add_to_cart": 0,
+      "purchases": 0,
+      "revenue": 0,
+      "roas": 0,
+      "cpa": 0
+    },
+    "optimization_actions": [],
+    "notes": ""
+  },
+  "platform_ad_types": {
+    "tiktok_spark_ads": {
+      "description": "Promote your existing organic TikTok posts as ads",
+      "benefits": ["Keeps social proof (likes, comments)", "Feels native", "Can boost viral momentum"],
+      "setup": "TikTok Ads Manager → Spark Ads → Select organic post",
+      "min_budget": "$20/day",
+      "recommended_for": "Posts that already have 10k+ organic views"
+    },
+    "tiktok_top_view": {
+      "description": "Full-screen ad when users open TikTok app",
+      "benefits": ["Maximum visibility", "High impact"],
+      "cost": "$50,000+ (way too expensive for this campaign)",
+      "recommended": false
+    },
+    "instagram_reels_ads": {
+      "description": "Promote Reels in Instagram feed and Reels tab",
+      "benefits": ["Reaches Instagram users who don't see TikTok", "Integrated with Meta Ads Manager"],
+      "setup": "Meta Ads Manager → Create Campaign → Reels Placement",
+      "min_budget": "$10/day",
+      "recommended_for": "Repurpose top TikTok performers"
+    },
+    "instagram_story_ads": {
+      "description": "Full-screen ads between Stories",
+      "benefits": ["Urgent, tap-forward format", "Swipe-up CTA"],
+      "recommended": "Test with $20/day for gift-giving hooks"
+    }
+  },
+  "targeting_strategy": {
+    "lookalike_audiences": {
+      "seed": "Website visitors who viewed order page (from Stripe customer list)",
+      "size": "1% lookalike (most similar to existing customers)",
+      "platforms": ["Instagram", "TikTok"]
+    },
+    "interest_targeting": {
+      "primary": ["Dog owners", "Cat owners", "Pet parents", "Pet portraits"],
+      "secondary": ["Etsy", "Home decor", "Custom gifts", "Personalized products"],
+      "tertiary": ["Art collectors", "Digital art", "AI art", "Tech enthusiasts"]
+    },
+    "behavioral_targeting": {
+      "engaged_shoppers": true,
+      "online_purchasers_90_days": true,
+      "gift_givers": true
+    },
+    "exclusions": ["People under 18 (unlikely to have purchasing power)", "Existing customers (retarget separately)"]
+  },
+  "spend_triggers": {
+    "boost_immediately_if": [
+      "Post hits 50k views in first 24 hours",
+      "Engagement rate > 12% in first 6 hours",
+      "Post drives 50+ website visits organically in first day",
+      "Comments show high purchase intent ('where can I buy this?', 'link?', 'take my money')"
+    ],
+    "increase_budget_if": [
+      "ROAS > 3.0 after 48 hours (spending $1, making $3+)",
+      "CPA < $15 (each customer costs less than $15 to acquire)",
+      "Post is trending upward (views increasing hour-over-hour)"
+    ],
+    "pause_ad_if": [
+      "ROAS < 1.0 after 72 hours (losing money)",
+      "CPA > $50 (too expensive to acquire customers)",
+      "Engagement rate drops below 2%",
+      "Negative comments/backlash"
+    ]
+  },
+  "kpis": {
+    "target_roas": "3.0+ (spend $1, make $3)",
+    "target_cpa": "$15 or less",
+    "target_ctr": "2%+ (2 out of 100 people click)",
+    "target_conversion_rate": "5%+ (5 out of 100 visitors purchase)",
+    "break_even_point": "$9 order - $3 stripe fee = $6 profit. CPA must be under $6 to break even on first purchase."
+  },
+  "lifetime_value_calculation": {
+    "assumption": "10% of customers order again within 6 months",
+    "avg_orders_per_customer": 1.5,
+    "lifetime_revenue_per_customer": 13.5,
+    "acceptable_cpa_with_ltv": "$20 (losses on first order, profit on repeat orders)"
+  },
+  "daily_spend_log": [],
+  "example_daily_log_entry": {
+    "date": "2026-03-26",
+    "total_spend": 50,
+    "posts_boosted": [
+      {"post_id": "20260325_morning_etsycomparison", "spend": 50}
+    ],
+    "results": {
+      "impressions": 0,
+      "clicks": 0,
+      "website_visits": 0,
+      "purchases": 0,
+      "revenue": 0,
+      "roas": 0
+    },
+    "cumulative_campaign_spend": 50,
+    "cumulative_campaign_revenue": 0,
+    "cumulative_roas": 0
+  },
+  "weekly_spend_summary": {
+    "week_1": {"budget": 0, "spend": 0, "revenue": 0, "roas": 0, "notes": "Organic only"},
+    "week_2": {"budget": 350, "spend": 0, "revenue": 0, "roas": 0, "notes": ""},
+    "week_3": {"budget": 500, "spend": 0, "revenue": 0, "roas": 0, "notes": ""},
+    "week_4": {"budget": 650, "spend": 0, "revenue": 0, "roas": 0, "notes": ""}
+  },
+  "campaign_totals": {
+    "total_budget": 1500,
+    "total_spent": 0,
+    "total_revenue": 0,
+    "total_roas": 0,
+    "total_customers_acquired": 0,
+    "avg_cpa": 0
+  },
+  "optimization_checklist": [
+    "Check ad performance every 24 hours",
+    "Pause ads with ROAS < 1.0 after 72 hours",
+    "Increase budget on ads with ROAS > 3.0",
+    "Test different audiences (pet owners vs gift givers vs art collectors)",
+    "A/B test ad copy (price-focused vs emotion-focused)",
+    "Exclude low-performing placements after 1 week",
+    "Retarget website visitors who didn't purchase (separate campaign, $10/day)",
+    "Create lookalike audiences from purchasers after first 50 sales"
+  ],
+  "contingency_plans": {
+    "if_all_ads_fail": "Double down on organic content, collaborate with pet influencers for shoutouts",
+    "if_one_post_goes_mega_viral": "Pause other ads, put all budget ($200/day) into amplifying the viral post",
+    "if_budget_runs_out_early": "Switch to pure organic, focus on engagement-bait content (polls, questions)"
+  },
+  "reporting_template": {
+    "daily": "Total spend: $X | Revenue: $Y | ROAS: Z | Top post: [hook]",
+    "weekly": "Week X: Spent $A, Made $B, ROAS C, Acquired D customers at $E CPA",
+    "campaign_end": "30-day total: Spent $1500, Made $X, ROAS Y%, Customers Z, Avg CPA $W, Key learnings: ..."
+  }
+}

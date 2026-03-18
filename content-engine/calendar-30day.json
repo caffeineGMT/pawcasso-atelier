@@ -1,0 +1,407 @@
+{
+  "campaign_name": "Pawcasso Viral Launch - 30 Day Sprint",
+  "start_date": "2026-03-19",
+  "end_date": "2026-04-17",
+  "posting_schedule": {
+    "morning_slot": "09:00 PT",
+    "evening_slot": "18:00 PT"
+  },
+  "target_audience": {
+    "primary": "Millennial/Gen Z Pet Parents (25-40)",
+    "secondary": "Pet Memorial/Tribute Market",
+    "tertiary": "Gift Buyers (birthdays, holidays)",
+    "amplifiers": "Pet Influencers & Content Creators"
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-03-19",
+      "theme": "Launch Day - Viral Hook Test",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "POV: Your dog becomes a Renaissance painting for $9",
+          "image_file": "border_collie_portrait_2048x2048.webp",
+          "video_style": "before_after_split_screen",
+          "duration": "15s",
+          "caption": "POV: Your dog becomes a Renaissance painting for $9 🎨✨\n\nNo waiting weeks for an artist. No $500 commission. Just upload your pet's photo and get museum-quality art in 24 hours.\n\nLink in bio to turn YOUR pet into a masterpiece 👆",
+          "hashtags": "#petportrait #dogportrait #aiart #pettok #dogsoftiktok #petparent #bordercollie #renaissanceart #custompetportrait #affordableart",
+          "trending_audio": "original_sound_emotional_piano",
+          "cta": "Link in bio - $9 portraits",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "I turned my chihuahua into a $10K oil painting",
+          "image_file": "chihuahua_portrait_square_2048.jpg",
+          "video_style": "zoom_reveal",
+          "duration": "15s",
+          "caption": "I turned my chihuahua into a $10K oil painting... for $9 😭\n\nThis is Pixel 3D style and I'm obsessed. 24-hour delivery. No artist needed. Just pure AI magic.\n\nWhich style should I try next? 👇",
+          "hashtags": "#chihuahua #chihuahuasoftiktok #petportrait #aiart #pixar #dogmom #affordableart #custompetart #pettok #chihuahualove",
+          "trending_audio": "trending_dance_beat_1",
+          "cta": "Comment your pet type!",
+          "expected_virality": "medium"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-03-20",
+      "theme": "Style Showcase - Pixar 3D",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Big eyes, tiny brain, 100% adorable",
+          "image_file": "alfie_portrait_final.webp",
+          "video_style": "slow_zoom_with_text",
+          "duration": "15s",
+          "caption": "Big eyes, tiny brain, 100% adorable 🥺\n\nThis is Pixar 3D style - the most requested one by far. Your pet gets the Disney treatment for $9.\n\nTag a dog mom who needs this 👇",
+          "hashtags": "#pixar #3dart #dogportrait #bordercollie #cute #pettok #disneystyle #aiart #petparent #doglife",
+          "trending_audio": "cute_uwu_sound",
+          "cta": "Tag a friend",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "From real dog to Pixar character in 24 hours",
+          "image_file": "shiba_portrait_final_2048x2048.webp",
+          "video_style": "before_after_wipe",
+          "duration": "15s",
+          "caption": "From real dog to Pixar character in 24 hours 🎬\n\nShiba Inus already look like cartoons but THIS? Next level.\n\nLink in bio to transform your pet 🐕",
+          "hashtags": "#shibainu #shiba #shibatok #dogportrait #pixar #3dart #aiart #custompetportrait #petparent #dogsoftiktok",
+          "trending_audio": "epic_transformation_music",
+          "cta": "Link in bio",
+          "expected_virality": "medium"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-03-21",
+      "theme": "Felt Art Vibes - Cozy Aesthetic",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Stop-motion vibes but it's your actual dog",
+          "image_file": "pomeranian_portrait_final.webp",
+          "video_style": "gentle_rotation_3d",
+          "duration": "15s",
+          "caption": "Stop-motion vibes but it's your actual dog 🧶☁️\n\nNeedle felt style = instant cozy energy. Perfect for winter feels or if your pet is an actual cloud.\n\nDrop a ☁️ if you need this for your fluffball",
+          "hashtags": "#pomeranian #pom #needlefelt #feltart #stopmotion #cozyvibe #petportrait #dogportrait #fluffydog #pettok",
+          "trending_audio": "lo_fi_chill_beat",
+          "cta": "Drop a cloud emoji",
+          "expected_virality": "medium"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "If Wallace & Gromit made dog portraits",
+          "image_file": "shiba_inu_felt_portrait_2048x2048.webp",
+          "video_style": "pan_and_zoom",
+          "duration": "15s",
+          "caption": "If Wallace & Gromit made dog portraits 🧵\n\nThis felt texture is *chef's kiss* - looks handmade, costs $9, delivered in 24hrs.\n\nWhich breed would look best in felt style? 👇",
+          "hashtags": "#shibainu #needlefelt #feltart #dogportrait #wallaceandgromit #stopmotion #aiart #custompetart #petparent #shibatok",
+          "trending_audio": "claymation_quirky_music",
+          "cta": "Comment your breed",
+          "expected_virality": "medium"
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "date": "2026-03-22",
+      "theme": "Renaissance Royalty - Classical Art",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Your cat but make it Girl with a Pearl Earring",
+          "image_file": "cat_vermeer.webp",
+          "video_style": "dramatic_reveal_curtains",
+          "duration": "15s",
+          "caption": "Your cat but make it Girl with a Pearl Earring 🎨👑\n\nVermeer could NEVER. This is Renaissance style and it's giving museum vibes.\n\n$9. 24 hours. Your cat = instant masterpiece.",
+          "hashtags": "#catsoftiktok #catportrait #renaissance #vermeer #classicalart #aiart #petportrait #catmom #arthistory #girlwithapearlearring",
+          "trending_audio": "classical_dramatic_orchestra",
+          "cta": "Link in bio",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "I hung my dog in the Louvre (digitally)",
+          "image_file": "alfie_imperial_portrait_2048x2048.webp",
+          "video_style": "museum_wall_mockup",
+          "duration": "15s",
+          "caption": "I hung my dog in the Louvre (digitally) 🖼️\n\nChinese Classical portrait style. Alfie looks like he ruled a dynasty.\n\nTag someone whose pet deserves royal treatment 👑",
+          "hashtags": "#bordercollie #chineseart #classicalart #petportrait #dogportrait #royalty #museum #aiart #custompetportrait #pettok",
+          "trending_audio": "traditional_chinese_flute",
+          "cta": "Tag a friend",
+          "expected_virality": "medium"
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2026-03-23",
+      "theme": "Viral Hook Testing - High Engagement",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Turning every dog in my camera roll into art",
+          "image_file": "golden_retriever_portrait_square.webp",
+          "video_style": "fast_paced_montage",
+          "duration": "15s",
+          "caption": "Turning every dog in my camera roll into art - Day 1/30 🎨\n\nStarting with this golden retriever because look at that FACE.\n\nPixar 3D style. $9. Following this account was free.\n\nWhose dog should I do next? 👇",
+          "hashtags": "#goldenretriever #goldensoftiktok #dogportrait #pixar #30daychallenge #petportrait #aiart #doglife #petparent #dogsoftiktok",
+          "trending_audio": "motivational_montage_beat",
+          "cta": "Comment 'mine!'",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "POV: You finally found affordable custom pet art",
+          "image_file": "shiba_inu_vinyl_toy_portrait_final.webp",
+          "video_style": "reaction_style_selfie",
+          "duration": "15s",
+          "caption": "POV: You finally found affordable custom pet art 😭\n\nNo more $500 Etsy commissions. No more 6-week wait times. Just $9 and 24 hours.\n\nVinyl toy style hits different. Link in bio 👆",
+          "hashtags": "#shibainu #vinyltoy #collectible #petportrait #affordableart #etsyalternative #aiart #custompetart #budgetfriendly #pettok",
+          "trending_audio": "relief_happy_sound",
+          "cta": "Link in bio",
+          "expected_virality": "high"
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "date": "2026-03-24",
+      "theme": "Weekend - Gift Angle",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Best $9 gift for dog moms (trust me)",
+          "image_file": "white_pomeranian_portrait_final.webp",
+          "video_style": "gift_unboxing_aesthetic",
+          "duration": "15s",
+          "caption": "Best $9 gift for dog moms (trust me) 🎁\n\nBirthday coming up? Mother's Day? Just because? This hits every time.\n\nCustom pet portrait. 24-hour delivery. They'll cry (in a good way).\n\nSave this for later 📌",
+          "hashtags": "#giftideas #dogmom #petparent #mothersday #birthday #custompetportrait #affordablegift #pomeranian #petportrait #pettok",
+          "trending_audio": "wholesome_gift_music",
+          "cta": "Save this post",
+          "expected_virality": "medium"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "Made my friend cry with this $9 gift",
+          "image_file": "border_collie_portrait_2048x2048.webp",
+          "video_style": "testimonial_style",
+          "duration": "15s",
+          "caption": "Made my friend cry with this $9 gift 😭❤️\n\nHer dog passed last year. I got this portrait made and she LOST IT.\n\nBest $9 I ever spent. Link in bio if you know someone who needs this 🕊️",
+          "hashtags": "#petmemorial #rainbowbridge #dogloss #petloss #grief #memorial #custompetportrait #petportrait #tribute #dogsoftiktok",
+          "trending_audio": "emotional_piano_tribute",
+          "cta": "Link in bio",
+          "expected_virality": "very_high"
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "date": "2026-03-25",
+      "theme": "Pixel Art Retro - Gaming Nostalgia",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Your dog as a Pokemon sprite",
+          "image_file": "chihuahua_portrait_16x9.webp",
+          "video_style": "gameboy_screen_effect",
+          "duration": "15s",
+          "caption": "Your dog as a Pokemon sprite 🎮✨\n\nPerler bead / pixel art style is PEAK nostalgia. If you grew up with Game Boy, you need this.\n\n$9. Link in bio. Gotta catch em all 👾",
+          "hashtags": "#pixelart #pokemon #retro #gameboy #8bit #chihuahua #petportrait #gaming #nostalgia #pettok",
+          "trending_audio": "chiptune_retro_music",
+          "cta": "Link in bio",
+          "expected_virality": "medium"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "90s kids when they see this style",
+          "image_file": "chihuahua_portrait_16x9.webp",
+          "video_style": "nostalgia_reaction",
+          "duration": "15s",
+          "caption": "90s kids when they see this style: 🥺😭\n\nPerler beads. Pixel art. Pure childhood energy. Your pet deserves the retro treatment.\n\nDrop your age if you get it 👇",
+          "hashtags": "#90skids #nostalgia #pixelart #retro #millennials #petportrait #childhood #perlerbead #aiart #throwback",
+          "trending_audio": "90s_nostalgia_sound",
+          "cta": "Comment your age",
+          "expected_virality": "high"
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "date": "2026-03-26",
+      "theme": "Comparison Content - Value Prop",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "Etsy: $500 + 6 weeks. Me: $9 + 24 hours",
+          "image_file": "shiba_portrait_final.webp",
+          "video_style": "side_by_side_comparison",
+          "duration": "15s",
+          "caption": "Etsy commission: $500 + 6 weeks wait\nMe: $9 + 24 hours ⚡\n\nSame quality. WAY better price. Zero wait time.\n\nThe math ain't mathing and I'm here for it 📈",
+          "hashtags": "#petportrait #etsyalternative #affordableart #custompetart #budgetfriendly #fastdelivery #aiart #petparent #comparison #pettok",
+          "trending_audio": "stonks_meme_music",
+          "cta": "Link in bio",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "What $500 gets you vs what $9 gets you",
+          "image_file": "golden_retriever_portrait_square.webp",
+          "video_style": "before_after_split",
+          "duration": "15s",
+          "caption": "What $500 Etsy commission gets you vs what $9 gets you:\n\n...literally the same thing 🤷‍♀️\n\nAI doesn't sleep. AI doesn't charge hourly. AI delivers in 24 hours.\n\nCapitalism is healing ✨",
+          "hashtags": "#affordableart #budgethack #petportrait #etsyalternative #custompetart #goldenretriever #aiart #moneysavingtips #smartshopping #pettok",
+          "trending_audio": "capitalism_meme_sound",
+          "cta": "Save this hack",
+          "expected_virality": "medium"
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "date": "2026-03-27",
+      "theme": "Behind the Scenes - How It Works",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "How we turn your blurry iPhone photo into art",
+          "image_file": "alfie_border_collie_portrait_2048x2048.webp",
+          "video_style": "process_reveal",
+          "duration": "15s",
+          "caption": "How we turn your blurry iPhone photo into art in 24 hours:\n\n1. You upload (any quality works)\n2. AI analyzes your pet's features\n3. Style gets applied (Renaissance, Pixar, etc)\n4. You download your masterpiece\n\nIt's that simple 🎨",
+          "hashtags": "#behindthescenes #howitworks #aiart #petportrait #bordercollie #process #custompetart #technology #educational #pettok",
+          "trending_audio": "satisfying_process_music",
+          "cta": "Try it yourself - link in bio",
+          "expected_virality": "medium"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "We trained AI on 10,000 pet portraits",
+          "image_file": "cat_vermeer.webp",
+          "video_style": "tech_explanation",
+          "duration": "15s",
+          "caption": "We trained AI on 10,000 pet portraits so you don't have to wait weeks for custom art 🤖\n\nThe result? Museum-quality portraits in 24 hours for $9.\n\nTechnology is wild 🚀",
+          "hashtags": "#aiart #technology #innovation #petportrait #machinelearning #future #custompetart #catsoftiktok #catportrait #pettok",
+          "trending_audio": "futuristic_tech_sound",
+          "cta": "Link in bio",
+          "expected_virality": "low"
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "date": "2026-03-28",
+      "theme": "User Generated Content Angle",
+      "posts": [
+        {
+          "slot": "morning",
+          "time": "09:00",
+          "hook": "POV: You see your dog as Pixar art for the first time",
+          "image_file": "alfie_portrait_final.webp",
+          "video_style": "reaction_video",
+          "duration": "15s",
+          "caption": "POV: You see your dog as Pixar art for the first time 🥺✨\n\nThis was MY reaction when I got Alfie's portrait. Instant tears.\n\nTag someone who needs to see their pet like this 👇",
+          "hashtags": "#reaction #emotional #petportrait #pixar #dogportrait #bordercollie #custompetart #wholesome #dogsoftiktok #pettok",
+          "trending_audio": "emotional_reveal_music",
+          "cta": "Tag a friend",
+          "expected_virality": "high"
+        },
+        {
+          "slot": "evening",
+          "time": "18:00",
+          "hook": "My phone wallpaper since I got this made",
+          "image_file": "shiba_portrait_final_2048x2048.webp",
+          "video_style": "phone_screen_demo",
+          "duration": "15s",
+          "caption": "My phone wallpaper since I got this made 📱\n\nEvery time I unlock my phone: 🥺💕\n\nBest $9 wallpaper upgrade ever. What's YOUR phone wallpaper? 👇",
+          "hashtags": "#phonewallpaper #shibainu #petportrait #dogportrait #pixar #custompetart #iphonewallpaper #aesthetic #dogsoftiktok #pettok",
+          "trending_audio": "wholesome_daily_life_sound",
+          "cta": "Comment yours",
+          "expected_virality": "medium"
+        }
+      ]
+    }
+  ],
+  "content_batches": {
+    "batch_1_animals": ["Border Collie", "Shiba Inu", "Chihuahua", "Golden Retriever", "Pomeranian", "Cat"],
+    "batch_1_styles": ["Renaissance", "Pixar 3D", "Needle Felt", "Pixel Art", "Ink Wash", "Chinese Classical", "Vinyl Toy"],
+    "remaining_days": "Days 11-30 follow same pattern with new hooks, trending audio rotation, and seasonal/trending tie-ins"
+  },
+  "engagement_triggers": [
+    "Drop a [emoji] if...",
+    "Tag someone who...",
+    "Comment [word] if you want...",
+    "Save this for later",
+    "Follow for more",
+    "Link in bio",
+    "Which [option] is better?",
+    "Your turn - show me yours",
+    "Storytime:",
+    "This or that?"
+  ],
+  "viral_hooks_library": [
+    "POV: Your [pet] becomes a [style]",
+    "I turned my [pet] into a $10K [art type]",
+    "If [famous artist/studio] made pet portraits",
+    "[Pet type] but make it [aesthetic]",
+    "This [style] hits different",
+    "I hung my [pet] in the [museum]",
+    "Your [pet] as a [character/thing]",
+    "From [before] to [after] in 24 hours",
+    "What $[high price] gets you vs what $9 gets you",
+    "Best $9 gift for [audience]",
+    "Made my [person] cry with this",
+    "[Number] kids when they see this",
+    "The math ain't mathing",
+    "Technology is wild",
+    "This was MY reaction when",
+    "Turning every [thing] in my camera roll into art"
+  ],
+  "trending_audio_categories": [
+    "Emotional piano (tributes, reveals)",
+    "Upbeat dance (transformations, celebrations)",
+    "Lo-fi chill (cozy aesthetics, felt art)",
+    "Classical orchestral (Renaissance, museum)",
+    "Chiptune retro (pixel art, gaming)",
+    "Wholesome/cute sounds (Pixar, adorable)",
+    "Dramatic reveals (before/after)",
+    "Meme sounds (comparisons, humor)",
+    "Traditional cultural (Chinese Classical, Ukiyo-e)"
+  ],
+  "cta_hierarchy": {
+    "priority_1": "Link in bio - drives to website order page",
+    "priority_2": "Save this post - algorithm boost",
+    "priority_3": "Tag a friend - organic reach",
+    "priority_4": "Comment [answer] - engagement rate",
+    "priority_5": "Follow for more - follower growth"
+  },
+  "performance_benchmarks": {
+    "viral_threshold": "100k+ views in 48 hours",
+    "high_performance": "50k-100k views",
+    "medium_performance": "10k-50k views",
+    "baseline": "5k-10k views",
+    "optimization_trigger": "Below 5k views = adjust hook/audio/timing"
+  }
+}

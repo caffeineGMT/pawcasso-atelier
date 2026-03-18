@@ -95,6 +95,7 @@ export async function createCheckoutSession({
   style,
   notes,
   petPhotoUrl,
+  discountCode,
 }: {
   tier: TierId;
   customerEmail: string;
@@ -103,6 +104,7 @@ export async function createCheckoutSession({
   style: string;
   notes?: string;
   petPhotoUrl?: string;
+  discountCode?: string;
 }) {
   const stripe = getStripe();
   const tierConfig = TIER_CONFIG.find((t) => t.id === tier);
@@ -117,7 +119,7 @@ export async function createCheckoutSession({
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  const session = await stripe.checkout.sessions.create({
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
     payment_method_types: ["card"],
     mode: "payment",
     customer_email: customerEmail,
@@ -137,9 +139,49 @@ export async function createCheckoutSession({
       notes: notes || "",
       petPhotoUrl: petPhotoUrl || "",
     },
+    // Expire session after 24 hours to trigger abandoned cart webhook
+    expires_at: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
     success_url: `${baseUrl}/order/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/order?canceled=true`,
-  });
+  };
+
+  // Add discount code if provided
+  if (discountCode) {
+    sessionParams.discounts = [{ coupon: discountCode }];
+  }
+
+  const session = await stripe.checkout.sessions.create(sessionParams);
 
   return session;
+}
+
+export async function getStripeCustomerId(email: string): Promise<string> {
+  const stripe = getStripe();
+  const customers = await stripe.customers.list({ email, limit: 1 });
+  return customers.data[0]?.id || "";
+}
+
+export interface ReferralStats {
+  clicks: number;
+  conversions: number;
+  earnings: number;
+}
+
+export async function getReferralStats(customerId: string): Promise<ReferralStats> {
+  if (!customerId) {
+    return { clicks: 0, conversions: 0, earnings: 0 };
+  }
+
+  const stripe = getStripe();
+  const customer = await stripe.customers.retrieve(customerId);
+
+  if (customer.deleted) {
+    return { clicks: 0, conversions: 0, earnings: 0 };
+  }
+
+  return {
+    clicks: parseInt(customer.metadata.referral_clicks || "0"),
+    conversions: parseInt(customer.metadata.referral_conversions || "0"),
+    earnings: parseFloat(customer.metadata.referral_earnings || "0"),
+  };
 }

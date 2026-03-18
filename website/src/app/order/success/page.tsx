@@ -120,13 +120,21 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           </div>
 
           {/* CTA */}
-          <div className="text-center">
+          <div className="text-center space-y-4">
             <a
-              href="/"
-              className="inline-block px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-text-primary font-medium rounded-full hover:bg-white/[0.10] hover:border-white/[0.16] transition-all"
+              href="/portal"
+              className="inline-block px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all"
             >
-              Back to Gallery
+              Track Your Order & Get Referral Link
             </a>
+            <div>
+              <a
+                href="/"
+                className="inline-block px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-text-primary font-medium rounded-full hover:bg-white/[0.10] hover:border-white/[0.16] transition-all"
+              >
+                Back to Gallery
+              </a>
+            </div>
           </div>
         </div>
 

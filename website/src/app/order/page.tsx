@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { artStyleOptions } from "@/lib/data";
 import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
@@ -23,6 +24,7 @@ const stylePreviewMap: Record<string, { image: string; title: string }> = {
 };
 
 export default function OrderPage() {
+  const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [style, setStyle] = useState("");
@@ -34,13 +36,29 @@ export default function OrderPage() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedTier, setSelectedTier] = useState<TierId>('basic');
+  const [discountCode, setDiscountCode] = useState<string | null>(null);
 
-  // Track begin_checkout event on page load
+  // Track begin_checkout event on page load and check for URL params
   useEffect(() => {
     trackEvent('begin_checkout', {
       currency: 'USD',
     });
-  }, []);
+
+    // Check for tier parameter
+    const tierParam = searchParams.get('tier');
+    if (tierParam) {
+      const validTier = TIER_CONFIG.find(t => t.id === tierParam);
+      if (validTier) {
+        setSelectedTier(validTier.id);
+      }
+    }
+
+    // Check for discount code parameter
+    const codeParam = searchParams.get('code');
+    if (codeParam) {
+      setDiscountCode(codeParam);
+    }
+  }, [searchParams]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -106,7 +124,7 @@ export default function OrderPage() {
         setUploadProgress(100);
       }
 
-      // Create checkout session with photo URL and tier
+      // Create checkout session with photo URL, tier, and discount code
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +135,8 @@ export default function OrderPage() {
           petName,
           notes,
           petPhotoUrl,
-          tier: selectedTier
+          tier: selectedTier,
+          discountCode: discountCode || undefined
         }),
       });
 
@@ -188,6 +207,20 @@ export default function OrderPage() {
             Upload a photo. Pick a style. Get a masterpiece delivered fast.
           </p>
         </div>
+
+        {/* Discount Code Banner */}
+        {discountCode && (
+          <div className="mb-8 p-4 rounded-xl bg-gold/10 border border-gold/30">
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <p className="text-gold font-medium">
+                Discount code <span className="font-mono font-bold">{discountCode}</span> will be applied at checkout (10% off)
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Pricing Comparison Table */}
         <div className="mb-16">

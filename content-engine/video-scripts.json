@@ -1,0 +1,198 @@
+{
+  "capcut_templates": {
+    "template_1_before_after_split": {
+      "name": "Before/After Split Screen",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-1s", "content": "Hook text overlay appears", "text": "[HOOK]"},
+        {"time": "1-3s", "content": "Original pet photo (left half)", "overlay": "BEFORE"},
+        {"time": "3-14s", "content": "AI portrait reveal (right half)", "overlay": "AFTER", "transition": "wipe_left_to_right"},
+        {"time": "14-15s", "content": "CTA text overlay", "text": "Link in bio 👆"}
+      ],
+      "text_style": {
+        "font": "Montserrat Bold",
+        "color": "#FFFFFF",
+        "stroke": "#000000",
+        "stroke_width": "3px",
+        "animation": "pop_in"
+      },
+      "audio": "trending_audio_slot_1",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 30,
+        "format": "MP4",
+        "quality": "high"
+      }
+    },
+    "template_2_zoom_reveal": {
+      "name": "Dramatic Zoom Reveal",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-2s", "content": "Hook text on black screen", "text": "[HOOK]"},
+        {"time": "2-5s", "content": "Zoomed in on AI portrait (150% scale)"},
+        {"time": "5-13s", "content": "Slow zoom out to full portrait", "animation": "ease_out"},
+        {"time": "10-13s", "content": "Caption text appears bottom", "text": "[CAPTION]"},
+        {"time": "13-15s", "content": "CTA overlay", "text": "👆 Link in bio"}
+      ],
+      "effects": ["lens_flare_subtle", "color_grade_warm"],
+      "audio": "trending_audio_slot_2",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 30,
+        "format": "MP4"
+      }
+    },
+    "template_3_fast_montage": {
+      "name": "Fast-Paced Style Showcase",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-1s", "content": "Hook text", "text": "[HOOK]"},
+        {"time": "1-3s", "content": "Style 1 portrait", "text": "Renaissance"},
+        {"time": "3-5s", "content": "Style 2 portrait", "text": "Pixar 3D"},
+        {"time": "5-7s", "content": "Style 3 portrait", "text": "Needle Felt"},
+        {"time": "7-9s", "content": "Style 4 portrait", "text": "Pixel Art"},
+        {"time": "9-11s", "content": "Style 5 portrait", "text": "Ink Wash"},
+        {"time": "11-13s", "content": "Style 6 portrait", "text": "Classical"},
+        {"time": "13-15s", "content": "CTA with price", "text": "All styles - $9 each 🎨"}
+      ],
+      "transitions": "quick_cut",
+      "audio": "upbeat_fast_music",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 30,
+        "format": "MP4"
+      }
+    },
+    "template_4_museum_wall": {
+      "name": "Museum Wall Mockup",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-2s", "content": "Hook text", "text": "[HOOK]"},
+        {"time": "2-4s", "content": "Empty museum wall with frame"},
+        {"time": "4-6s", "content": "Portrait fades into frame", "transition": "fade_in"},
+        {"time": "6-12s", "content": "Slow pan across framed portrait on wall"},
+        {"time": "12-15s", "content": "Zoom into portrait + CTA", "text": "Hang your pet in the Louvre (digitally) 👑"}
+      ],
+      "overlay_assets": ["museum_wall_background.jpg", "golden_frame.png"],
+      "audio": "classical_museum_ambient",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 24,
+        "format": "MP4"
+      }
+    },
+    "template_5_gameboy_screen": {
+      "name": "Retro Game Boy Effect",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-2s", "content": "Hook text with glitch effect", "text": "[HOOK]"},
+        {"time": "2-4s", "content": "Game Boy screen frame appears"},
+        {"time": "4-6s", "content": "Portrait pixelates in", "effect": "pixel_transition"},
+        {"time": "6-12s", "content": "Portrait displayed in GB screen", "overlay": "scanlines"},
+        {"time": "12-15s", "content": "Press START text + CTA", "text": "PRESS START\n[Link in bio]"}
+      ],
+      "color_filter": "gameboy_green_palette",
+      "audio": "chiptune_retro",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 30,
+        "format": "MP4"
+      }
+    },
+    "template_6_reaction_style": {
+      "name": "Selfie Reaction Video",
+      "duration": "15s",
+      "structure": [
+        {"time": "0-2s", "content": "Creator looking at phone (blank screen)"},
+        {"time": "2-4s", "content": "Portrait appears on phone screen"},
+        {"time": "4-7s", "content": "Creator reacts (eyes widen, smile)"},
+        {"time": "7-12s", "content": "Portrait zooms to fill screen"},
+        {"time": "12-15s", "content": "Text overlay + CTA", "text": "This was my reaction 🥺\n$9 - Link in bio"}
+      ],
+      "filming_notes": "Record yourself looking at blank phone first, then composite portrait onto phone screen in post",
+      "audio": "emotional_reveal_music",
+      "export_settings": {
+        "resolution": "1080x1920",
+        "fps": 30,
+        "format": "MP4"
+      }
+    }
+  },
+  "batch_production_workflow": {
+    "goal": "Create 50 videos in one sitting",
+    "tools": ["CapCut desktop app", "Photoshop (background removal)", "Canva (text overlays)", "Epidemic Sound (trending audio)"],
+    "steps": [
+      {
+        "step": 1,
+        "action": "Gather Assets",
+        "details": "Export all 14 gallery images + collect 36 user-submitted pet photos (from Instagram DMs, form submissions)"
+      },
+      {
+        "step": 2,
+        "action": "Organize by Template Type",
+        "details": "Sort 50 images into 6 template folders (Template 1: 15 images, Template 2: 10 images, etc.)"
+      },
+      {
+        "step": 3,
+        "action": "Batch Apply Template 1",
+        "details": "Open CapCut, import Template 1, batch replace placeholders with 15 images, export all"
+      },
+      {
+        "step": 4,
+        "action": "Batch Apply Remaining Templates",
+        "details": "Repeat for Templates 2-6"
+      },
+      {
+        "step": 5,
+        "action": "Add Trending Audio",
+        "details": "Replace placeholder audio tracks with current trending sounds from TikTok/Reels Creative Center"
+      },
+      {
+        "step": 6,
+        "action": "Customize Captions",
+        "details": "Edit text overlays for each video using hook variations from calendar"
+      },
+      {
+        "step": 7,
+        "action": "Export All",
+        "details": "Batch export at 1080x1920, 30fps, MP4 format"
+      },
+      {
+        "step": 8,
+        "action": "Filename Convention",
+        "details": "Save as: YYYYMMDD_slot_hookKeyword_template.mp4 (e.g., 20260319_morning_povRenaissance_template1.mp4)"
+      }
+    ],
+    "estimated_time": "4-6 hours for 50 videos",
+    "pro_tips": [
+      "Use CapCut's 'Duplicate Project' feature to speed up template application",
+      "Create custom CapCut templates with placeholders so you only swap images/text",
+      "Keep a spreadsheet mapping each video file to its calendar day/slot",
+      "Export in batches of 10 to avoid crashes",
+      "Save project files in case you need to re-edit later"
+    ]
+  },
+  "trending_audio_sources": {
+    "tiktok_creative_center": "https://ads.tiktok.com/business/creativecenter/inspiration/popular/music/pc/en",
+    "instagram_reels_trends": "Check Reels tab → Audio trending section daily",
+    "epidemic_sound": "https://www.epidemicsound.com (licensed, safe for commercial use)",
+    "artlist": "https://artlist.io (alternative to Epidemic)",
+    "manual_monitoring": "Spend 15 min/day scrolling For You Page, save trending sounds you hear 3+ times"
+  },
+  "audio_rotation_strategy": {
+    "week_1": "Focus on emotional/wholesome sounds (pet memorial angle, gift giving)",
+    "week_2": "Shift to upbeat dance beats (transformations, reveals)",
+    "week_3": "Nostalgia sounds (90s kids, retro gaming)",
+    "week_4": "Meme sounds (comparison videos, humor)",
+    "ongoing": "Rotate top 5 trending sounds every 3 days based on TikTok Creative Center data"
+  },
+  "video_variants_per_image": {
+    "strategy": "Each gallery image can generate 3-5 different videos",
+    "example_alfie_portrait": [
+      {"variant": "A", "template": "template_1_before_after_split", "hook": "POV: Your dog becomes a Renaissance painting"},
+      {"variant": "B", "template": "template_2_zoom_reveal", "hook": "I turned my border collie into a $10K oil painting"},
+      {"variant": "C", "template": "template_6_reaction_style", "hook": "This was my reaction when I saw my dog as art"}
+    ],
+    "testing_approach": "Post variant A first, if it hits 50k+ views, post variant B/C the next day to capitalize on momentum"
+  }
+}
