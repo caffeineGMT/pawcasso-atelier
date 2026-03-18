@@ -684,14 +684,14 @@ function OrderPageContent() {
                   <path d="M22 14h-7v12h3v-4h4c2.76 0 5-2.24 5-5s-2.24-3-5-3zm0 5h-4v-3h4c.55 0 1 .45 1 1s-.45 1-1 1z"/>
                 </svg>
               </a>
-              <a
-                href="https://techcrunch.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="opacity-40 hover:opacity-70 transition-opacity"
-              >
-                <span className="text-lg font-bold tracking-tight text-text-primary">TechCrunch</span>
-              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
 export default function OrderPage() {
   return (
     <>
