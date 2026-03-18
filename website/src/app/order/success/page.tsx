@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getStripe } from "@/lib/stripe";
 import UpsellModal from "@/components/UpsellModal";
+import SuccessPageTracker from "@/components/SuccessPageTracker";
 
 interface SuccessPageProps {
   searchParams: Promise<{ session_id?: string }>;
@@ -30,9 +31,13 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     const petName = session.metadata?.petName || 'Your Pet';
     const style = session.metadata?.style || 'custom';
     const customerName = session.metadata?.customerName || 'Customer';
+    const tier = session.metadata?.tier || 'basic';
 
     return (
       <section className="py-24 px-6">
+        {/* Analytics Tracker */}
+        <SuccessPageTracker amount={amountTotal} tier={tier} />
+
         <div className="max-w-2xl mx-auto">
           {/* Success Header */}
           <div className="text-center mb-12">
