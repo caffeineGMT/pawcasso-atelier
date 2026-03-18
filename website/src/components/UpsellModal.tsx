@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useExperiment, useExperimentVariant, trackExperiment } from "@/lib/experiments";
+import { PRINT_UPSELL_PRICES, type PrintProductType } from "@/lib/stripe";
 
 interface UpsellModalProps {
   sessionId: string;
@@ -9,11 +9,7 @@ interface UpsellModalProps {
 
 export default function UpsellModal({ sessionId }: UpsellModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState<string | null>(null);
-
-  // Get experiment variant
-  const delay = useExperiment('upsell-modal-timing', 2000, sessionId);
-  const variant = useExperimentVariant('upsell-modal-timing', sessionId);
+  const [loading, setLoading] = useState<PrintProductType | null>(null);
 
   useEffect(() => {
     // Check if user has already declined this session's upsell
@@ -24,50 +20,25 @@ export default function UpsellModal({ sessionId }: UpsellModalProps) {
       return;
     }
 
-    // Handle exit-intent variant
-    if (delay === 'mouseleave') {
-      const handleMouseLeave = (e: MouseEvent) => {
-        // Trigger when mouse leaves viewport from the top
-        if (e.clientY <= 0) {
-          setIsOpen(true);
-          // Track impression
-          trackExperiment('upsell_shown', { variant, sessionId });
-          // Remove listener after first trigger
-          document.removeEventListener('mouseleave', handleMouseLeave);
-        }
-      };
+    // Show modal at 3 seconds for digital-only purchases
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 3000);
 
-      document.addEventListener('mouseleave', handleMouseLeave);
-      return () => document.removeEventListener('mouseleave', handleMouseLeave);
-    }
+    return () => clearTimeout(timer);
+  }, [sessionId]);
 
-    // Handle timed variants (control, fast, delayed)
-    if (typeof delay === 'number') {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        // Track impression
-        trackExperiment('upsell_shown', { variant, sessionId });
-      }, delay);
-
-      return () => clearTimeout(timer);
-    }
-  }, [sessionId, delay, variant]);
-
-  const handleUpsell = async (upsellType: 'print' | 'license') => {
-    setLoading(upsellType);
-
-    // Track acceptance
-    trackExperiment('upsell_accepted', {
-      variant,
-      sessionId,
-      product: upsellType,
-    });
+  const handlePrintUpsell = async (productType: PrintProductType) => {
+    setLoading(productType);
 
     try {
-      const res = await fetch('/api/upsell', {
+      const res = await fetch('/api/checkout/print-upsell', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, upsellType }),
+        body: JSON.stringify({
+          originalSessionId: sessionId,
+          productType
+        }),
       });
 
       const data = await res.json();
@@ -75,20 +46,17 @@ export default function UpsellModal({ sessionId }: UpsellModalProps) {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert('Something went wrong. Please contact us on Instagram.');
+        alert('Something went wrong. Please try again.');
         setLoading(null);
       }
     } catch (error) {
-      console.error('Upsell error:', error);
-      alert('Something went wrong. Please contact us on Instagram.');
+      console.error('Print upsell error:', error);
+      alert('Something went wrong. Please try again.');
       setLoading(null);
     }
   };
 
   const handleDecline = () => {
-    // Track decline
-    trackExperiment('upsell_declined', { variant, sessionId });
-
     // Store decline in localStorage
     const declinedKey = `upsell_declined_${sessionId}`;
     localStorage.setItem(declinedKey, 'true');
@@ -99,128 +67,134 @@ export default function UpsellModal({ sessionId }: UpsellModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-      <div className="bg-[#0a0a0a] border border-white/[0.12] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#0a0a0a] border border-white/[0.12] rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="p-8 border-b border-white/[0.08]">
           <h2 className="text-3xl font-semibold tracking-tight mb-2">
-            Upgrade Your <span className="text-gradient">Order</span>
+            Love Your Portrait? <span className="text-gradient">Get It Printed!</span>
           </h2>
           <p className="text-text-secondary">
-            Add premium options to make the most of your portrait
+            Limited time: 20% off all print products for digital buyers
           </p>
         </div>
 
-        {/* Upsell Cards */}
-        <div className="p-8 grid md:grid-cols-2 gap-6">
-          {/* Print Package */}
-          <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 hover:border-gold/40 transition-all">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-xl font-semibold text-text-primary">Print Package</h3>
-                <p className="text-2xl font-bold text-gold mt-2">$19</p>
+        {/* Print Product Cards */}
+        <div className="p-8 grid md:grid-cols-3 gap-6">
+          {/* Framed Print */}
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 hover:border-gold/40 transition-all relative">
+            <div className="absolute top-4 right-4 bg-gold/20 text-gold text-xs font-bold px-3 py-1 rounded-full">
+              SAVE $10
+            </div>
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold text-text-primary">{PRINT_UPSELL_PRICES.framed.name}</h3>
+              <div className="flex items-baseline gap-2 mt-2">
+                <p className="text-2xl font-bold text-gold">${PRINT_UPSELL_PRICES.framed.discountedPrice}</p>
+                <p className="text-sm text-text-secondary line-through">${PRINT_UPSELL_PRICES.framed.originalPrice}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
-              </div>
+              <p className="text-xs text-text-secondary mt-1">{PRINT_UPSELL_PRICES.framed.description}</p>
             </div>
 
-            <ul className="space-y-3 mb-6">
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                High-resolution TIFF file (print-ready)
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Lossless PNG file (6000x7500px)
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Print dimensions guide (recommended sizes)
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Color profile for professional printing
-              </li>
+            <ul className="space-y-2 mb-6">
+              {PRINT_UPSELL_PRICES.framed.features.map((feature, idx) => (
+                <li key={idx} className="flex items-start gap-2 text-xs text-text-secondary">
+                  <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
             </ul>
 
             <button
-              onClick={() => handleUpsell('print')}
+              onClick={() => handlePrintUpsell('framed')}
               disabled={loading !== null}
-              className="w-full py-3 bg-gold text-black font-semibold rounded-full hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gold text-black font-semibold rounded-full hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
-              {loading === 'print' ? 'Processing...' : 'Add to Order'}
+              {loading === 'framed' ? 'Processing...' : 'Add Framed Print'}
             </button>
           </div>
 
-          {/* Commercial License */}
-          <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 hover:border-gold/40 transition-all">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-xl font-semibold text-text-primary">Commercial License</h3>
-                <p className="text-2xl font-bold text-gold mt-2">$99</p>
+          {/* Canvas Wrap */}
+          <div className="bg-white/[0.03] border border-gold/30 rounded-xl p-6 hover:border-gold/50 transition-all relative ring-2 ring-gold/20">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-black text-xs font-bold px-4 py-1 rounded-full whitespace-nowrap">
+              MOST POPULAR
+            </div>
+            <div className="absolute top-4 right-4 bg-gold/20 text-gold text-xs font-bold px-3 py-1 rounded-full">
+              SAVE $20
+            </div>
+            <div className="mb-4 mt-2">
+              <h3 className="text-xl font-semibold text-text-primary">{PRINT_UPSELL_PRICES.canvas.name}</h3>
+              <div className="flex items-baseline gap-2 mt-2">
+                <p className="text-2xl font-bold text-gold">${PRINT_UPSELL_PRICES.canvas.discountedPrice}</p>
+                <p className="text-sm text-text-secondary line-through">${PRINT_UPSELL_PRICES.canvas.originalPrice}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
+              <p className="text-xs text-text-secondary mt-1">{PRINT_UPSELL_PRICES.canvas.description}</p>
             </div>
 
-            <ul className="space-y-3 mb-6">
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Use in commercial projects
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Merchandise & product sales rights
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Marketing & advertising usage
-              </li>
-              <li className="flex items-start gap-2 text-sm text-text-secondary">
-                <svg className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Legal usage rights documentation
-              </li>
+            <ul className="space-y-2 mb-6">
+              {PRINT_UPSELL_PRICES.canvas.features.map((feature, idx) => (
+                <li key={idx} className="flex items-start gap-2 text-xs text-text-secondary">
+                  <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
             </ul>
 
             <button
-              onClick={() => handleUpsell('license')}
+              onClick={() => handlePrintUpsell('canvas')}
               disabled={loading !== null}
-              className="w-full py-3 bg-gold text-black font-semibold rounded-full hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gold text-black font-semibold rounded-full hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
-              {loading === 'license' ? 'Processing...' : 'Add to Order'}
+              {loading === 'canvas' ? 'Processing...' : 'Add Canvas Wrap'}
+            </button>
+          </div>
+
+          {/* Metal Print */}
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 hover:border-gold/40 transition-all relative">
+            <div className="absolute top-4 right-4 bg-gold/20 text-gold text-xs font-bold px-3 py-1 rounded-full">
+              SAVE $30
+            </div>
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold text-text-primary">{PRINT_UPSELL_PRICES.metal.name}</h3>
+              <div className="flex items-baseline gap-2 mt-2">
+                <p className="text-2xl font-bold text-gold">${PRINT_UPSELL_PRICES.metal.discountedPrice}</p>
+                <p className="text-sm text-text-secondary line-through">${PRINT_UPSELL_PRICES.metal.originalPrice}</p>
+              </div>
+              <p className="text-xs text-text-secondary mt-1">{PRINT_UPSELL_PRICES.metal.description}</p>
+            </div>
+
+            <ul className="space-y-2 mb-6">
+              {PRINT_UPSELL_PRICES.metal.features.map((feature, idx) => (
+                <li key={idx} className="flex items-start gap-2 text-xs text-text-secondary">
+                  <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => handlePrintUpsell('metal')}
+              disabled={loading !== null}
+              className="w-full py-3 bg-gold text-black font-semibold rounded-full hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            >
+              {loading === 'metal' ? 'Processing...' : 'Add Metal Print'}
             </button>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-white/[0.08] flex justify-center">
+        <div className="p-8 border-t border-white/[0.08] flex flex-col items-center gap-2">
+          <p className="text-xs text-gold font-semibold">⏰ Limited time: 20% off expires in 10 minutes</p>
           <button
             onClick={handleDecline}
             disabled={loading !== null}
-            className="px-6 py-2 text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
           >
-            No thanks, continue
+            No thanks, I&apos;ll keep digital only
           </button>
         </div>
       </div>

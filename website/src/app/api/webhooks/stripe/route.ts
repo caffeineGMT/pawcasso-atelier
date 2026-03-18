@@ -5,6 +5,8 @@ import { Resend } from "resend";
 import { processReferralConversion, getOrCreateCustomer } from "@/lib/referral";
 import { generateOrderCompleteEmailWithReferral } from "@/lib/email-templates/order-complete-with-referral";
 import { PrismaClient } from "@prisma/client";
+import { createGiftCard, markGiftCardAsSent } from "@/lib/gift-cards";
+import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
 
 const prisma = new PrismaClient();
 
@@ -156,6 +158,284 @@ async function sendFailureNotification(
   }
 }
 
+// Helper function to create Printful order
+async function createPrintfulOrder(
+  portraitUrl: string,
+  productType: string,
+  customerName: string,
+  customerEmail: string,
+  shippingAddress: {
+    name: string;
+    address1: string;
+    city: string;
+    state_code: string;
+    country_code: string;
+    zip: string;
+  },
+  printfulProductId: string
+) {
+  if (!process.env.PRINTFUL_API_KEY) {
+    throw new Error("Printful API key not configured");
+  }
+
+  // Create Printful order via API
+  const printfulResponse = await fetch("https://api.printful.com/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.PRINTFUL_API_KEY}`,
+    },
+    body: JSON.stringify({
+      recipient: {
+        name: shippingAddress.name,
+        address1: shippingAddress.address1,
+        city: shippingAddress.city,
+        state_code: shippingAddress.state_code,
+        country_code: shippingAddress.country_code,
+        zip: shippingAddress.zip,
+        email: customerEmail,
+      },
+      items: [
+        {
+          variant_id: printfulProductId,
+          quantity: 1,
+          files: [
+            {
+              url: portraitUrl,
+              type: "default",
+            },
+          ],
+        },
+      ],
+    }),
+  });
+
+  if (!printfulResponse.ok) {
+    const errorData = await printfulResponse.json();
+    throw new Error(`Printful API error: ${JSON.stringify(errorData)}`);
+  }
+
+  return await printfulResponse.json();
+}
+
+// Handler for print upsell orders
+async function handlePrintUpsellOrder(
+  session: Stripe.Checkout.Session,
+  stripe: Stripe,
+  resend: any
+) {
+  const metadata = session.metadata || {};
+  const productType = metadata.product_type;
+  const originalOrderId = metadata.original_order_id;
+  const portraitUrl = metadata.portrait_url;
+  const customerEmail = session.customer_email!;
+  const customerName = metadata.customer_name || "Customer";
+  const petName = metadata.pet_name || "your pet";
+  const printfulProductId = metadata.printful_product_id;
+
+  console.log(`Processing print upsell order: ${session.id}`);
+  console.log(`Product: ${productType}, Original order: ${originalOrderId}`);
+
+  try {
+    // Record the print upsell order in database
+    const amountTotal = session.amount_total || 0;
+
+    await prisma.order.create({
+      data: {
+        stripeSessionId: session.id,
+        stripePaymentIntentId: typeof session.payment_intent === 'string'
+          ? session.payment_intent
+          : null,
+        customerEmail,
+        customerName,
+        tier: 'print_upsell',
+        tierName: `Print Upsell - ${productType}`,
+        amount: amountTotal / 100,
+        subtotal: amountTotal / 100,
+        discount: 0,
+        tax: (session.total_details?.amount_tax || 0) / 100,
+        petName,
+        style: productType,
+        notes: `Print upsell from order ${originalOrderId}`,
+        petPhotoUrl: '',
+        portraitUrls: portraitUrl,
+        portraitCount: 0,
+        utmSource: null,
+        utmMedium: 'upsell',
+        utmCampaign: 'print_upsell',
+        referralCode: null,
+        discountCode: null,
+        pricingBadge: null,
+        status: 'completed',
+        deliveryStatus: 'pending',
+        paidAt: new Date(),
+      },
+    });
+
+    // TODO: Create Printful order when API keys are configured
+    // For now, send manual fulfillment notification to admin
+    if (process.env.PRINTFUL_API_KEY) {
+      // Shipping address will need to be collected in checkout
+      // For MVP, we'll send a notification to manually fulfill
+      console.log("Printful API configured, but shipping collection not yet implemented");
+    }
+
+    // Send notification to admin for manual Printful fulfillment
+    await resend.emails.send({
+      from: "orders@pawcasso-atelier.com",
+      to: "michaelguo@meta.com",
+      subject: `🖼️ New Print Order - ${productType} - ${petName}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #1d1d1f; }
+    h1 { color: #C9A96E; margin-bottom: 20px; font-size: 28px; }
+    .order-box { background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 20px 0; }
+    .label { color: #86868b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .value { color: #F5F5F7; font-size: 16px; margin-bottom: 15px; }
+    img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+    .btn { display: inline-block; background: #C9A96E; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>New Print Order 🖼️</h1>
+
+    <div class="order-box">
+      <div class="label">Product Type</div>
+      <div class="value">${productType.toUpperCase()} - ${petName}</div>
+
+      <div class="label">Customer</div>
+      <div class="value">${customerName} (${customerEmail})</div>
+
+      <div class="label">Order ID</div>
+      <div class="value">${session.id}</div>
+
+      <div class="label">Original Digital Order</div>
+      <div class="value">${originalOrderId}</div>
+
+      <div class="label">Amount Paid</div>
+      <div class="value">$${(amountTotal / 100).toFixed(2)}</div>
+    </div>
+
+    <div class="label">Portrait to Print</div>
+    <img src="${portraitUrl}" alt="Portrait" />
+
+    <p><strong>Action Required:</strong> Create Printful order manually with the portrait above.</p>
+    <p>Printful Product ID: ${printfulProductId}</p>
+
+    <a href="https://dashboard.stripe.com/payments/${session.payment_intent}" class="btn">View in Stripe</a>
+  </div>
+</body>
+</html>
+      `,
+    });
+
+    // Send confirmation email to customer
+    await resend.emails.send({
+      from: "portraits@pawcasso-atelier.com",
+      to: customerEmail,
+      subject: `Your ${productType} Print Order Confirmed! 🖼️`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #1d1d1f; }
+    h1 { color: #C9A96E; margin-bottom: 20px; font-size: 28px; }
+    p { line-height: 1.6; margin: 15px 0; }
+    .timeline { background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 20px 0; }
+    .step { display: flex; gap: 15px; margin-bottom: 15px; align-items: start; }
+    .step-number { background: #C9A96E; color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+    img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Print Order Confirmed! 🖼️</h1>
+
+    <p>Hi ${customerName},</p>
+
+    <p>Thank you for ordering a <strong>${productType} print</strong> of ${petName}'s portrait!</p>
+
+    <img src="${portraitUrl}" alt="Your Portrait" />
+
+    <div class="timeline">
+      <h3 style="color: #C9A96E; margin-top: 0;">What Happens Next?</h3>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div>
+          <strong style="color: #F5F5F7;">Production (2-3 business days)</strong><br>
+          <span style="color: #86868b;">Your portrait is professionally printed on premium materials</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div>
+          <strong style="color: #F5F5F7;">Shipping (5-7 business days)</strong><br>
+          <span style="color: #86868b;">Carefully packaged and shipped to your address</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div>
+          <strong style="color: #F5F5F7;">Delivery & Enjoy!</strong><br>
+          <span style="color: #86868b;">Your beautiful print arrives ready to display</span>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>Total delivery time:</strong> 7-10 business days</p>
+    <p style="color: #86868b; font-size: 14px;">You'll receive tracking information once your order ships.</p>
+
+    <p style="margin-top: 30px;">Questions? Reply to this email or DM us on Instagram <a href="https://instagram.com/pawcasso.atelier" style="color: #C9A96E;">@pawcasso.atelier</a></p>
+  </div>
+</body>
+</html>
+      `,
+    });
+
+    console.log(`Print upsell order processed successfully: ${session.id}`);
+
+    return NextResponse.json({
+      success: true,
+      order_type: 'print_upsell',
+      session_id: session.id,
+    });
+  } catch (error) {
+    console.error("Error processing print upsell order:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+
+    // Send failure notification
+    await resend.emails.send({
+      from: "alerts@pawcasso-atelier.com",
+      to: "michaelguo@meta.com",
+      subject: `[ERROR] Print Upsell Order Failed - ${session.id}`,
+      html: `
+        <div style="font-family: sans-serif; padding: 20px;">
+          <h2 style="color: #ff6b6b;">Print Upsell Order Failed</h2>
+          <p><strong>Session ID:</strong> ${session.id}</p>
+          <p><strong>Product Type:</strong> ${productType}</p>
+          <p><strong>Customer:</strong> ${customerEmail}</p>
+          <p><strong>Error:</strong> ${errorMessage}</p>
+        </div>
+      `,
+    });
+
+    return NextResponse.json(
+      { error: "Print upsell processing failed", details: errorMessage },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   const stripe = getStripeInstance();
   const resend = getResend();
@@ -192,6 +472,180 @@ export async function POST(req: NextRequest) {
 
     // Extract metadata
     const metadata = session.metadata || {};
+
+    // Check if this is a print upsell order
+    if (metadata.order_type === 'print_upsell') {
+      return handlePrintUpsellOrder(session, stripe, resend);
+    }
+
+    // Check if this is a gift card purchase
+    if (metadata.type === 'gift_card') {
+      try {
+        console.log(`Processing gift card purchase: ${session.id}`);
+
+        const amount = parseFloat(metadata.amount || "0");
+        const recipientEmail = metadata.recipientEmail;
+        const recipientName = metadata.recipientName;
+        const senderName = metadata.senderName;
+        const senderEmail = metadata.senderEmail || session.customer_email || "";
+        const message = metadata.message || null;
+        const deliveryDate = metadata.deliveryDate
+          ? new Date(metadata.deliveryDate)
+          : new Date();
+
+        // Create gift card record
+        const giftCard = await createGiftCard({
+          amount,
+          purchaserEmail: senderEmail,
+          purchaserName: senderName,
+          recipientEmail,
+          recipientName,
+          message,
+          deliveryDate,
+          stripeSessionId: session.id,
+          stripePaymentIntentId: typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : undefined,
+        });
+
+        console.log(`Gift card created: ${giftCard.code}`);
+
+        // Send email to recipient (if delivery date is now)
+        const shouldSendNow = deliveryDate <= new Date();
+
+        if (shouldSendNow) {
+          const emailHtml = GiftCardEmail({
+            recipientName,
+            senderName,
+            giftCardCode: giftCard.code,
+            amount,
+            message: message || undefined,
+            expiresAt: giftCard.expiresAt?.toISOString() || "",
+          });
+
+          await resend.emails.send({
+            from: "Pawcasso Atelier <gifts@pawcasso-atelier.com>",
+            to: recipientEmail,
+            subject: `🎁 ${senderName} sent you a Pawcasso gift card!`,
+            html: emailHtml,
+          });
+
+          // Mark as sent
+          await markGiftCardAsSent(giftCard.id);
+
+          console.log(`Gift card email sent to: ${recipientEmail}`);
+        } else {
+          console.log(
+            `Gift card scheduled for delivery on: ${deliveryDate.toISOString()}`
+          );
+          // TODO: Set up scheduled email delivery (can use a cron job or scheduled task)
+        }
+
+        // Send confirmation to purchaser
+        await resend.emails.send({
+          from: "Pawcasso Atelier <gifts@pawcasso-atelier.com>",
+          to: senderEmail,
+          subject: `Gift Card Purchase Confirmed - $${amount}`,
+          html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #FEF3E2 0%, #FFFFFF 50%, #FFF1F3 100%); padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+    h1 { color: #C9A96E; margin-bottom: 20px; font-size: 28px; }
+    .info-box { background: #F9FAFB; border-radius: 12px; padding: 20px; margin: 20px 0; }
+    .label { color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .value { color: #1f2937; font-size: 16px; margin-bottom: 15px; }
+    p { line-height: 1.6; color: #4b5563; }
+    .highlight { background: #FEF3E2; border-left: 4px solid #C9A96E; padding: 16px; border-radius: 8px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gift Card Purchase Confirmed! 🎁</h1>
+    <p>Hi ${senderName},</p>
+    <p>Thank you for purchasing a Pawcasso gift card! Here are the details:</p>
+
+    <div class="info-box">
+      <div class="label">Gift Card Amount</div>
+      <div class="value">$${amount.toFixed(2)}</div>
+
+      <div class="label">Recipient</div>
+      <div class="value">${recipientName} (${recipientEmail})</div>
+
+      <div class="label">Gift Card Code</div>
+      <div class="value" style="font-family: 'Courier New', monospace; font-size: 18px; font-weight: 700; color: #C9A96E;">${giftCard.code}</div>
+
+      <div class="label">Delivery</div>
+      <div class="value">${
+        shouldSendNow
+          ? "Sent immediately"
+          : `Scheduled for ${deliveryDate.toLocaleDateString()}`
+      }</div>
+    </div>
+
+    ${
+      message
+        ? `
+    <div class="highlight">
+      <p style="margin: 0; font-style: italic;">"${message}"</p>
+    </div>
+    `
+        : ""
+    }
+
+    <div class="highlight">
+      <p style="margin: 0;"><strong>💰 Earn 10% Credit!</strong></p>
+      <p style="margin: 8px 0 0;">When ${recipientName} makes their first purchase using this gift card, you'll receive 10% of the order value as account credit. It's our way of saying thanks for spreading the love!</p>
+    </div>
+
+    <p style="margin-top: 30px; color: #6b7280; font-size: 14px;">
+      Questions? Reply to this email or visit our website for support.
+    </p>
+  </div>
+</body>
+</html>
+          `,
+        });
+
+        console.log(`Gift card confirmation sent to purchaser: ${senderEmail}`);
+
+        return NextResponse.json({
+          success: true,
+          type: "gift_card",
+          gift_card_code: giftCard.code,
+          delivery_scheduled: !shouldSendNow,
+        });
+      } catch (error) {
+        console.error("Error processing gift card:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+
+        // Send failure notification
+        await resend.emails.send({
+          from: "alerts@pawcasso-atelier.com",
+          to: "michaelguo@meta.com",
+          subject: `[ERROR] Gift Card Purchase Failed - ${session.id}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px;">
+              <h2 style="color: #ff6b6b;">Gift Card Purchase Failed</h2>
+              <p><strong>Session ID:</strong> ${session.id}</p>
+              <p><strong>Amount:</strong> $${metadata.amount}</p>
+              <p><strong>Recipient:</strong> ${metadata.recipientEmail}</p>
+              <p><strong>Error:</strong> ${errorMessage}</p>
+            </div>
+          `,
+        });
+
+        return NextResponse.json(
+          { error: "Gift card processing failed", details: errorMessage },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Standard digital portrait order
     const petPhotoUrl = metadata.petPhotoUrl;
     const tier = metadata.tier || "basic";
     const customerEmail = session.customer_email!;

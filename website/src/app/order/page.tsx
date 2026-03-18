@@ -57,6 +57,14 @@ function OrderPageContent() {
   const [step1Error, setStep1Error] = useState<string>("");
   const [step2Error, setStep2Error] = useState<string>("");
 
+  // Gift card state
+  const [giftCardExpanded, setGiftCardExpanded] = useState(false);
+  const [giftCardCode, setGiftCardCode] = useState("");
+  const [giftCardBalance, setGiftCardBalance] = useState<number | null>(null);
+  const [giftCardValid, setGiftCardValid] = useState(false);
+  const [giftCardError, setGiftCardError] = useState<string | null>(null);
+  const [giftCardLoading, setGiftCardLoading] = useState(false);
+
   // Track page view and check for URL params (don't track begin_checkout until form interaction)
   useEffect(() => {
     // Check for tier parameter
@@ -258,6 +266,42 @@ function OrderPageContent() {
     });
   };
 
+  const handleGiftCardApply = async () => {
+    if (!giftCardCode.trim()) {
+      setGiftCardError("Please enter a gift card code");
+      return;
+    }
+
+    setGiftCardLoading(true);
+    setGiftCardError(null);
+
+    try {
+      const res = await fetch(`/api/gift/validate?code=${encodeURIComponent(giftCardCode.trim())}`);
+      const data = await res.json();
+
+      if (data.valid) {
+        setGiftCardBalance(data.balance);
+        setGiftCardValid(true);
+        setGiftCardError(null);
+        trackEngagement('gift_card_applied', {
+          code: giftCardCode.trim(),
+          balance: data.balance,
+        });
+      } else {
+        setGiftCardBalance(null);
+        setGiftCardValid(false);
+        setGiftCardError(data.error || "Invalid gift card code");
+      }
+    } catch (error) {
+      console.error("Gift card validation error:", error);
+      setGiftCardBalance(null);
+      setGiftCardValid(false);
+      setGiftCardError("Failed to validate gift card. Please try again.");
+    } finally {
+      setGiftCardLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -326,7 +370,7 @@ function OrderPageContent() {
         items: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
       });
 
-      // Create checkout session with photo URL, tier, discount code, and badge info
+      // Create checkout session with photo URL, tier, discount code, badge info, and gift card
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -340,6 +384,7 @@ function OrderPageContent() {
           tier: selectedTier,
           discountCode: discountCode || undefined,
           badge: tierBadge || undefined,
+          giftCardCode: giftCardValid && giftCardCode ? giftCardCode.trim() : undefined,
         }),
       });
 
@@ -720,6 +765,138 @@ function OrderPageContent() {
                       <p className="text-text-secondary text-sm">
                         Join <span className="text-gold font-bold">{socialProofCount.toLocaleString()}</span> happy pet parents
                       </p>
+                    </div>
+                  </div>
+
+                  {/* Gift Card Section */}
+                  <div className="mb-6">
+                    <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
+                      <button
+                        type="button"
+                        onClick={() => setGiftCardExpanded(!giftCardExpanded)}
+                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-white/[0.06] transition-all text-left"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                              <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 className="text-base font-semibold text-text-primary">Have a gift card?</h3>
+                            <p className="text-sm text-text-secondary">Apply your gift card code</p>
+                          </div>
+                        </div>
+                        <svg
+                          className={`w-5 h-5 text-text-secondary transition-transform duration-300 ${giftCardExpanded ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${
+                          giftCardExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <div className="px-6 pb-6 pt-2 border-t border-white/[0.08]">
+                          {!giftCardValid ? (
+                            <>
+                              <div className="flex gap-2 mb-3">
+                                <input
+                                  type="text"
+                                  value={giftCardCode}
+                                  onChange={(e) => {
+                                    setGiftCardCode(e.target.value.toUpperCase());
+                                    setGiftCardError(null);
+                                  }}
+                                  placeholder="GIFT-XXXX-XXXX"
+                                  className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={handleGiftCardApply}
+                                  disabled={giftCardLoading || !giftCardCode.trim()}
+                                  className="px-6 py-3 bg-gold text-black font-semibold rounded-xl hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {giftCardLoading ? 'Checking...' : 'Apply'}
+                                </button>
+                              </div>
+                              {giftCardError && (
+                                <p className="text-red-400 text-sm font-medium">{giftCardError}</p>
+                              )}
+                            </>
+                          ) : (
+                            <div className="space-y-3">
+                              <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/30">
+                                <div className="flex items-start justify-between gap-3">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                      </svg>
+                                      <p className="text-green-400 font-semibold text-sm">Gift card applied!</p>
+                                    </div>
+                                    <p className="text-sm text-text-secondary">
+                                      Code: <span className="font-mono font-bold text-text-primary">{giftCardCode}</span>
+                                    </p>
+                                    <p className="text-sm text-text-secondary mt-1">
+                                      Balance: <span className="font-bold text-green-400">${giftCardBalance?.toFixed(2)}</span>
+                                    </p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setGiftCardValid(false);
+                                      setGiftCardBalance(null);
+                                      setGiftCardCode("");
+                                    }}
+                                    className="text-text-secondary hover:text-text-primary transition-colors"
+                                  >
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </div>
+                              {giftCardBalance !== null && selectedTierConfig && (
+                                <div className="space-y-2 text-sm">
+                                  {giftCardBalance >= selectedTierConfig.price ? (
+                                    <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
+                                      <p className="text-gold font-semibold">Fully covered! No payment needed.</p>
+                                      <p className="text-text-secondary mt-1">
+                                        Remaining balance: ${(giftCardBalance - selectedTierConfig.price).toFixed(2)}
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <div className="p-3 rounded-lg bg-white/[0.06] border border-white/[0.08]">
+                                      <p className="text-text-primary font-medium">Partial payment</p>
+                                      <div className="mt-2 space-y-1 text-sm">
+                                        <div className="flex justify-between">
+                                          <span className="text-text-secondary">Order total:</span>
+                                          <span className="text-text-primary font-medium">${selectedTierConfig.price.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-text-secondary">Gift card credit:</span>
+                                          <span className="text-green-400 font-medium">-${giftCardBalance.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex justify-between pt-2 border-t border-white/[0.08]">
+                                          <span className="text-text-primary font-semibold">Remaining due:</span>
+                                          <span className="text-gold font-bold">${(selectedTierConfig.price - giftCardBalance).toFixed(2)}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
 

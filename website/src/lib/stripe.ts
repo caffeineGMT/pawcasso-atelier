@@ -102,6 +102,7 @@ export async function createCheckoutSession({
   utmSource,
   utmMedium,
   utmCampaign,
+  giftCardCode,
 }: {
   tier: TierId;
   customerEmail: string;
@@ -116,6 +117,7 @@ export async function createCheckoutSession({
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  giftCardCode?: string;
 }) {
   const stripe = getStripe();
   const tierConfig = TIER_CONFIG.find((t) => t.id === tier);
@@ -155,6 +157,7 @@ export async function createCheckoutSession({
       utmSource: utmSource || "",
       utmMedium: utmMedium || "",
       utmCampaign: utmCampaign || "",
+      giftCardCode: giftCardCode || "",
     },
     // Expire session after 24 hours to trigger abandoned cart webhook
     expires_at: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
@@ -245,3 +248,51 @@ export async function getReferralStats(customerId: string): Promise<ReferralStat
     earnings: parseFloat(customer.metadata.referral_earnings || "0"),
   };
 }
+
+// Print upsell product configurations (20% discount applied)
+export const PRINT_UPSELL_PRICES = {
+  framed: {
+    name: 'Framed Print',
+    originalPrice: 59,
+    discountedPrice: 49,
+    description: 'Museum-quality framed print (12x16")',
+    features: [
+      'Premium wooden frame',
+      'Museum-quality matte paper',
+      '12x16" standard size',
+      'Ready to hang hardware included',
+    ],
+    stripeId: process.env.STRIPE_PRICE_PRINT_FRAMED || '',
+    printfulProductId: '71', // Framed poster 12x16"
+  },
+  canvas: {
+    name: 'Canvas Wrap',
+    originalPrice: 89,
+    discountedPrice: 69,
+    description: 'Gallery-wrapped canvas print (16x20")',
+    features: [
+      '1.5" thick gallery wrap',
+      'Fade-resistant archival inks',
+      '16x20" gallery size',
+      'Hanging hardware included',
+    ],
+    stripeId: process.env.STRIPE_PRICE_PRINT_CANVAS || '',
+    printfulProductId: '29', // Canvas wrap 16x20"
+  },
+  metal: {
+    name: 'Metal Print',
+    originalPrice: 149,
+    discountedPrice: 119,
+    description: 'Vibrant metal print (16x20")',
+    features: [
+      'Aluminum dibond panel',
+      'High-gloss finish',
+      '16x20" premium size',
+      'Float mount hardware included',
+    ],
+    stripeId: process.env.STRIPE_PRICE_PRINT_METAL || '',
+    printfulProductId: '86', // Metal print 16x20"
+  },
+} as const;
+
+export type PrintProductType = keyof typeof PRINT_UPSELL_PRICES;

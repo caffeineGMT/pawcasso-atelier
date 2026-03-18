@@ -254,6 +254,10 @@ model Order {
   discountCode          String?
   pricingBadge          String?   // Badge shown at purchase time (e.g., "Most Popular", "Best Value")
 
+  // Gift card payment tracking
+  giftCardCode          String?   // Gift card code used (if any)
+  giftCardAmount        Float     @default(0) // Amount paid with gift card
+
   // Status
   status                String    @default("pending") // pending, completed, refunded, failed
   deliveryStatus        String    @default("pending") // pending, completed, failed
@@ -274,4 +278,137 @@ model Order {
   @@index([utmSource])
   @@index([utmMedium])
   @@index([referralCode])
+  @@index([giftCardCode])
+}
+
+// Corporate Bulk Orders (B2B)
+model CorporateInquiry {
+  id                  String    @id @default(cuid())
+  companyName         String
+  contactName         String
+  email               String
+  teamSize            Int       // Number of portraits requested
+  useCase             String    // holiday_gifts, employee_appreciation, team_building, pet_adoption_benefit, other
+  preferredDeliveryDate DateTime?
+  notes               String?   // Additional details from form
+
+  // Pricing & Quote
+  estimatedValue      Float?    // Auto-calculated based on team size
+  quoteAmount         Float?    // Custom quote amount set by admin
+  quotedAt            DateTime?
+
+  // Status tracking
+  status              String    @default("PENDING") // PENDING, QUOTED, WON, LOST
+  wonAt               DateTime?
+  lostReason          String?
+
+  // UTM tracking
+  utmSource           String?
+  utmMedium           String?
+  utmCampaign         String?
+
+  // Timestamps
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+}
+
+model CorporateOrder {
+  id                  String              @id @default(cuid())
+  companyName         String
+  contactName         String
+  contactEmail        String
+  tier                String              // basic, premium, deluxe
+  employeeCount       Int                 // Total employees in this order
+  totalAmount         Float               // Total order value
+  stripeInvoiceId     String?             @unique
+  paymentStatus       String              @default("PENDING") // PENDING, PAID, FAILED
+  paidAt              DateTime?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  employees           CorporateEmployee[]
+
+  @@index([contactEmail])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+model CorporateEmployee {
+  id                  String            @id @default(cuid())
+  corporateOrderId    String
+  corporateOrder      CorporateOrder    @relation(fields: [corporateOrderId], references: [id], onDelete: Cascade)
+  employeeName        String
+  employeeEmail       String
+  petPhotoUrl         String?
+  uploadToken         String?           @unique // Unique token for upload URL
+  portraitUrl         String?
+  status              String            @default("PENDING_PHOTO") // PENDING_PHOTO, PHOTO_UPLOADED, GENERATED, DELIVERED
+  emailSent           Boolean           @default(false)
+  emailSentAt         DateTime?
+  photoUploadedAt     DateTime?
+  portraitGeneratedAt DateTime?
+  portraitDeliveredAt DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([employeeEmail])
+  @@index([uploadToken])
+  @@index([status])
+  @@index([corporateOrderId])
+}
+
+// Gift Card System
+model GiftCard {
+  id                String    @id @default(cuid())
+  code              String    @unique  // Unique gift card code (e.g., "GIFT-ABCD-1234")
+  initialBalance    Float     // Initial value in dollars
+  currentBalance    Float     // Current balance in dollars
+
+  // Purchase info
+  purchaserEmail    String?   // Who bought this gift card
+  purchaserName     String?
+  recipientEmail    String?   // Who received it
+  recipientName     String?
+
+  // Referral mechanism (10% credit to sender on first use)
+  senderCredited    Boolean   @default(false)  // Has sender received 10% credit?
+  senderCreditAmount Float    @default(0)      // Amount credited to sender
+
+  // Status
+  active            Boolean   @default(true)
+  expiresAt         DateTime?
+
+  // Timestamps
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  firstUsedAt       DateTime? // When first used by recipient
+
+  // Transactions
+  transactions      GiftCardTransaction[]
+
+  @@index([code])
+  @@index([purchaserEmail])
+  @@index([recipientEmail])
+}
+
+model GiftCardTransaction {
+  id            String    @id @default(cuid())
+  giftCardId    String
+  giftCard      GiftCard  @relation(fields: [giftCardId], references: [id])
+
+  amount        Float     // Amount used (positive) or added (negative for refunds)
+  type          String    // "purchase", "redemption", "refund"
+  description   String
+
+  orderId       String?   // Related order if this was a redemption
+  balanceBefore Float     // Balance before transaction
+  balanceAfter  Float     // Balance after transaction
+
+  createdAt     DateTime  @default(now())
+
+  @@index([giftCardId])
+  @@index([orderId])
 }
