@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { artworks, styles, animals } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
+import GallerySkeleton from "@/components/GallerySkeleton";
 
 export default function GalleryPage() {
   const [styleFilter, setStyleFilter] = useState("All");
   const [animalFilter, setAnimalFilter] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
 
   const filtered = useMemo(() => {
     return artworks.filter((a) => {
@@ -15,6 +17,14 @@ export default function GalleryPage() {
       return matchStyle && matchAnimal;
     });
   }, [styleFilter, animalFilter]);
+
+  // Simulate initial loading for smooth skeleton transition
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="py-24 px-6">
@@ -50,39 +60,47 @@ export default function GalleryPage() {
         {/* Filters */}
         <div className="space-y-4 mb-12">
           {/* Style filter */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-text-secondary text-xs tracking-wider uppercase mr-2">Style</span>
-            {styles.map((s) => (
-              <button
-                key={s}
-                onClick={() => setStyleFilter(s)}
-                className={`px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
-                  styleFilter === s
-                    ? "bg-white text-black font-medium"
-                    : "bg-white/[0.06] text-text-secondary hover:bg-white/[0.1]"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
+          <div>
+            <span className="text-text-secondary text-xs tracking-wider uppercase mb-2 block px-4 sm:px-0">Style</span>
+            <div className="overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 sm:mx-0">
+              <div className="flex gap-2 pb-2 px-4 sm:px-0 sm:flex-wrap" style={{ touchAction: 'pan-x' }}>
+                {styles.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStyleFilter(s)}
+                    className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
+                      styleFilter === s
+                        ? "bg-white text-black font-medium"
+                        : "bg-white/[0.06] text-text-secondary hover:bg-white/[0.1]"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Animal filter */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-text-secondary text-xs tracking-wider uppercase mr-2">Animal</span>
-            {animals.map((a) => (
-              <button
-                key={a}
-                onClick={() => setAnimalFilter(a)}
-                className={`px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
-                  animalFilter === a
-                    ? "bg-white text-black font-medium"
-                    : "bg-white/[0.06] text-text-secondary hover:bg-white/[0.1]"
-                }`}
-              >
-                {a}
-              </button>
-            ))}
+          <div>
+            <span className="text-text-secondary text-xs tracking-wider uppercase mb-2 block px-4 sm:px-0">Animal</span>
+            <div className="overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 sm:mx-0">
+              <div className="flex gap-2 pb-2 px-4 sm:px-0 sm:flex-wrap" style={{ touchAction: 'pan-x' }}>
+                {animals.map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => setAnimalFilter(a)}
+                    className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
+                      animalFilter === a
+                        ? "bg-white text-black font-medium"
+                        : "bg-white/[0.06] text-text-secondary hover:bg-white/[0.1]"
+                    }`}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -91,8 +109,10 @@ export default function GalleryPage() {
           {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
         </p>
 
-        {/* Grid */}
-        {filtered.length > 0 ? (
+        {/* Grid with skeleton loading */}
+        {isLoading ? (
+          <GallerySkeleton />
+        ) : filtered.length > 0 ? (
           <GalleryGrid artworks={filtered} />
         ) : (
           <div className="text-center py-20">

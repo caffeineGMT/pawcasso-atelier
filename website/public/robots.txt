@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://pawcasso-atelier.vercel.app/sitemap.xml

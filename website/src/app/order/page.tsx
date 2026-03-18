@@ -26,17 +26,80 @@ export default function OrderPage() {
   const [petName, setPetName] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    // Clear previous errors
+    setUploadError(null);
+
+    if (!file) {
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      return;
+    }
+
+    // Validate file size (10MB max)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      setUploadError("File size exceeds 10MB limit. Please choose a smaller image.");
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Invalid file type. Please upload a JPEG, PNG, WebP, or HEIC image.");
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      return;
+    }
+
+    // Set the file and generate preview
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setUploadError(null);
 
     try {
+      // Upload the photo first if one is selected
+      let petPhotoUrl = null;
+      if (selectedFile) {
+        setUploadProgress(50);
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadRes.ok) {
+          const errorData = await uploadRes.json();
+          throw new Error(errorData.error || "Photo upload failed");
+        }
+
+        const uploadData = await uploadRes.json();
+        petPhotoUrl = uploadData.url;
+        setUploadProgress(100);
+      }
+
+      // Create checkout session with photo URL
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, style, petName, notes }),
+        body: JSON.stringify({ name, email, style, petName, notes, petPhotoUrl }),
       });
 
       const data = await res.json();
@@ -46,10 +109,14 @@ export default function OrderPage() {
       } else {
         alert("Something went wrong. Please try again or DM us on Instagram.");
         setLoading(false);
+        setUploadProgress(0);
       }
-    } catch {
-      alert("Something went wrong. Please try again or DM us on Instagram.");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+      setUploadError(errorMessage);
+      alert(`${errorMessage}. Please try again or DM us on Instagram.`);
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -147,23 +214,50 @@ export default function OrderPage() {
             <div className="border border-dashed border-white/[0.12] hover:border-gold/40 transition-all rounded-2xl p-10 text-center cursor-pointer relative group">
               <input
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp,image/heic"
                 required
-                onChange={(e) => setFileName(e.target.files?.[0]?.name || "")}
+                onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
               <svg className="w-10 h-10 mx-auto text-white/20 group-hover:text-gold/60 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              {fileName ? (
-                <p className="text-gold text-sm font-medium">{fileName}</p>
+              {selectedFile ? (
+                <p className="text-gold text-sm font-medium">{selectedFile.name}</p>
               ) : (
                 <>
                   <p className="text-text-secondary text-sm">Click or drag to upload</p>
-                  <p className="text-white/20 text-xs mt-1">JPG, PNG, or HEIC — max 10MB</p>
+                  <p className="text-white/20 text-xs mt-1">JPG, PNG, WebP, or HEIC — max 10MB</p>
                 </>
               )}
             </div>
+            {previewUrl && (
+              <div className="mt-4 flex justify-center">
+                <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-white/[0.08]">
+                  <Image
+                    src={previewUrl}
+                    alt="Pet photo preview"
+                    fill
+                    className="object-cover"
+                    sizes="128px"
+                  />
+                </div>
+              </div>
+            )}
+            {uploadError && (
+              <p className="text-red-400 text-sm mt-2">{uploadError}</p>
+            )}
+            {uploadProgress > 0 && uploadProgress < 100 && (
+              <div className="mt-4">
+                <div className="w-full bg-white/[0.08] rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-gold h-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-text-secondary text-center mt-2">Uploading photo...</p>
+              </div>
+            )}
           </div>
 
           {/* Style Selection */}
@@ -227,10 +321,14 @@ export default function OrderPage() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={loading || !style}
+            disabled={loading || !style || (uploadProgress > 0 && uploadProgress < 100)}
             className="w-full py-4 bg-white text-black font-medium tracking-wide text-sm rounded-full hover:bg-white/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            {loading ? "Redirecting to checkout..." : "Pay $9 — Get Your Portrait"}
+            {uploadProgress > 0 && uploadProgress < 100
+              ? "Uploading photo..."
+              : loading
+              ? "Redirecting to checkout..."
+              : "Pay $9 — Get Your Portrait"}
           </button>
 
           <p className="text-center text-white/30 text-xs">

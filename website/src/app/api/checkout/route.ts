@@ -4,7 +4,7 @@ import { getStripe, PRODUCTS } from "@/lib/stripe";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, style, petName, notes } = body;
+    const { name, email, style, petName, notes, petPhotoUrl } = body;
 
     if (!name || !email || !style) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
         petName,
         style,
         notes: notes || "",
+        petPhotoUrl: petPhotoUrl || "",
       },
       success_url: `${baseUrl}/thank-you`,
       cancel_url: `${baseUrl}/order?canceled=true`,
