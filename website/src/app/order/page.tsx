@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import Image from "next/image";
 import { artStyleOptions } from "@/lib/data";
+import { TIER_CONFIG, type TierId } from "@/lib/stripe";
+import { PricingComparison } from "@/components/PricingComparison";
+import { trackEvent } from "@/lib/analytics";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -30,6 +33,14 @@ export default function OrderPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedTier, setSelectedTier] = useState<TierId>('basic');
+
+  // Track begin_checkout event on page load
+  useEffect(() => {
+    trackEvent('begin_checkout', {
+      currency: 'USD',
+    });
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -95,16 +106,29 @@ export default function OrderPage() {
         setUploadProgress(100);
       }
 
-      // Create checkout session with photo URL
+      // Create checkout session with photo URL and tier
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, style, petName, notes, petPhotoUrl }),
+        body: JSON.stringify({
+          name,
+          email,
+          style,
+          petName,
+          notes,
+          petPhotoUrl,
+          tier: selectedTier
+        }),
       });
 
       const data = await res.json();
 
       if (data.url) {
+        // Track add_payment_info event before redirect to Stripe
+        trackEvent('add_payment_info', {
+          tier: selectedTier,
+          currency: 'USD',
+        });
         window.location.href = data.url;
       } else {
         alert("Something went wrong. Please try again or DM us on Instagram.");
@@ -130,33 +154,89 @@ export default function OrderPage() {
             "@type": "Product",
             name: "Custom AI Pet Portrait",
             image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
-            description: "Transform your pet into stunning AI-generated artwork. Choose from 17 artistic styles including Renaissance, Pixar 3D, Needle Felt, and more. Portrait delivered within 24 hours.",
+            description: "Transform your pet into stunning AI-generated artwork. Choose from 17 artistic styles including Renaissance, Pixar 3D, Needle Felt, and more. Multiple packages available with delivery from 24 hours to instant.",
             brand: {
               "@type": "Brand",
               name: "Pawcasso Atelier"
             },
             offers: {
-              "@type": "Offer",
+              "@type": "AggregateOffer",
               url: "https://pawcasso-atelier.vercel.app/order",
               priceCurrency: "USD",
-              price: "9.00",
-              availability: "https://schema.org/InStock"
+              lowPrice: "9.00",
+              highPrice: "79.00",
+              offerCount: "4",
+              availability: "https://schema.org/InStock",
+              offers: TIER_CONFIG.map(tier => ({
+                "@type": "Offer",
+                name: `${tier.name} Package`,
+                price: tier.price.toFixed(2),
+                priceCurrency: "USD",
+                availability: "https://schema.org/InStock"
+              }))
             }
           })
         }}
       />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-semibold tracking-tight mb-6">
             Commission a <span className="text-gradient">Portrait</span>
           </h1>
           <p className="text-text-secondary text-lg max-w-md mx-auto leading-relaxed">
-            Upload a photo. Pick a style. Get a masterpiece in 24 hours.
+            Upload a photo. Pick a style. Get a masterpiece delivered fast.
           </p>
-          <div className="mt-6 inline-flex items-baseline gap-1">
-            <span className="text-4xl font-semibold text-text-primary">$9</span>
-            <span className="text-text-secondary text-sm">per portrait</span>
+        </div>
+
+        {/* Pricing Comparison Table */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-semibold tracking-tight mb-8 text-center">
+            Choose Your <span className="text-gradient">Perfect Package</span>
+          </h2>
+          <PricingComparison />
+        </div>
+
+        {/* Tier Selection */}
+        <div className="mb-10">
+          <label className="block text-xs tracking-wider uppercase text-text-secondary mb-4 font-medium text-center">
+            Choose Your Package
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {TIER_CONFIG.map((tier) => (
+              <button
+                key={tier.id}
+                type="button"
+                onClick={() => setSelectedTier(tier.id)}
+                className={`text-left p-5 rounded-2xl border transition-all min-h-[200px] flex flex-col ${
+                  selectedTier === tier.id
+                    ? "border-gold bg-gold/10 ring-2 ring-gold/40 shadow-lg shadow-gold/20"
+                    : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
+                }`}
+              >
+                <div className="flex items-baseline justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-text-primary">{tier.name}</h3>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-text-primary">{tier.priceDisplay}</div>
+                  </div>
+                </div>
+                <ul className="space-y-2 flex-1">
+                  {tier.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                {selectedTier === tier.id && (
+                  <div className="mt-3 pt-3 border-t border-gold/20">
+                    <span className="text-xs text-gold font-medium">Selected ✓</span>
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -328,7 +408,7 @@ export default function OrderPage() {
               ? "Uploading photo..."
               : loading
               ? "Redirecting to checkout..."
-              : "Pay $9 — Get Your Portrait"}
+              : `Pay ${TIER_CONFIG.find(t => t.id === selectedTier)?.priceDisplay} — Get Your Portrait`}
           </button>
 
           <p className="text-center text-white/30 text-xs">

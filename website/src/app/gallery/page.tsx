@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { artworks, styles, animals } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import GallerySkeleton from "@/components/GallerySkeleton";
+import { trackEvent } from "@/lib/analytics";
 
 export default function GalleryPage() {
   const [styleFilter, setStyleFilter] = useState("All");
@@ -24,6 +25,11 @@ export default function GalleryPage() {
       setIsLoading(false);
     }, 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Track view_gallery event on page load
+  useEffect(() => {
+    trackEvent('view_gallery');
   }, []);
 
   return (

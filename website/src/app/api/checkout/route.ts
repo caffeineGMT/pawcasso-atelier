@@ -1,52 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe, PRODUCTS } from "@/lib/stripe";
+import { createCheckoutSession, type TierId } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, style, petName, notes, petPhotoUrl } = body;
+    const { name, email, style, petName, notes, petPhotoUrl, tier } = body;
 
     if (!name || !email || !style) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const product = PRODUCTS.digital;
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    // Default to 'basic' tier if not provided
+    const selectedTier: TierId = tier || 'basic';
 
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      customer_email: email,
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: `${product.name} — ${style}`,
-              description: `Portrait of ${petName}. ${notes || ""}`.trim(),
-            },
-            unit_amount: product.price,
-          },
-          quantity: 1,
-        },
-      ],
-      metadata: {
-        customerName: name,
-        petName,
-        style,
-        notes: notes || "",
-        petPhotoUrl: petPhotoUrl || "",
-      },
-      success_url: `${baseUrl}/thank-you`,
-      cancel_url: `${baseUrl}/order?canceled=true`,
+    const session = await createCheckoutSession({
+      tier: selectedTier,
+      customerEmail: email,
+      customerName: name,
+      petName,
+      style,
+      notes,
+      petPhotoUrl,
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error: unknown) {
     console.error("Stripe checkout error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to create checkout session";
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { error: errorMessage },
       { status: 500 }
     );
   }

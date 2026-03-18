@@ -2,12 +2,15 @@ import Link from "next/link";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import StyleShowcase from "@/components/StyleShowcase";
+import Testimonials from "@/components/Testimonials";
+import LiveOrderCounter from "@/components/LiveOrderCounter";
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);
 
   return (
     <>
+      <LiveOrderCounter />
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Ambient glow */}
@@ -160,66 +163,15 @@ export default function HomePage() {
       <div className="section-divider" />
 
       {/* Testimonials */}
-      <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto">
+      <section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-center text-4xl md:text-5xl font-semibold tracking-tight mb-4">
-            Loved by pet owners.
+            Happy Pet Parents
           </h2>
-          <p className="text-center text-text-secondary text-lg mb-20">
-            Every portrait tells a story.
+          <p className="text-center text-text-secondary text-lg mb-16">
+            Join hundreds of delighted customers
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              {
-                quote:
-                  "I commissioned a Renaissance portrait of our rescue lab, Duke. When the file arrived, my wife cried. It\u2019s now the centerpiece of our living room.",
-                name: "Sarah K.",
-                detail: "Golden Retriever \u2022 Renaissance",
-              },
-              {
-                quote:
-                  "We lost our tabby, Miso, last spring. Having her immortalized in an Impressionist style feels like she\u2019s still sitting in that sunbeam.",
-                name: "James L.",
-                detail: "Tabby Cat \u2022 Impressionist",
-              },
-              {
-                quote:
-                  "I ordered a Baroque portrait of my French Bulldog, Baguette, as a joke gift. It was so stunning we had it printed on canvas the same day.",
-                name: "Priya M.",
-                detail: "French Bulldog \u2022 Baroque",
-              },
-              {
-                quote:
-                  "The Ukiyo-e style for our black cat, Shadow, is my favorite. It looks like an authentic woodblock print from the Edo period.",
-                name: "Mei T.",
-                detail: "Black Cat \u2022 Ukiyo-e",
-              },
-            ].map((testimonial) => (
-              <div
-                key={testimonial.name}
-                className="rounded-2xl bg-bg-card p-8 hover:bg-bg-elevated transition-colors duration-300"
-              >
-                <div className="flex gap-1 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-text-primary text-[15px] leading-relaxed mb-6">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="text-text-primary text-sm font-medium">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-text-secondary text-xs mt-1">
-                    {testimonial.detail}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Testimonials />
         </div>
       </section>
 
