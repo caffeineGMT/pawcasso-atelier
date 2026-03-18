@@ -6,6 +6,7 @@ export interface ArtworkItem {
   imageUrl: string;
   width: number;
   height: number;
+  blurDataURL: string;
 }
 
 export const artworks: ArtworkItem[] = [

@@ -47,6 +47,8 @@ export default function Lightbox({ artwork, onClose }: LightboxProps) {
             alt={artwork.title}
             width={artwork.width}
             height={artwork.height}
+            quality={90}
+            priority
             className="w-full h-auto max-h-[75vh] object-contain"
           />
         </div>

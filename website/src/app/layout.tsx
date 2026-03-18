@@ -4,35 +4,40 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pawcasso Atelier | Bespoke Animal Portraits",
+  title: {
+    template: "%s | Pawcasso Atelier",
+    default: "Pawcasso Atelier - Custom AI Pet Portraits",
+  },
   description:
-    "Bespoke animal portraits crafted in the tradition of the Old Masters. Renaissance, Baroque, Impressionist, Ghibli, and more. Commission your masterpiece today.",
-  keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "bespoke portrait", "pet commission"],
+    "Transform your pet into stunning AI-generated art. Custom portraits for $9. Renaissance, Baroque, Impressionist, Ghibli, and 12+ other art styles.",
+  keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "AI pet portrait", "pet commission"],
   icons: {
     icon: "/favicon.svg",
   },
+  metadataBase: new URL("https://pawcasso-atelier.vercel.app"),
   openGraph: {
-    title: "Pawcasso Atelier | Bespoke Animal Portraits",
-    description:
-      "Where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
     type: "website",
-    siteName: "Pawcasso Atelier",
     locale: "en_US",
+    url: "https://pawcasso-atelier.vercel.app",
+    siteName: "Pawcasso Atelier",
+    title: "Pawcasso Atelier - Custom AI Pet Portraits",
+    description:
+      "Transform your pet into stunning AI-generated art for $9. Choose from 16+ art styles.",
     images: [
       {
-        url: "https://pawcasso-atelier.vercel.app/gallery/lion_portrait.png",
+        url: "/gallery/cat_vermeer.png",
         width: 2048,
         height: 2048,
-        alt: "Pawcasso Atelier - Sovereign Light",
+        alt: "Cat with a Pearl Earring - Renaissance pet portrait by Pawcasso Atelier",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pawcasso Atelier | Bespoke Animal Portraits",
+    title: "Pawcasso Atelier - Custom AI Pet Portraits",
     description:
-      "Where every pet becomes a masterpiece. Bespoke animal portraits crafted in the tradition of the Old Masters.",
-    images: ["https://pawcasso-atelier.vercel.app/gallery/lion_portrait.png"],
+      "Transform your pet into stunning AI-generated art for $9",
+    images: ["/gallery/cat_vermeer.png"],
   },
 };
 
@@ -40,9 +45,9 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "Pawcasso Atelier",
-  description: "Bespoke animal portraits crafted in the tradition of the Old Masters. 16 curated art styles.",
+  description: "Custom AI-generated pet portraits in 16+ curated art styles. Transform your pet into stunning art for $9.",
   url: "https://pawcasso-atelier.vercel.app",
-  image: "https://pawcasso-atelier.vercel.app/gallery/lion_portrait.png",
+  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
   priceRange: "$9",
   address: {
     "@type": "PostalAddress",
@@ -53,7 +58,7 @@ const jsonLd = {
   ],
   offers: {
     "@type": "Offer",
-    name: "Digital Pet Portrait",
+    name: "Custom AI Pet Portrait",
     price: "9.00",
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",

@@ -55,6 +55,29 @@ export default function OrderPage() {
 
   return (
     <section className="py-24 px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: "Custom AI Pet Portrait",
+            image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
+            description: "Transform your pet into stunning AI-generated artwork. Choose from 17 artistic styles including Renaissance, Pixar 3D, Needle Felt, and more. Portrait delivered within 24 hours.",
+            brand: {
+              "@type": "Brand",
+              name: "Pawcasso Atelier"
+            },
+            offers: {
+              "@type": "Offer",
+              url: "https://pawcasso-atelier.vercel.app/order",
+              priceCurrency: "USD",
+              price: "9.00",
+              availability: "https://schema.org/InStock"
+            }
+          })
+        }}
+      />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

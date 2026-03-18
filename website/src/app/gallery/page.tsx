@@ -18,6 +18,23 @@ export default function GalleryPage() {
 
   return (
     <section className="py-24 px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ImageGallery",
+            name: "Pawcasso Atelier Gallery",
+            description: "A curated collection of bespoke AI-generated animal portraits, each crafted with care in the tradition of the great masters.",
+            image: artworks.map(img => ({
+              "@type": "ImageObject",
+              contentUrl: `https://pawcasso-atelier.vercel.app${img.imageUrl}`,
+              name: img.title,
+              description: `${img.animal} portrait in ${img.style} style`
+            }))
+          })
+        }}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

@@ -40,6 +40,7 @@ export default function StyleShowcase() {
                 src={item.image}
                 alt={item.title}
                 fill
+                quality={85}
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={i === 0}

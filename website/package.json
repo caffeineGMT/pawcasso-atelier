@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "convert-images": "tsx scripts/convert-to-webp.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.9.0",
@@ -17,11 +18,14 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
-    "@types/node": "^25.4.0",
+    "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.27",
     "postcss": "^8.5.8",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.2.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
