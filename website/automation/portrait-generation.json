@@ -1,0 +1,440 @@
+{
+  "name": "Pawcasso Portrait Generation Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-checkout",
+        "options": {}
+      },
+      "id": "stripe-webhook-listener",
+      "name": "Stripe Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "pawcasso-stripe-webhook"
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "url": "https://api.stripe.com/v1/events/={{$json.id}}",
+        "options": {
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "stripe-signature",
+                "value": "={{$json.headers['stripe-signature']}}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "verify-stripe-event",
+      "name": "Verify Stripe Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "stripe-api-key",
+          "name": "Stripe API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.type}}",
+              "operation": "equals",
+              "value2": "checkout.session.completed"
+            }
+          ]
+        }
+      },
+      "id": "check-event-type",
+      "name": "Check Event Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "pet_photo_url",
+              "name": "pet_photo_url",
+              "value": "={{$json.data.object.metadata.petPhotoUrl}}",
+              "type": "string"
+            },
+            {
+              "id": "order_tier",
+              "name": "order_tier",
+              "value": "={{$json.data.object.metadata.tier}}",
+              "type": "string"
+            },
+            {
+              "id": "customer_email",
+              "name": "customer_email",
+              "value": "={{$json.data.object.customer_email}}",
+              "type": "string"
+            },
+            {
+              "id": "customer_name",
+              "name": "customer_name",
+              "value": "={{$json.data.object.metadata.customerName}}",
+              "type": "string"
+            },
+            {
+              "id": "pet_name",
+              "name": "pet_name",
+              "value": "={{$json.data.object.metadata.petName}}",
+              "type": "string"
+            },
+            {
+              "id": "art_style",
+              "name": "art_style",
+              "value": "={{$json.data.object.metadata.style}}",
+              "type": "string"
+            },
+            {
+              "id": "session_id",
+              "name": "session_id",
+              "value": "={{$json.data.object.id}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "extract-metadata",
+      "name": "Extract Metadata",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.pet_photo_url}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "download-pet-photo",
+      "name": "Download Pet Photo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1050, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vercel-blob-token",
+          "name": "Vercel Blob Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "loopMode": "tillDone"
+        }
+      },
+      "id": "loop-portraits",
+      "name": "Loop Portraits",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://manus.aws.metafb.cloud/api/v1/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"Professional artistic portrait of {{$json.pet_name}} in {{$json.art_style}} style, high detail, studio lighting, 8K resolution, masterpiece quality\",\n  \"image_url\": \"{{$node['Download Pet Photo'].json.data}}\",\n  \"model\": \"flux-pro\",\n  \"aspect_ratio\": \"1:1\",\n  \"num_inference_steps\": 50\n}",
+        "options": {}
+      },
+      "id": "generate-portrait-manus",
+      "name": "Generate Portrait (Manus API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1450, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "manus-api-key",
+          "name": "Manus API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://manus.aws.metafb.cloud/api/v1/tasks/{{$json.task_id}}/status",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 300000,
+          "retry": {
+            "retry": {
+              "maxRetries": 30,
+              "retryInterval": 10000
+            }
+          }
+        }
+      },
+      "id": "poll-manus-status",
+      "name": "Poll Manus Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1650, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "manus-api-key",
+          "name": "Manus API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$json.output_url}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "download-generated-image",
+      "name": "Download Generated Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1850, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://{{$env.VERCEL_BLOB_API_URL}}/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"pathname\": \"portraits/{{$json.session_id}}_{{$json.pet_name}}_{{$now}}.png\",\n  \"data\": \"{{$json.data}}\"\n}",
+        "options": {}
+      },
+      "id": "upload-to-blob",
+      "name": "Upload to Vercel Blob",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2050, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vercel-blob-token",
+          "name": "Vercel Blob Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "=<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; }\n    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #1d1d1f; }\n    h1 { color: #C9A96E; margin-bottom: 20px; }\n    .portrait { margin: 20px 0; }\n    .download-btn { display: inline-block; background: #C9A96E; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 10px 5px; }\n    .download-btn:hover { background: #E8D5A8; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>Your Pawcasso Portrait is Ready! 🎨</h1>\n    <p>Hi {{$json.customer_name}},</p>\n    <p>We're thrilled to deliver {{$json.pet_name}}'s stunning AI-generated portrait in the {{$json.art_style}} style!</p>\n    <div class=\"portrait\">\n      <h3>Download Your Portraits:</h3>\n      {{#each portraits}}\n      <a href=\"{{this.url}}\" class=\"download-btn\">Download Portrait {{@index}}</a>\n      {{/each}}\n    </div>\n    <p>These high-resolution files are ready for printing or sharing on social media.</p>\n    <p><strong>Pro tip:</strong> Tag us @pawcasso.atelier on Instagram and get featured in our gallery!</p>\n    <p>With love,<br/>The Pawcasso Atelier Team</p>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "build-email-html",
+      "name": "Build Email HTML",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [2250, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "portraits@pawcasso-atelier.com",
+        "toEmail": "={{$json.customer_email}}",
+        "subject": "Your Pawcasso Portrait is Ready! 🎨",
+        "emailType": "html",
+        "message": "={{$json.html}}",
+        "options": {}
+      },
+      "id": "send-email-resend",
+      "name": "Send Email (Resend)",
+      "type": "n8n-nodes-base.resend",
+      "typeVersion": 1,
+      "position": [2450, 200],
+      "credentials": {
+        "resendApi": {
+          "id": "resend-api",
+          "name": "Resend API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.stripe.com/v1/checkout/sessions/{{$json.session_id}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"metadata\": {\n    \"delivery_status\": \"completed\",\n    \"delivered_at\": \"{{$now}}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "update-stripe-metadata",
+      "name": "Update Stripe Metadata",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2650, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "stripe-api-key",
+          "name": "Stripe API Key"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Stripe Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify Stripe Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Stripe Event": {
+      "main": [
+        [
+          {
+            "node": "Check Event Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Event Type": {
+      "main": [
+        [
+          {
+            "node": "Extract Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Metadata": {
+      "main": [
+        [
+          {
+            "node": "Download Pet Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Pet Photo": {
+      "main": [
+        [
+          {
+            "node": "Loop Portraits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Portraits": {
+      "main": [
+        [
+          {
+            "node": "Generate Portrait (Manus API)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Portrait (Manus API)": {
+      "main": [
+        [
+          {
+            "node": "Poll Manus Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Manus Status": {
+      "main": [
+        [
+          {
+            "node": "Download Generated Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Generated Image": {
+      "main": [
+        [
+          {
+            "node": "Upload to Vercel Blob",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Vercel Blob": {
+      "main": [
+        [
+          {
+            "node": "Build Email HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Email HTML": {
+      "main": [
+        [
+          {
+            "node": "Send Email (Resend)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email (Resend)": {
+      "main": [
+        [
+          {
+            "node": "Update Stripe Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-18T00:00:00.000Z",
+  "versionId": "1"
+}
