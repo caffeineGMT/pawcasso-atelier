@@ -1,8 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function VerifyPage() {
+export const dynamic = "force-dynamic";
+
+function VerifyContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -76,5 +79,13 @@ export default function VerifyPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center"><div className="text-text-primary">Loading...</div></div>}>
+      <VerifyContent />
+    </Suspense>
   );
 }

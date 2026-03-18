@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { artStyleOptions } from "@/lib/data";
 import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, ContentType } from "@/lib/analytics";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -23,7 +23,7 @@ const stylePreviewMap: Record<string, { image: string; title: string }> = {
   "art-deco": { image: "/gallery/the_great_catsby_poster.png", title: "The Great Catsby" },
 };
 
-export default function OrderPage() {
+function OrderPageContent() {
   const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,12 +38,8 @@ export default function OrderPage() {
   const [selectedTier, setSelectedTier] = useState<TierId>('basic');
   const [discountCode, setDiscountCode] = useState<string | null>(null);
 
-  // Track begin_checkout event on page load and check for URL params
+  // Track page view and check for URL params (don't track begin_checkout until form interaction)
   useEffect(() => {
-    trackEvent('begin_checkout', {
-      currency: 'USD',
-    });
-
     // Check for tier parameter
     const tierParam = searchParams.get('tier');
     if (tierParam) {
@@ -57,6 +53,7 @@ export default function OrderPage() {
     const codeParam = searchParams.get('code');
     if (codeParam) {
       setDiscountCode(codeParam);
+      trackEngagement('discount_view', { discount_code: codeParam });
     }
   }, [searchParams]);
 
@@ -94,6 +91,24 @@ export default function OrderPage() {
     setSelectedFile(file);
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+
+    // Track AddToCart event (critical for "add-to-cart abandoners" retargeting audience)
+    // This signals high purchase intent
+    const selectedTierConfig = TIER_CONFIG.find(t => t.id === selectedTier);
+    trackAddToCart({
+      content_ids: [`portrait_${selectedTier}`],
+      content_name: `AI Pet Portrait - ${selectedTierConfig?.name || 'Basic'} Package`,
+      content_type: 'product',
+      value: selectedTierConfig?.price || 9,
+      currency: 'USD',
+    });
+
+    // Track engagement
+    trackEngagement('photo_upload_start', {
+      tier: selectedTier,
+      file_size: file.size,
+      file_type: file.type,
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -124,6 +139,16 @@ export default function OrderPage() {
         setUploadProgress(100);
       }
 
+      // Track InitiateCheckout event (creates "checkout initiators" audience)
+      const selectedTierConfig = TIER_CONFIG.find(t => t.id === selectedTier);
+      trackInitiateCheckout({
+        content_ids: [`portrait_${selectedTier}`],
+        contents: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
+        value: selectedTierConfig?.price || 9,
+        currency: 'USD',
+        num_items: 1,
+      });
+
       // Create checkout session with photo URL, tier, and discount code
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -147,6 +172,7 @@ export default function OrderPage() {
         trackEvent('add_payment_info', {
           tier: selectedTier,
           currency: 'USD',
+          value: selectedTierConfig?.price,
         });
         window.location.href = data.url;
       } else {
@@ -240,7 +266,10 @@ export default function OrderPage() {
               <button
                 key={tier.id}
                 type="button"
-                onClick={() => setSelectedTier(tier.id)}
+                onClick={() => {
+                  setSelectedTier(tier.id);
+                  trackEngagement('tier_selection', { tier: tier.id, price: tier.price });
+                }}
                 className={`text-left p-5 rounded-2xl border transition-all min-h-[200px] flex flex-col ${
                   selectedTier === tier.id
                     ? "border-gold bg-gold/10 ring-2 ring-gold/40 shadow-lg shadow-gold/20"
@@ -383,7 +412,10 @@ export default function OrderPage() {
                 <button
                   key={opt.value}
                   type="button"
-                  onClick={() => setStyle(opt.value)}
+                  onClick={() => {
+                    setStyle(opt.value);
+                    trackEngagement('style_preview', { style: opt.value, style_name: opt.label });
+                  }}
                   className={`text-left p-4 rounded-xl border transition-all min-h-[64px] ${
                     style === opt.value
                       ? "border-gold/60 bg-gold/10 ring-1 ring-gold/20"
@@ -450,5 +482,13 @@ export default function OrderPage() {
         </form>
       </div>
     </section>
+  );
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-text-primary">Loading...</div></div>}>
+      <OrderPageContent />
+    </Suspense>
   );
 }

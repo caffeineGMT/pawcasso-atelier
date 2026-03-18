@@ -4,9 +4,9 @@ import Link from "next/link";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function RedditLandingPage() {
+function RedditLandingContent() {
   const searchParams = useSearchParams();
   const featured = artworks.slice(0, 8);
 
@@ -273,5 +273,13 @@ export default function RedditLandingPage() {
         </div>
       </section>
     </>
+  );
+}
+
+export default function RedditLandingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <RedditLandingContent />
+    </Suspense>
   );
 }
