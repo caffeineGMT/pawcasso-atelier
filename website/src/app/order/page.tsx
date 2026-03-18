@@ -74,6 +74,13 @@ function OrderPageContent() {
       setDiscountCode(codeParam);
       trackEngagement('discount_view', { discount_code: codeParam });
     }
+
+    // Track initial badge exposure
+    trackEvent('pricing_badge_view', {
+      premium_badge: TIER_BADGES.premium,
+      deluxe_badge: TIER_BADGES.deluxe,
+      experiment: 'most_popular_vs_best_value',
+    });
   }, [searchParams]);
 
   // Urgency timer - 24 hour countdown
@@ -528,49 +535,70 @@ function OrderPageContent() {
                       Choose Your Package
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {TIER_CONFIG.map((tier) => (
-                        <button
-                          key={tier.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedTier(tier.id);
-                            trackEngagement('tier_selection', { tier: tier.id, price: tier.price });
-                          }}
-                          className={`relative text-left p-6 rounded-2xl border transition-all flex flex-col ${
-                            selectedTier === tier.id
-                              ? "border-gold bg-gold/10 ring-2 ring-gold/40 shadow-lg shadow-gold/20"
-                              : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
-                          }`}
-                        >
-                          {tier.id === 'premium' && (
-                            <div className="absolute -top-3 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                              Most Popular
+                      {TIER_CONFIG.map((tier) => {
+                        const badge = TIER_BADGES[tier.id];
+                        return (
+                          <button
+                            key={tier.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedTier(tier.id);
+                              trackEngagement('tier_selection', {
+                                tier: tier.id,
+                                price: tier.price,
+                                badge: badge || 'none',
+                                experiment: 'most_popular_vs_best_value',
+                              });
+
+                              // Track specific badge click
+                              if (badge) {
+                                trackEvent('pricing_badge_click', {
+                                  badge_type: badge,
+                                  tier: tier.id,
+                                  price: tier.price,
+                                });
+                              }
+                            }}
+                            className={`relative text-left p-6 rounded-2xl border transition-all flex flex-col ${
+                              selectedTier === tier.id
+                                ? "border-gold bg-gold/10 ring-2 ring-gold/40 shadow-lg shadow-gold/20"
+                                : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
+                            }`}
+                          >
+                            {badge && (
+                              <div className={`absolute -top-3 right-4 px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
+                                badge === 'Most Popular'
+                                  ? 'bg-purple-600 text-white'
+                                  : 'bg-green-600 text-white'
+                              }`}>
+                                {badge}
+                              </div>
+                            )}
+                            <div className="flex items-baseline justify-between mb-3">
+                              <h3 className="text-xl font-bold text-text-primary">{tier.name}</h3>
+                              <div className="text-right">
+                                <div className="line-through text-gray-400 text-sm">${getOriginalPrice(tier.id)}</div>
+                                <div className="text-3xl font-bold text-text-primary">{tier.priceDisplay}</div>
+                              </div>
                             </div>
-                          )}
-                          <div className="flex items-baseline justify-between mb-3">
-                            <h3 className="text-xl font-bold text-text-primary">{tier.name}</h3>
-                            <div className="text-right">
-                              <div className="line-through text-gray-400 text-sm">${getOriginalPrice(tier.id)}</div>
-                              <div className="text-3xl font-bold text-text-primary">{tier.priceDisplay}</div>
-                            </div>
-                          </div>
-                          <ul className="space-y-2 flex-1 mb-4">
-                            {tier.features.map((feature, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-text-secondary">
-                                <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                          {selectedTier === tier.id && (
-                            <div className="pt-3 border-t border-gold/20">
-                              <span className="text-sm text-gold font-semibold">✓ Selected</span>
-                            </div>
-                          )}
-                        </button>
-                      ))}
+                            <ul className="space-y-2 flex-1 mb-4">
+                              {tier.features.map((feature, idx) => (
+                                <li key={idx} className="flex items-start gap-2 text-sm text-text-secondary">
+                                  <svg className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                            {selectedTier === tier.id && (
+                              <div className="pt-3 border-t border-gold/20">
+                                <span className="text-sm text-gold font-semibold">✓ Selected</span>
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
