@@ -8,6 +8,7 @@ import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
 import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, ContentType } from "@/lib/analytics";
 import { trackPinterestAddToCart, trackPinterestCheckout } from "@/lib/pinterest";
+import { trackAddToCartAds, trackBeginCheckoutAds } from "@/lib/google-ads";
 import CrispChat from "@/components/CrispChat";
 import TrustBadges from "@/components/TrustBadges";
 import OrderActivityFeed from "@/components/OrderActivityFeed";
@@ -222,6 +223,18 @@ function OrderPageContent() {
       quantity: 1,
     });
 
+    // Track Google Ads AddToCart
+    trackAddToCartAds({
+      value: selectedTierConfig?.price || 9,
+      currency: 'USD',
+      items: [{
+        id: `portrait_${selectedTier}`,
+        name: `AI Pet Portrait - ${selectedTierConfig?.name || 'Basic'} Package`,
+        price: selectedTierConfig?.price || 9,
+        quantity: 1,
+      }],
+    });
+
     // Track engagement
     trackEngagement('photo_upload_start', {
       tier: selectedTier,
@@ -278,6 +291,13 @@ function OrderPageContent() {
           price: selectedTierConfig?.price || 9,
           quantity: 1,
         }],
+      });
+
+      // Track Google Ads Begin Checkout
+      trackBeginCheckoutAds({
+        value: selectedTierConfig?.price || 9,
+        currency: 'USD',
+        items: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
       });
 
       // Create checkout session with photo URL, tier, and discount code

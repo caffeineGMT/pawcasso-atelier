@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getStripe } from "@/lib/stripe";
 import UpsellModal from "@/components/UpsellModal";
 import SuccessPageTracker from "@/components/SuccessPageTracker";
+import GoogleAdsConversionTracker from "@/components/GoogleAdsConversionTracker";
 
 interface SuccessPageProps {
   searchParams: Promise<{ session_id?: string }>;
@@ -35,8 +36,14 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
     return (
       <section className="py-24 px-6">
-        {/* Analytics Tracker */}
+        {/* Analytics Trackers */}
         <SuccessPageTracker amount={amountTotal} tier={tier} />
+        <GoogleAdsConversionTracker
+          orderId={sessionId}
+          amount={amountTotal}
+          email={customerEmail}
+          tier={tier}
+        />
 
         <div className="max-w-2xl mx-auto">
           {/* Success Header */}

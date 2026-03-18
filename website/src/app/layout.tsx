@@ -157,6 +157,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Pinterest Domain Verification */}
         <meta name="p:domain_verify" content="PINTEREST_VERIFICATION_CODE_HERE" />
+
+        {/* Google Ads Conversion Tracking */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-config" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}');
+          `}
+        </Script>
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <SessionProvider>

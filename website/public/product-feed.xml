@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Pawcasso Atelier - AI Pet Portraits</title>
+    <link>https://pawcasso-atelier.vercel.app</link>
+    <description>Custom AI-generated pet portraits in 17+ artistic styles</description>
+
+    <!-- Basic Package -->
+    <item>
+      <g:id>portrait_basic</g:id>
+      <g:title>AI Pet Portrait - Basic Package</g:title>
+      <g:description>Transform your pet into stunning AI-generated artwork. Choose from 17 artistic styles including Renaissance, Pixar 3D, Needle Felt, and more. Delivered within 24 hours. 1 high-resolution portrait (2048x2048px), downloadable digital file, commercial use rights included.</g:description>
+      <g:link>https://pawcasso-atelier.vercel.app/order?tier=basic</g:link>
+      <g:image_link>https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp</g:image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/shiba_portrait_final_2048x2048.webp</g:additional_image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/golden_retriever_portrait_square.webp</g:additional_image_link>
+      <g:condition>new</g:condition>
+      <g:availability>in stock</g:availability>
+      <g:price>9.00 USD</g:price>
+      <g:sale_price>9.00 USD</g:sale_price>
+      <g:brand>Pawcasso Atelier</g:brand>
+      <g:gtin></g:gtin>
+      <g:mpn>PORTRAIT_BASIC</g:mpn>
+      <g:google_product_category>Arts &amp; Entertainment &gt; Hobbies &amp; Creative Arts &gt; Arts &amp; Crafts &gt; Art &amp; Crafting Materials &gt; Craft Kits</g:google_product_category>
+      <g:product_type>Pet Portraits &gt; Digital Art &gt; AI Generated</g:product_type>
+      <g:item_group_id>ai_pet_portrait</g:item_group_id>
+      <g:custom_label_0>Basic</g:custom_label_0>
+      <g:custom_label_1>Digital Download</g:custom_label_1>
+      <g:custom_label_2>24 Hour Delivery</g:custom_label_2>
+      <g:custom_label_3>Pet Gifts</g:custom_label_3>
+      <g:custom_label_4>Affordable</g:custom_label_4>
+    </item>
+
+    <!-- Premium Package -->
+    <item>
+      <g:id>portrait_premium</g:id>
+      <g:title>AI Pet Portrait - Premium Package (Most Popular)</g:title>
+      <g:description>Premium AI pet portrait package with 3 unique portraits in your chosen style. Perfect for pet lovers who want variety. Delivered within 24 hours. 3 unique high-resolution portraits, downloadable digital files, commercial use rights, priority processing.</g:description>
+      <g:link>https://pawcasso-atelier.vercel.app/order?tier=premium</g:link>
+      <g:image_link>https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp</g:image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/border_collie_portrait_2048x2048.webp</g:additional_image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/alfie_portrait_final.webp</g:additional_image_link>
+      <g:condition>new</g:condition>
+      <g:availability>in stock</g:availability>
+      <g:price>29.00 USD</g:price>
+      <g:sale_price>29.00 USD</g:sale_price>
+      <g:brand>Pawcasso Atelier</g:brand>
+      <g:gtin></g:gtin>
+      <g:mpn>PORTRAIT_PREMIUM</g:mpn>
+      <g:google_product_category>Arts &amp; Entertainment &gt; Hobbies &amp; Creative Arts &gt; Arts &amp; Crafts &gt; Art &amp; Crafting Materials &gt; Craft Kits</g:google_product_category>
+      <g:product_type>Pet Portraits &gt; Digital Art &gt; AI Generated</g:product_type>
+      <g:item_group_id>ai_pet_portrait</g:item_group_id>
+      <g:custom_label_0>Premium</g:custom_label_0>
+      <g:custom_label_1>Digital Download</g:custom_label_1>
+      <g:custom_label_2>24 Hour Delivery</g:custom_label_2>
+      <g:custom_label_3>Pet Gifts</g:custom_label_3>
+      <g:custom_label_4>Best Value</g:custom_label_4>
+    </item>
+
+    <!-- Deluxe Package -->
+    <item>
+      <g:id>portrait_deluxe</g:id>
+      <g:title>AI Pet Portrait - Deluxe Package</g:title>
+      <g:description>Deluxe AI pet portrait package with 5 stunning portraits plus instant delivery. Perfect for creating a gallery wall or gifts. Delivered instantly. 5 unique high-resolution portraits, instant delivery (no waiting), downloadable digital files, commercial use rights, priority support.</g:description>
+      <g:link>https://pawcasso-atelier.vercel.app/order?tier=deluxe</g:link>
+      <g:image_link>https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp</g:image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/pomeranian_portrait_final.webp</g:additional_image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/chihuahua_portrait_square_2048.jpg</g:additional_image_link>
+      <g:condition>new</g:condition>
+      <g:availability>in stock</g:availability>
+      <g:price>49.00 USD</g:price>
+      <g:sale_price>49.00 USD</g:sale_price>
+      <g:brand>Pawcasso Atelier</g:brand>
+      <g:gtin></g:gtin>
+      <g:mpn>PORTRAIT_DELUXE</g:mpn>
+      <g:google_product_category>Arts &amp; Entertainment &gt; Hobbies &amp; Creative Arts &gt; Arts &amp; Crafts &gt; Art &amp; Crafting Materials &gt; Craft Kits</g:google_product_category>
+      <g:product_type>Pet Portraits &gt; Digital Art &gt; AI Generated</g:product_type>
+      <g:item_group_id>ai_pet_portrait</g:item_group_id>
+      <g:custom_label_0>Deluxe</g:custom_label_0>
+      <g:custom_label_1>Digital Download</g:custom_label_1>
+      <g:custom_label_2>Instant Delivery</g:custom_label_2>
+      <g:custom_label_3>Pet Gifts</g:custom_label_3>
+      <g:custom_label_4>Premium</g:custom_label_4>
+    </item>
+
+    <!-- Bundle Package -->
+    <item>
+      <g:id>portrait_bundle</g:id>
+      <g:title>AI Pet Portrait - Ultimate Bundle</g:title>
+      <g:description>Ultimate AI pet portrait bundle with 10 portraits across multiple styles. Create a complete collection for your pet. Delivered instantly. 10 unique high-resolution portraits, 3 different art styles of your choice, instant delivery, downloadable digital files, commercial use rights, VIP priority support.</g:description>
+      <g:link>https://pawcasso-atelier.vercel.app/order?tier=bundle</g:link>
+      <g:image_link>https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp</g:image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/alfie_border_collie_portrait_2048x2048.webp</g:additional_image_link>
+      <g:additional_image_link>https://pawcasso-atelier.vercel.app/gallery/white_pomeranian_portrait_final.webp</g:additional_image_link>
+      <g:condition>new</g:condition>
+      <g:availability>in stock</g:availability>
+      <g:price>79.00 USD</g:price>
+      <g:sale_price>79.00 USD</g:sale_price>
+      <g:brand>Pawcasso Atelier</g:brand>
+      <g:gtin></g:gtin>
+      <g:mpn>PORTRAIT_BUNDLE</g:mpn>
+      <g:google_product_category>Arts &amp; Entertainment &gt; Hobbies &amp; Creative Arts &gt; Arts &amp; Crafts &gt; Art &amp; Crafting Materials &gt; Craft Kits</g:google_product_category>
+      <g:product_type>Pet Portraits &gt; Digital Art &gt; AI Generated</g:product_type>
+      <g:item_group_id>ai_pet_portrait</g:item_group_id>
+      <g:custom_label_0>Bundle</g:custom_label_0>
+      <g:custom_label_1>Digital Download</g:custom_label_1>
+      <g:custom_label_2>Instant Delivery</g:custom_label_2>
+      <g:custom_label_3>Pet Gifts</g:custom_label_3>
+      <g:custom_label_4>Ultimate Value</g:custom_label_4>
+    </item>
+  </channel>
+</rss>
