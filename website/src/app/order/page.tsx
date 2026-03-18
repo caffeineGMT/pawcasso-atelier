@@ -7,6 +7,7 @@ import { artStyleOptions } from "@/lib/data";
 import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
 import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, ContentType } from "@/lib/analytics";
+import { trackPinterestAddToCart, trackPinterestCheckout } from "@/lib/pinterest";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -103,6 +104,14 @@ function OrderPageContent() {
       currency: 'USD',
     });
 
+    // Track Pinterest AddToCart
+    trackPinterestAddToCart({
+      id: `portrait_${selectedTier}`,
+      name: `AI Pet Portrait - ${selectedTierConfig?.name || 'Basic'} Package`,
+      price: selectedTierConfig?.price || 9,
+      quantity: 1,
+    });
+
     // Track engagement
     trackEngagement('photo_upload_start', {
       tier: selectedTier,
@@ -147,6 +156,18 @@ function OrderPageContent() {
         value: selectedTierConfig?.price || 9,
         currency: 'USD',
         num_items: 1,
+      });
+
+      // Track Pinterest Checkout
+      trackPinterestCheckout({
+        id: `order_${Date.now()}`,
+        value: selectedTierConfig?.price || 9,
+        products: [{
+          id: `portrait_${selectedTier}`,
+          name: `AI Pet Portrait - ${selectedTierConfig?.name || 'Basic'} Package`,
+          price: selectedTierConfig?.price || 9,
+          quantity: 1,
+        }],
       });
 
       // Create checkout session with photo URL, tier, and discount code

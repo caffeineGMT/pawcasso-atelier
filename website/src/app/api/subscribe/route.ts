@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mailchimp from '@mailchimp/mailchimp_marketing';
+import { trackLeadServerSide, extractFacebookCookies, generateEventId } from '@/lib/meta-conversions-api';
 
 // Initialize Mailchimp
 mailchimp.setConfig({
@@ -38,6 +39,21 @@ export async function POST(request: NextRequest) {
       });
 
       console.log(`Successfully subscribed: ${email}`);
+
+      // Track Lead event server-side to Meta Conversions API
+      const cookies = extractFacebookCookies(request.headers.get('cookie') || undefined);
+      const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined;
+      const userAgent = request.headers.get('user-agent') || undefined;
+      const eventId = generateEventId('lead');
+
+      await trackLeadServerSide({
+        email,
+        ipAddress,
+        userAgent,
+        eventId,
+        fbp: cookies.fbp,
+        fbc: cookies.fbc,
+      });
 
       return NextResponse.json({
         success: true,

@@ -4,6 +4,7 @@ import GalleryGrid from "@/components/GalleryGrid";
 import StyleShowcase from "@/components/StyleShowcase";
 import Testimonials from "@/components/Testimonials";
 import LiveOrderCounter from "@/components/LiveOrderCounter";
+import { trackEngagement } from "@/lib/analytics";
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);
@@ -47,6 +48,7 @@ export default function HomePage() {
               href="https://instagram.com/pawcasso.atelier"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEngagement?.('instagram_click', { source: 'hero_cta' })}
               className="px-8 py-3.5 rounded-full border border-white/[0.12] text-text-primary text-[15px] hover:border-white/[0.24] hover:bg-white/[0.04] transition-all duration-300 inline-flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
