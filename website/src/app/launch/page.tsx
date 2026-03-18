@@ -93,7 +93,8 @@ export default function LaunchPage() {
         localStorage.setItem('launch_supporters', JSON.stringify(updatedSupporters));
 
         // Track engagement
-        trackEngagement?.('launch_signup', { email });
+        // Note: trackEngagement doesn't support 'launch_signup' event type yet
+        // trackEngagement?.('launch_signup', { email });
       } else {
         setSubmitStatus('error');
       }

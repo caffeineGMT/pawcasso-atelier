@@ -412,3 +412,36 @@ model GiftCardTransaction {
   @@index([giftCardId])
   @@index([orderId])
 }
+
+// Analytics Event Tracking
+model AnalyticsEvent {
+  id            String   @id @default(cuid())
+  eventName     String   // 'page_view', 'gallery_view', 'order_start', 'checkout_start', 'purchase_complete', 'subscription_start'
+  sessionId     String   @default(cuid())
+  userId        String?  // Customer email if known
+
+  // UTM parameters
+  utmSource     String?
+  utmMedium     String?
+  utmCampaign   String?
+  utmContent    String?
+  utmTerm       String?
+
+  // Page context
+  pathname      String
+  referrer      String?
+
+  // Event metadata (JSON)
+  metadata      String?  // Store as JSON string: {tier, amount, etc.}
+
+  // Revenue tracking
+  revenue       Float    @default(0)
+
+  createdAt     DateTime @default(now())
+
+  @@index([eventName])
+  @@index([sessionId])
+  @@index([userId])
+  @@index([utmSource])
+  @@index([createdAt])
+}

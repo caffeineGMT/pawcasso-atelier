@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import { useEffect } from "react";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import StyleShowcase from "@/components/StyleShowcase";
@@ -7,10 +10,19 @@ import LiveOrderCounter from "@/components/LiveOrderCounter";
 import SocialProofStats from "@/components/SocialProofStats";
 import InstagramFeed from "@/components/InstagramFeed";
 import OrderActivityFeed from "@/components/OrderActivityFeed";
-import { trackEngagement } from "@/lib/analytics";
+import { trackEngagement, trackAnalyticsEvent } from "@/lib/analytics";
+import { captureUTMParams } from "@/lib/utm-tracker";
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);
+
+  useEffect(() => {
+    // Capture UTM params on page load
+    captureUTMParams();
+
+    // Track page view
+    trackAnalyticsEvent('page_view');
+  }, []);
 
   return (
     <>

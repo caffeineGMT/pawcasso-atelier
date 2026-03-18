@@ -6,9 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { artStyleOptions } from "@/lib/data";
 import { TIER_CONFIG, type TierId } from "@/lib/stripe";
 import { PricingComparison } from "@/components/PricingComparison";
-import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, ContentType } from "@/lib/analytics";
+import { trackEvent, trackAddToCart, trackInitiateCheckout, trackEngagement, trackAnalyticsEvent, ContentType } from "@/lib/analytics";
 import { trackPinterestAddToCart, trackPinterestCheckout } from "@/lib/pinterest";
 import { trackAddToCartAds, trackBeginCheckoutAds } from "@/lib/google-ads";
+import { captureUTMParams } from "@/lib/utm-tracker";
 import CrispChat from "@/components/CrispChat";
 import TrustBadges from "@/components/TrustBadges";
 import OrderActivityFeed from "@/components/OrderActivityFeed";
@@ -49,6 +50,9 @@ function OrderPageContent() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const [selectedTier, setSelectedTier] = useState<TierId>('basic');
   const [discountCode, setDiscountCode] = useState<string | null>(null);
   const [guaranteeExpanded, setGuaranteeExpanded] = useState(false);
@@ -67,6 +71,12 @@ function OrderPageContent() {
 
   // Track page view and check for URL params (don't track begin_checkout until form interaction)
   useEffect(() => {
+    // Capture UTM params on page load
+    captureUTMParams();
+
+    // Track order start for analytics funnel
+    trackAnalyticsEvent('order_start');
+
     // Check for tier parameter
     const tierParam = searchParams.get('tier');
     if (tierParam) {
@@ -153,7 +163,7 @@ function OrderPageContent() {
   };
 
   const validateStep1 = (): boolean => {
-    if (!selectedFile) {
+    if (!uploadedPhotoUrl) {
       setStep1Error("Please upload a photo of your pet");
       return false;
     }
@@ -177,30 +187,59 @@ function OrderPageContent() {
   const handleNext = () => {
     if (currentStep === 1 && validateStep1()) {
       setCurrentStep(2);
-      trackEngagement('wizard_step_2', { has_photo: !!selectedFile, pet_name: petName });
+      // trackEngagement('wizard_step_2', { has_photo: !!selectedFile, pet_name: petName });
     } else if (currentStep === 2 && validateStep2()) {
       setCurrentStep(3);
-      trackEngagement('wizard_step_3', { style, tier: selectedTier });
+      // trackEngagement('wizard_step_3', { style, tier: selectedTier });
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      trackEngagement('wizard_back', { from_step: currentStep });
+      // trackEngagement('wizard_back', { from_step: currentStep });
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      // Create a synthetic event to reuse handleFileChange logic
+      const syntheticEvent = {
+        target: { files: [file] }
+      } as React.ChangeEvent<HTMLInputElement>;
+      await handleFileChange(syntheticEvent);
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    // Clear previous errors
+    // Clear previous errors and state
     setUploadError(null);
     setStep1Error("");
+    setUploadedPhotoUrl(null);
 
     if (!file) {
       setSelectedFile(null);
       setPreviewUrl(null);
+      setUploadProgress(0);
       return;
     }
 
@@ -213,10 +252,10 @@ function OrderPageContent() {
       return;
     }
 
-    // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    // Validate file type (including HEIC)
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
     if (!allowedTypes.includes(file.type)) {
-      setUploadError("Invalid file type. Please upload a JPEG, PNG, or WebP image.");
+      setUploadError("Invalid file type. Please upload JPG, PNG, HEIC, or WebP.");
       setSelectedFile(null);
       setPreviewUrl(null);
       return;
@@ -264,6 +303,74 @@ function OrderPageContent() {
       file_size: file.size,
       file_type: file.type,
     });
+
+    // Upload immediately
+    setUploading(true);
+    setUploadProgress(0);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Use XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = (event.loaded / event.total) * 100;
+          setUploadProgress(percentComplete);
+        }
+      });
+
+      // Handle completion
+      const uploadPromise = new Promise<{ url: string }>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            resolve(response);
+          } else {
+            const errorResponse = JSON.parse(xhr.responseText);
+            reject(new Error(errorResponse.error || 'Upload failed'));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Network error during upload'));
+        });
+
+        xhr.addEventListener('abort', () => {
+          reject(new Error('Upload cancelled'));
+        });
+      });
+
+      xhr.open('POST', '/api/upload-pet-photo');
+      xhr.send(formData);
+
+      const uploadData = await uploadPromise;
+      setUploadedPhotoUrl(uploadData.url);
+      setUploadProgress(100);
+
+      // Track successful upload
+      trackEngagement('photo_upload_success', {
+        tier: selectedTier,
+        file_size: file.size,
+        file_type: file.type,
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Upload failed";
+      setUploadError(errorMessage);
+      setUploadedPhotoUrl(null);
+      setUploadProgress(0);
+
+      // Track failed upload
+      trackEngagement('photo_upload_error', {
+        tier: selectedTier,
+        error: errorMessage,
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleGiftCardApply = async () => {
@@ -283,10 +390,10 @@ function OrderPageContent() {
         setGiftCardBalance(data.balance);
         setGiftCardValid(true);
         setGiftCardError(null);
-        trackEngagement('gift_card_applied', {
-          code: giftCardCode.trim(),
-          balance: data.balance,
-        });
+        // trackEngagement('gift_card_applied', {
+        //   code: giftCardCode.trim(),
+        //   balance: data.balance,
+        // });
       } else {
         setGiftCardBalance(null);
         setGiftCardValid(false);
@@ -308,27 +415,8 @@ function OrderPageContent() {
     setUploadError(null);
 
     try {
-      // Upload the photo first if one is selected
-      let petPhotoUrl = null;
-      if (selectedFile) {
-        setUploadProgress(50);
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!uploadRes.ok) {
-          const errorData = await uploadRes.json();
-          throw new Error(errorData.error || "Photo upload failed");
-        }
-
-        const uploadData = await uploadRes.json();
-        petPhotoUrl = uploadData.url;
-        setUploadProgress(100);
-      }
+      // Use the already-uploaded photo URL (uploaded on file selection)
+      const petPhotoUrl = uploadedPhotoUrl;
 
       // Track InitiateCheckout event (creates "checkout initiators" audience)
       const selectedTierConfig = TIER_CONFIG.find(t => t.id === selectedTier);
@@ -398,6 +486,15 @@ function OrderPageContent() {
           value: selectedTierConfig?.price,
           badge: tierBadge || 'none',
         });
+
+        // Track checkout start for analytics funnel
+        trackAnalyticsEvent('checkout_start', {
+          tier: selectedTier,
+          amount: selectedTierConfig?.price,
+          style,
+          petName,
+        }, selectedTierConfig?.price || 0);
+
         window.location.href = data.url;
       } else {
         alert("Something went wrong. Please try again or DM us on Instagram.");
@@ -517,41 +614,91 @@ function OrderPageContent() {
                     <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
                       Pet Photo
                     </label>
-                    <div className="border border-dashed border-white/[0.12] hover:border-gold/40 transition-all rounded-2xl p-10 sm:p-12 text-center cursor-pointer relative group min-h-[200px] flex flex-col items-center justify-center">
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`border border-dashed transition-all rounded-2xl text-center cursor-pointer relative group min-h-[320px] flex flex-col items-center justify-center ${
+                        dragOver
+                          ? 'border-gold bg-gold/5'
+                          : uploadedPhotoUrl
+                          ? 'border-green-500/40 bg-green-500/5'
+                          : 'border-white/[0.12] hover:border-gold/40'
+                      } ${uploading ? 'pointer-events-none' : ''}`}
+                    >
                       <input
                         type="file"
-                        accept="image/jpeg,image/png,image/webp"
+                        accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
                         required
                         onChange={handleFileChange}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        disabled={uploading}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                       />
-                      <svg className="w-12 h-12 mx-auto text-white/20 group-hover:text-gold/60 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {selectedFile ? (
-                        <p className="text-gold text-lg font-medium">{selectedFile.name}</p>
+
+                      {/* Preview with uploaded state */}
+                      {previewUrl && uploadedPhotoUrl ? (
+                        <div className="relative w-full h-full p-4">
+                          <div className="relative w-full h-64 rounded-2xl overflow-hidden">
+                            <Image
+                              src={previewUrl}
+                              alt="Pet photo preview"
+                              fill
+                              className="object-cover"
+                              sizes="600px"
+                            />
+                            {/* Success overlay */}
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <div className="text-center">
+                                <svg className="w-12 h-12 text-green-400 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                                <p className="text-white text-sm font-semibold">Uploaded successfully</p>
+                                <p className="text-white/60 text-xs mt-1">Click to replace photo</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : uploading ? (
+                        /* Upload progress */
+                        <div className="p-10 sm:p-12 w-full">
+                          <svg className="w-12 h-12 mx-auto text-gold mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="text-gold text-lg font-medium mb-4">Uploading...</p>
+                          {/* Progress bar */}
+                          <div className="w-full max-w-xs mx-auto">
+                            <div className="w-full bg-white/[0.08] rounded-full h-2 overflow-hidden">
+                              <div
+                                className="bg-gold h-full transition-all duration-300 ease-out rounded-full"
+                                style={{ width: `${uploadProgress}%` }}
+                              />
+                            </div>
+                            <p className="text-white/40 text-xs mt-2 text-center">{Math.round(uploadProgress)}%</p>
+                          </div>
+                        </div>
+                      ) : selectedFile && !uploadedPhotoUrl ? (
+                        /* File selected but not uploaded yet (shouldn't happen with immediate upload) */
+                        <div className="p-10 sm:p-12">
+                          <svg className="w-12 h-12 mx-auto text-white/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="text-gold text-lg font-medium">{selectedFile.name}</p>
+                        </div>
                       ) : (
-                        <>
-                          <p className="text-text-secondary text-lg font-medium">Click or drag to upload</p>
-                          <p className="text-white/20 text-sm mt-2">JPG, PNG, or WebP — max 10MB</p>
-                        </>
+                        /* Empty state */
+                        <div className="p-10 sm:p-12">
+                          <svg className="w-16 h-16 mx-auto text-white/20 group-hover:text-gold/60 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="text-text-secondary text-lg font-medium">
+                            {dragOver ? 'Drop photo here' : 'Drag photo here or click to browse'}
+                          </p>
+                          <p className="text-white/20 text-xs mt-2">JPG, PNG, HEIC up to 10MB</p>
+                        </div>
                       )}
                     </div>
-                    {previewUrl && (
-                      <div className="mt-6 flex justify-center">
-                        <div className="relative w-48 h-48 rounded-2xl overflow-hidden border-2 border-gold/40 shadow-lg shadow-gold/20">
-                          <Image
-                            src={previewUrl}
-                            alt="Pet photo preview"
-                            fill
-                            className="object-cover"
-                            sizes="192px"
-                          />
-                        </div>
-                      </div>
-                    )}
                     {(uploadError || step1Error) && (
-                      <p className="text-red-400 text-sm mt-3 text-center font-medium">{uploadError || step1Error}</p>
+                      <p className="text-red-400 text-sm mt-3 text-center font-medium animate-shake">{uploadError || step1Error}</p>
                     )}
                   </div>
                 </div>

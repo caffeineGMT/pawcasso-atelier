@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from "react";
 import { artworks, styles, animals } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
 import GallerySkeleton from "@/components/GallerySkeleton";
-import { trackEvent, trackViewContent, trackSearch, trackEngagement, ContentType } from "@/lib/analytics";
+import { trackEvent, trackViewContent, trackSearch, trackEngagement, trackAnalyticsEvent, ContentType } from "@/lib/analytics";
+import { captureUTMParams } from "@/lib/utm-tracker";
 
 export default function GalleryPage() {
   const [styleFilter, setStyleFilter] = useState("All");
@@ -29,6 +30,10 @@ export default function GalleryPage() {
 
   // Track view_gallery event on page load
   useEffect(() => {
+    // Capture UTM params
+    captureUTMParams();
+
+    // Track for retargeting pixels
     trackEvent('view_gallery');
     trackViewContent({
       content_type: ContentType.GALLERY,
@@ -37,6 +42,12 @@ export default function GalleryPage() {
       content_category: 'gallery',
       value: 9,
       currency: 'USD',
+    });
+
+    // Track for database analytics
+    trackAnalyticsEvent('gallery_view', {
+      category: 'all',
+      artworkCount: artworks.length,
     });
   }, []);
 
@@ -85,6 +96,10 @@ export default function GalleryPage() {
                       setStyleFilter(s);
                       if (s !== 'All') {
                         trackSearch(`style:${s}`);
+                        trackAnalyticsEvent('gallery_view', {
+                          category: 'style_filter',
+                          filter: s,
+                        });
                       }
                     }}
                     className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${
@@ -112,6 +127,10 @@ export default function GalleryPage() {
                       setAnimalFilter(a);
                       if (a !== 'All') {
                         trackSearch(`animal:${a}`);
+                        trackAnalyticsEvent('gallery_view', {
+                          category: 'animal_filter',
+                          filter: a,
+                        });
                       }
                     }}
                     className={`snap-start flex-shrink-0 px-3 py-1.5 text-xs tracking-wide rounded-full transition-all ${

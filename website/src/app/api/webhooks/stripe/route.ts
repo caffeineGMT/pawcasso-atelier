@@ -684,6 +684,8 @@ export async function POST(req: NextRequest) {
           referralCode: metadata.referralCode || null,
           discountCode: metadata.discountCode || null,
           pricingBadge: metadata.badge || null,
+          giftCardCode: metadata.giftCardCode || null,
+          giftCardAmount: 0, // Will be updated if gift card was used
           status: 'completed',
           deliveryStatus: 'pending',
           paidAt: new Date(),
@@ -692,6 +694,126 @@ export async function POST(req: NextRequest) {
     } catch (dbError) {
       console.error('Failed to create order in database:', dbError);
       // Continue with order processing even if database save fails
+    }
+
+    // Handle partial gift card payment
+    if (metadata.giftCardCode) {
+      try {
+        const giftCard = await prisma.giftCard.findUnique({
+          where: { code: metadata.giftCardCode },
+        });
+
+        if (giftCard && giftCard.active && giftCard.currentBalance > 0) {
+          const orderTotal = amountTotal / 100; // Convert from cents to dollars
+          const giftCardAmount = Math.min(giftCard.currentBalance, orderTotal);
+          const newBalance = giftCard.currentBalance - giftCardAmount;
+
+          // Update gift card balance
+          await prisma.giftCard.update({
+            where: { id: giftCard.id },
+            data: { currentBalance: newBalance },
+          });
+
+          // Record transaction
+          await prisma.giftCardTransaction.create({
+            data: {
+              giftCardId: giftCard.id,
+              amount: giftCardAmount,
+              type: 'redemption',
+              description: `Partial payment for order ${session.id}`,
+              orderId: session.id,
+              balanceBefore: giftCard.currentBalance,
+              balanceAfter: newBalance,
+            },
+          });
+
+          // Update order with gift card amount
+          await prisma.order.update({
+            where: { stripeSessionId: session.id },
+            data: { giftCardAmount },
+          });
+
+          // Credit sender if this is first use
+          if (!giftCard.senderCredited && giftCard.purchaserEmail) {
+            const senderCredit = giftCardAmount * 0.1; // 10% of amount used
+            await prisma.giftCard.update({
+              where: { id: giftCard.id },
+              data: {
+                senderCredited: true,
+                senderCreditAmount: senderCredit,
+                firstUsedAt: new Date(),
+              },
+            });
+
+            // Add credit to sender's customer account
+            const senderCustomer = await prisma.customer.findUnique({
+              where: { email: giftCard.purchaserEmail },
+            });
+
+            if (senderCustomer) {
+              await prisma.customer.update({
+                where: { email: giftCard.purchaserEmail },
+                data: {
+                  creditBalance: { increment: senderCredit },
+                },
+              });
+
+              await prisma.creditTransaction.create({
+                data: {
+                  customerEmail: giftCard.purchaserEmail,
+                  amount: senderCredit,
+                  type: 'gift_card_referral',
+                  description: `10% credit from gift card redemption by ${customerEmail}`,
+                  orderId: session.id,
+                },
+              });
+
+              // Send notification to sender
+              try {
+                await resend.emails.send({
+                  from: "portraits@pawcasso-atelier.com",
+                  to: giftCard.purchaserEmail,
+                  subject: "🎉 You earned credit from your gift card!",
+                  html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #000; color: #F5F5F7; padding: 40px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; background: #111; border-radius: 16px; padding: 40px; border: 1px solid #1d1d1f; }
+    h1 { color: #C9A96E; margin-bottom: 20px; font-size: 28px; }
+    .credit-box { background: #51cf66; color: #000; padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; }
+    .credit-amount { font-size: 48px; font-weight: 700; }
+    p { line-height: 1.6; margin: 15px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>You Earned a Gift Card Bonus! 🎉</h1>
+    <div class="credit-box">
+      <div class="credit-amount">$${senderCredit.toFixed(2)}</div>
+      <div>Added to your account</div>
+    </div>
+    <p>Great news! Someone just used your gift card to purchase a portrait.</p>
+    <p>Your $${senderCredit.toFixed(2)} credit has been automatically added to your account and can be used on your next order.</p>
+    <p style="margin-top: 30px; color: #86868b; font-size: 14px;">Current balance: $${senderCustomer.creditBalance.toFixed(2)}</p>
+  </div>
+</body>
+</html>
+                  `,
+                });
+              } catch (emailError) {
+                console.error("Failed to send gift card credit notification:", emailError);
+              }
+            }
+          }
+
+          console.log(`Gift card ${giftCard.code} applied: $${giftCardAmount.toFixed(2)}`);
+        }
+      } catch (giftCardError) {
+        console.error("Failed to process gift card:", giftCardError);
+        // Don't fail the order if gift card processing fails
+      }
     }
 
     // Validate pet photo URL exists

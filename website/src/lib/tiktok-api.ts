@@ -115,7 +115,7 @@ export class TikTokAPI {
         'Content-Type': 'video/mp4',
         'Content-Range': `bytes 0-${videoBuffer.length - 1}/${videoBuffer.length}`,
       },
-      body: videoBuffer,
+      body: videoBuffer as any, // Buffer is valid but TypeScript doesn't recognize it
     });
 
     if (!response.ok) {

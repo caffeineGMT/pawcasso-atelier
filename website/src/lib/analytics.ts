@@ -272,7 +272,7 @@ export const trackSearch = (searchTerm: string): void => {
  * Track custom engagement events for audience building
  */
 export const trackEngagement = (
-  action: 'style_preview' | 'photo_upload_start' | 'tier_selection' | 'discount_view' | 'instagram_click',
+  action: 'style_preview' | 'photo_upload_start' | 'tier_selection' | 'discount_view' | 'instagram_click' | 'launch_signup' | 'wizard_step_2' | 'wizard_step_3' | 'wizard_back' | 'gift_card_applied',
   metadata?: Record<string, any>
 ): void => {
   if (typeof window !== 'undefined' && window.fbq) {
@@ -304,5 +304,54 @@ export const setUserProperties = (properties: {
     // Meta Pixel advanced matching is set via init, not dynamically
     // Store for later server-side API calls
     sessionStorage.setItem('user_email', properties.user_email);
+  }
+};
+
+/**
+ * Track analytics event to database for attribution and conversion tracking
+ * Captures UTM params, session data, and revenue
+ */
+export const trackAnalyticsEvent = async (
+  eventName: string,
+  metadata?: Record<string, any>,
+  revenue = 0
+): Promise<void> => {
+  if (typeof window === 'undefined') return;
+
+  try {
+    // Dynamically import to avoid SSR issues
+    const { getStoredUTMParams } = await import('./utm-tracker');
+    const utm = getStoredUTMParams();
+
+    // Get or create session ID
+    let sessionId = sessionStorage.getItem('session_id');
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      sessionStorage.setItem('session_id', sessionId);
+    }
+
+    // Get user email if available
+    const userId = sessionStorage.getItem('user_email') || null;
+
+    // Track event via API
+    await fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventName,
+        metadata: {
+          ...metadata,
+          pathname: window.location.pathname,
+          referrer: document.referrer,
+        },
+        revenue,
+        sessionId,
+        userId,
+        utm,
+      }),
+    });
+  } catch (error) {
+    console.error('Failed to track analytics event:', error);
+    // Silent fail - don't break user experience
   }
 };

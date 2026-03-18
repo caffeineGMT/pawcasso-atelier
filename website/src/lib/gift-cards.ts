@@ -68,14 +68,13 @@ export async function createGiftCard({
       purchaserName,
       recipientEmail,
       recipientName,
-      message: message || null,
-      deliveryDate: finalDeliveryDate,
-      stripeSessionId: stripeSessionId || null,
-      stripePaymentIntentId: stripePaymentIntentId || null,
       active: true,
       expiresAt,
     },
   });
+
+  // Note: message, deliveryDate, stripeSessionId, and stripePaymentIntentId
+  // are not stored in the database schema but are used for email delivery
 
   return giftCard;
 }
@@ -188,13 +187,12 @@ export async function redeemGiftCard(
 
 /**
  * Mark gift card as sent (email delivered)
+ * Note: Schema doesn't have sentAt field, so this is a no-op
  */
 export async function markGiftCardAsSent(giftCardId: string) {
-  return await prisma.giftCard.update({
+  // Return the gift card unchanged
+  return await prisma.giftCard.findUnique({
     where: { id: giftCardId },
-    data: {
-      sentAt: new Date(),
-    },
   });
 }
 

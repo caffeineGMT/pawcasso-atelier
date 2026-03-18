@@ -1,0 +1,268 @@
+{
+  "generatedAt": "2026-03-18T22:48:29.037Z",
+  "totalImages": 13,
+  "totalOriginalSize": 73163805,
+  "totalOptimizedSize": 2457432,
+  "images": [
+    {
+      "original": "alfie_border_collie_portrait_2048x2048.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/alfie_border_collie_portrait_2048x2048-400w.webp",
+          "size": 24990
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/alfie_border_collie_portrait_2048x2048-800w.webp",
+          "size": 70850
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/alfie_border_collie_portrait_2048x2048-1200w.webp",
+          "size": 125558
+        }
+      ]
+    },
+    {
+      "original": "alfie_imperial_portrait_2048x2048.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/alfie_imperial_portrait_2048x2048-400w.webp",
+          "size": 36744
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/alfie_imperial_portrait_2048x2048-800w.webp",
+          "size": 118810
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/alfie_imperial_portrait_2048x2048-1200w.webp",
+          "size": 214610
+        }
+      ]
+    },
+    {
+      "original": "alfie_portrait_final.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/alfie_portrait_final-400w.webp",
+          "size": 17984
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/alfie_portrait_final-800w.webp",
+          "size": 45904
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/alfie_portrait_final-1200w.webp",
+          "size": 80050
+        }
+      ]
+    },
+    {
+      "original": "border_collie_portrait_2048x2048.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/border_collie_portrait_2048x2048-400w.webp",
+          "size": 31148
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/border_collie_portrait_2048x2048-800w.webp",
+          "size": 119372
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/border_collie_portrait_2048x2048-1200w.webp",
+          "size": 200084
+        }
+      ]
+    },
+    {
+      "original": "cat_vermeer.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/cat_vermeer-400w.webp",
+          "size": 13996
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/cat_vermeer-800w.webp",
+          "size": 58216
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/cat_vermeer-1200w.webp",
+          "size": 135618
+        }
+      ]
+    },
+    {
+      "original": "chihuahua_portrait_16x9.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/chihuahua_portrait_16x9-400w.webp",
+          "size": 21238
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/chihuahua_portrait_16x9-800w.webp",
+          "size": 82530
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/chihuahua_portrait_16x9-1200w.webp",
+          "size": 145510
+        }
+      ]
+    },
+    {
+      "original": "golden_retriever_portrait_square.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/golden_retriever_portrait_square-400w.webp",
+          "size": 11888
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/golden_retriever_portrait_square-800w.webp",
+          "size": 37042
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/golden_retriever_portrait_square-1200w.webp",
+          "size": 67434
+        }
+      ]
+    },
+    {
+      "original": "pomeranian_portrait_final.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/pomeranian_portrait_final-400w.webp",
+          "size": 11110
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/pomeranian_portrait_final-800w.webp",
+          "size": 41088
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/pomeranian_portrait_final-1200w.webp",
+          "size": 81016
+        }
+      ]
+    },
+    {
+      "original": "shiba_inu_felt_portrait_2048x2048.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/shiba_inu_felt_portrait_2048x2048-400w.webp",
+          "size": 20028
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/shiba_inu_felt_portrait_2048x2048-800w.webp",
+          "size": 66760
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/shiba_inu_felt_portrait_2048x2048-1200w.webp",
+          "size": 119946
+        }
+      ]
+    },
+    {
+      "original": "shiba_inu_vinyl_toy_portrait_final.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/shiba_inu_vinyl_toy_portrait_final-400w.webp",
+          "size": 10678
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/shiba_inu_vinyl_toy_portrait_final-800w.webp",
+          "size": 34560
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/shiba_inu_vinyl_toy_portrait_final-1200w.webp",
+          "size": 62514
+        }
+      ]
+    },
+    {
+      "original": "shiba_portrait_final.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/shiba_portrait_final-400w.webp",
+          "size": 14376
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/shiba_portrait_final-800w.webp",
+          "size": 48250
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/shiba_portrait_final-1200w.webp",
+          "size": 86070
+        }
+      ]
+    },
+    {
+      "original": "shiba_portrait_final_2048x2048.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/shiba_portrait_final_2048x2048-400w.webp",
+          "size": 11540
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/shiba_portrait_final_2048x2048-800w.webp",
+          "size": 41656
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/shiba_portrait_final_2048x2048-1200w.webp",
+          "size": 73390
+        }
+      ]
+    },
+    {
+      "original": "white_pomeranian_portrait_final.png",
+      "sizes": [
+        {
+          "width": 400,
+          "path": "/gallery/optimized/white_pomeranian_portrait_final-400w.webp",
+          "size": 6196
+        },
+        {
+          "width": 800,
+          "path": "/gallery/optimized/white_pomeranian_portrait_final-800w.webp",
+          "size": 22880
+        },
+        {
+          "width": 1200,
+          "path": "/gallery/optimized/white_pomeranian_portrait_final-1200w.webp",
+          "size": 45798
+        }
+      ]
+    }
+  ]
+}
