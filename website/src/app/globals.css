@@ -212,4 +212,44 @@ body {
   .safe-area-bottom {
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
   }
+
+  /* Mobile touch target utilities */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .touch-target-large {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  /* Mobile-optimized tap highlight */
+  .tap-highlight-none {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tap-highlight-gold {
+    -webkit-tap-highlight-color: rgba(201, 169, 110, 0.3);
+  }
+
+  /* Prevent text selection on buttons (better mobile UX) */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  /* Safe area insets for notched devices */
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .safe-area-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
 }

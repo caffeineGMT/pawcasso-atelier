@@ -1,12 +1,31 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
+import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import SessionProvider from "@/components/SessionProvider";
 import PromotionBanner from "@/components/PromotionBanner";
+import WebVitals from "@/components/WebVitals";
 import "./globals.css";
+import "./mobile-enhancements.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+  preload: true,
+  variable: "--font-inter",
+});
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#000000',
+};
 
 export const metadata: Metadata = {
   title: {
@@ -81,23 +100,25 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://s.pinimg.com" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        {/* Google Analytics 4 */}
+        {/* Google Analytics 4 - Deferred for better FID */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -108,8 +129,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* Meta Pixel */}
-        <Script id="meta-pixel" strategy="afterInteractive">
+        {/* Meta Pixel - Deferred for better FID */}
+        <Script id="meta-pixel" strategy="lazyOnload">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -133,8 +154,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         </noscript>
 
-        {/* Pinterest Tag */}
-        <Script id="pinterest-tag" strategy="afterInteractive">
+        {/* Pinterest Tag - Deferred for better FID */}
+        <Script id="pinterest-tag" strategy="lazyOnload">
           {`
             !function(e){if(!window.pintrk){window.pintrk = function () {
             window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
@@ -159,12 +180,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Pinterest Domain Verification */}
         <meta name="p:domain_verify" content="PINTEREST_VERIFICATION_CODE_HERE" />
 
-        {/* Google Ads Conversion Tracking */}
+        {/* Google Ads Conversion Tracking - Deferred for better FID */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads-config" strategy="afterInteractive">
+        <Script id="google-ads-config" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -173,7 +194,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
       </head>
-      <body className="min-h-screen flex flex-col antialiased">
+      <body className={`min-h-screen flex flex-col antialiased ${inter.className}`}>
+        <WebVitals />
         <SessionProvider>
           <PromotionBanner />
           <Header />

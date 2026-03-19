@@ -1,0 +1,164 @@
+/**
+ * Mobile UX Enhancements
+ * Additional styles for improved mobile experience
+ */
+
+/* iOS-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent iOS from zooming on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Better tap handling on iOS */
+  button,
+  a,
+  input[type="submit"],
+  input[type="button"] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(201, 169, 110, 0.2);
+  }
+}
+
+/* Improve touch feedback globally */
+button,
+a,
+[role="button"],
+[tabindex="0"] {
+  -webkit-tap-highlight-color: rgba(201, 169, 110, 0.2);
+  touch-action: manipulation; /* Prevents double-tap zoom */
+}
+
+/* Mobile-optimized form inputs */
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* Prevents iOS zoom */
+    min-height: 44px;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  /* Larger touch targets for mobile buttons */
+  button,
+  [role="button"],
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Improved spacing for mobile stacked layouts */
+  .mobile-stack > * + * {
+    margin-top: 1rem;
+  }
+
+  /* Better mobile modal padding */
+  [role="dialog"],
+  .modal {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Prevent layout shift on tap */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch device styles */
+  *:focus {
+    outline-offset: 2px;
+  }
+
+  /* Remove hover states on touch devices */
+  .hover-only {
+    display: none !important;
+  }
+}
+
+/* Smooth scroll for better mobile UX */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Better focus indicators for mobile */
+@media (max-width: 768px) {
+  *:focus-visible {
+    outline: 3px solid rgba(201, 169, 110, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+/* Optimize for landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical padding in landscape */
+  .section-padding {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Taller modals should scroll */
+  [role="dialog"],
+  .modal {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* Loading state optimization */
+.loading-skeleton {
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pull-to-refresh area (prevent accidental triggers) */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* Better mobile table handling */
+@media (max-width: 640px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Thumb-friendly bottom sheet */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+/* Prevent text size adjustments on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
