@@ -262,8 +262,8 @@ async function validateAllTemplates() {
     console.log(`\n\n📧 ${template.name.toUpperCase()}`);
     console.log("-".repeat(70));
 
-    // Render template
-    const html = render(template.component(template.data as any));
+    // Render template to HTML string
+    const html = await render(template.component(template.data as any));
 
     // Run checks
     const checks = validateEmailHTML(html, template.name);

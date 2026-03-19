@@ -584,3 +584,322 @@ test.describe('Stripe Webhooks - Performance', () => {
     expect(successCount).toBeGreaterThan(45); // Allow max 5 failures
   });
 });
+
+test.describe('Stripe Webhooks - Edge Cases', () => {
+  test('should handle webhook with missing metadata gracefully', async ({ request }) => {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: { name: 'AI Pet Portrait' },
+            unit_amount: 1400,
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/order',
+      customer_email: 'no-metadata@pawcasso.test',
+      // NO metadata provided
+    });
+
+    const paidSession = { ...session, payment_status: 'paid' };
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: paidSession as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, event);
+
+    // Should still succeed with defaults
+    expect(result.status).toBe(200);
+  });
+
+  test('should handle webhook with malformed email', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+    const paidSession = {
+      ...session,
+      payment_status: 'paid',
+      customer_email: 'invalid-email', // Malformed email
+    };
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: paidSession as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, event);
+
+    // Should handle gracefully (don't crash, but may not send email)
+    expect([200, 400]).toContain(result.status);
+  });
+
+  test('should handle webhook with extremely large metadata', async ({ request }) => {
+    const largeNotes = 'A'.repeat(10000); // 10KB of notes
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: { name: 'AI Pet Portrait' },
+            unit_amount: 1400,
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/order',
+      customer_email: 'large-metadata@pawcasso.test',
+      metadata: {
+        petName: 'Test Dog',
+        notes: largeNotes.substring(0, 500), // Stripe limits metadata to 500 chars per field
+      },
+    });
+
+    const paidSession = { ...session, payment_status: 'paid' };
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: paidSession as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, event);
+
+    expect(result.status).toBe(200);
+  });
+
+  test('should handle unsupported event types gracefully', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'customer.created', // Unsupported event type
+      data: {
+        object: session as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, event);
+
+    // Should return 200 (acknowledge receipt) but not process
+    expect(result.status).toBe(200);
+  });
+
+  test('should handle refund webhook event', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+
+    // First create a successful payment
+    const paidEvent: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: { ...session, payment_status: 'paid' } as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    await sendWebhook(request, paidEvent);
+
+    // Wait for order creation
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Now send refund event
+    const refundEvent: Stripe.Event = {
+      id: `evt_refund_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'charge.refunded',
+      data: {
+        object: {
+          id: 'ch_test_123',
+          amount_refunded: 1400,
+          refunded: true,
+        } as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, refundEvent);
+
+    // Should handle refund (may update order status)
+    expect(result.status).toBe(200);
+  });
+
+  test('should handle subscription event (future feature)', async ({ request }) => {
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'customer.subscription.created',
+      data: {
+        object: {
+          id: 'sub_test_123',
+          status: 'active',
+        } as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const result = await sendWebhook(request, event);
+
+    // Should acknowledge (may be implemented for subscription feature)
+    expect(result.status).toBe(200);
+  });
+});
+
+test.describe('Stripe Webhooks - Security', () => {
+  test('should reject webhook with no signature header', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: session,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const payload = JSON.stringify(event);
+
+    // Send without signature header
+    const response = await request.post(WEBHOOK_ENDPOINT, {
+      data: payload,
+      headers: {
+        'content-type': 'application/json',
+        // NO stripe-signature header
+      },
+    });
+
+    expect(response.status()).toBe(400);
+  });
+
+  test('should reject webhook from wrong Stripe account', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+
+    const event: Stripe.Event = {
+      id: `evt_test_${Date.now()}`,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: session,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    const payload = JSON.stringify(event);
+
+    // Sign with wrong secret
+    const wrongSignature = generateStripeSignature(payload, 'whsec_wrong_secret');
+
+    const response = await request.post(WEBHOOK_ENDPOINT, {
+      data: payload,
+      headers: {
+        'stripe-signature': wrongSignature,
+        'content-type': 'application/json',
+      },
+    });
+
+    expect(response.status()).toBe(400);
+  });
+
+  test('should reject replay attack (reused event ID)', async ({ request }) => {
+    const session = await createTestCheckoutSession();
+    const eventId = `evt_replay_${Date.now()}`;
+
+    const event: Stripe.Event = {
+      id: eventId,
+      object: 'event',
+      api_version: '2024-12-18.acacia',
+      created: Math.floor(Date.now() / 1000),
+      type: 'checkout.session.completed',
+      data: {
+        object: { ...session, payment_status: 'paid' } as any,
+      },
+      livemode: false,
+      pending_webhooks: 1,
+      request: { id: null, idempotency_key: null },
+    };
+
+    // First webhook: should succeed
+    const result1 = await sendWebhook(request, event);
+    expect(result1.status).toBe(200);
+
+    // Wait a bit
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Replay attack: send same event ID again
+    const result2 = await sendWebhook(request, event);
+
+    // Should still return 200 (idempotent) but not process twice
+    expect(result2.status).toBe(200);
+
+    // Verify only ONE order was created
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const ordersResponse = await request.get(`/api/admin/orders?session_id=${session.id}`);
+
+    if (ordersResponse.ok()) {
+      const orders = await ordersResponse.json();
+      expect(orders.length).toBe(1); // Only one order
+    }
+  });
+});

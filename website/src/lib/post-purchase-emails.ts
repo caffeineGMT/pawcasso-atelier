@@ -56,7 +56,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
 
     const resend = getResend();
 
-    const emailHtml = render(
+    const emailHtml = await render(
       OrderConfirmation({
         customerName: order.customerName,
         petName: order.petName,
@@ -111,7 +111,7 @@ export async function sendShippingNotificationEmail(orderId: string) {
 
     const resend = getResend();
 
-    const emailHtml = render(
+    const emailHtml = await render(
       ShippingNotification({
         customerName: order.customerName,
         petName: order.petName,
@@ -165,7 +165,7 @@ export async function sendDeliveryConfirmationEmail(orderId: string) {
     // Generate download URL
     const downloadUrl = `${BASE_URL}/download/${order.stripeSessionId}`;
 
-    const emailHtml = render(
+    const emailHtml = await render(
       DeliveryConfirmation({
         customerName: order.customerName,
         petName: order.petName,
@@ -238,7 +238,7 @@ export async function sendReviewRequestEmail(orderId: string) {
       order.customerEmail
     )}&order=${order.id}`;
 
-    const emailHtml = render(
+    const emailHtml = await render(
       PostDeliveryReviewRequest({
         customerName: order.customerName,
         petName: order.petName,
@@ -312,7 +312,7 @@ export async function sendReorderIncentiveEmail(orderId: string) {
       .toUpperCase()
       .slice(0, 6)}`;
 
-    const emailHtml = render(
+    const emailHtml = await render(
       ReorderIncentive({
         customerName: order.customerName,
         petName: order.petName,
