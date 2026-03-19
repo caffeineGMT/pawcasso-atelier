@@ -12,6 +12,7 @@ import { createGiftCard, markGiftCardAsSent } from "@/lib/gift-cards";
 import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
 import { trackServerSideConversion } from "@/lib/google-ads-config";
 import { markCartAsRecovered } from "@/lib/cart-recovery";
+import { trackPricingConversion, DEFAULT_TEST_CONFIG } from "@/lib/ab-pricing";
 
 const prisma = new PrismaClient();
 
@@ -865,6 +866,24 @@ export async function POST(req: NextRequest) {
           revenue: amountTotal / 100, // Convert from cents to dollars
         },
       });
+
+      // Track A/B test conversion if variant is present
+      if (metadata.abTestVariant && metadata.abSessionId) {
+        try {
+          await trackPricingConversion({
+            testId: DEFAULT_TEST_CONFIG.id,
+            variant: metadata.abTestVariant,
+            sessionId: metadata.abSessionId,
+            revenue: amountTotal / 100,
+            tier,
+            orderId: session.id,
+          });
+          console.log(`Tracked A/B test conversion: ${metadata.abTestVariant} - $${amountTotal / 100}`);
+        } catch (abError) {
+          console.error('Failed to track A/B test conversion:', abError);
+          // Don't fail the webhook if A/B tracking fails
+        }
+      }
 
       // Mark abandoned cart as recovered
       markCartAsRecovered(session.id, session.id).catch((err) => {

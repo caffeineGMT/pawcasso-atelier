@@ -489,11 +489,4 @@ export function getFunnelSummary(): FunnelSummary {
   };
 }
 
-// ─── Window type augmentation ────────────────────────────────────────────────
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-    clarity?: (command: string, ...args: unknown[]) => void;
-  }
-}
+// Note: Window type augmentation for gtag and clarity is defined in analytics.ts and funnel-analytics.ts

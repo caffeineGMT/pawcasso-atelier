@@ -35,17 +35,19 @@ export default function StyleSelector({
       <label className="block text-xs tracking-wider uppercase text-text-secondary mb-4 font-medium text-center">
         Art Style
       </label>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {artStyleOptions.slice(0, maxStyles).map((opt) => (
           <button
             key={opt.value}
             type="button"
             onClick={() => onSelectStyle(opt.value)}
-            className={`text-left p-4 rounded-xl border transition-all ${
+            className={`text-left p-5 rounded-xl border transition-all min-h-[88px] touch-manipulation ${
               selectedStyle === opt.value
                 ? "border-gold/60 bg-gold/10 ring-1 ring-gold/20"
                 : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.06]"
             }`}
+            aria-pressed={selectedStyle === opt.value}
+            aria-label={`${opt.label} art style: ${opt.description}`}
           >
             <div className="text-base font-semibold text-text-primary">{opt.label}</div>
             <div className="text-xs text-text-secondary mt-1 leading-snug">{opt.description}</div>

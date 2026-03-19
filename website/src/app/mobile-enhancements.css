@@ -162,3 +162,60 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+
+/* ─── Mobile Checkout Funnel Optimizations ─── */
+
+/* Prevent viewport bounce on iOS during checkout */
+@media (max-width: 768px) {
+  .checkout-wizard {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Sticky mobile CTA safe area */
+  .safe-area-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  /* Add bottom padding to forms so sticky bar doesn't cover content */
+  form[data-step="3"] {
+    padding-bottom: 5rem;
+  }
+
+  /* Better mobile tier cards - full width on small screens */
+  @media (max-width: 400px) {
+    .grid-cols-1.sm\\:grid-cols-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Improve touch target for style selection on mobile */
+  .grid-cols-2.sm\\:grid-cols-3 button {
+    min-height: 72px;
+  }
+
+  /* Mobile-optimized progress bar */
+  .progress-bar-mobile {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1rem;
+    margin: -1.5rem -1.5rem 1rem;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .flex.transition-transform {
+    transition: none !important;
+  }
+}
+
+/* High contrast mode for form inputs */
+@media (prefers-contrast: high) {
+  input, textarea, select {
+    border-width: 2px !important;
+  }
+}

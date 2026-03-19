@@ -12,6 +12,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ToastProvider } from "@/components/ToastProvider";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { FunnelTracker } from "@/components/FunnelTracker";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import "./globals.css";
 import "./mobile-enhancements.css";
 import "./toast.css";
@@ -42,7 +43,9 @@ export const metadata: Metadata = {
   keywords: ["pet portrait", "animal painting", "custom pet art", "pet gift", "AI pet portrait", "pet commission", "custom dog portrait", "custom cat portrait", "affordable pet portrait"],
   icons: {
     icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/manifest.json",
   metadataBase: new URL("https://pawcasso-atelier.vercel.app"),
   openGraph: {
     type: "website",
@@ -84,7 +87,7 @@ const jsonLd = {
   name: "Pawcasso Atelier",
   description: "Custom AI-generated pet portraits in 16+ curated art styles. Transform your pet into stunning art for $9.",
   url: "https://pawcasso-atelier.vercel.app",
-  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
+  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp",
   priceRange: "$9",
   address: {
     "@type": "PostalAddress",
@@ -107,11 +110,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        {/* Critical resource hints */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://s.pinimg.com" />
+
+        {/* PWA & Mobile Optimization */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Pawcasso" />
 
         <script
           type="application/ld+json"
@@ -155,7 +165,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             width="1"
             style={{ display: 'none' }}
             src={`https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_META_PIXEL_ID}&ev=PageView&noscript=1`}
-            alt=""
+            alt="Meta Pixel tracking"
           />
         </noscript>
 
@@ -177,7 +187,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             height="1"
             width="1"
             style={{ display: 'none' }}
-            alt=""
+            alt="Pinterest tracking"
             src={`https://ct.pinterest.com/v3/?event=init&tid=${process.env.NEXT_PUBLIC_PINTEREST_TAG_ID || ""}&noscript=1`}
           />
         </noscript>
@@ -213,6 +223,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className={`min-h-screen flex flex-col antialiased ${inter.className}`}>
+        <ServiceWorkerRegistration />
         <WebVitals />
         <ErrorBoundary>
           <SessionProvider>

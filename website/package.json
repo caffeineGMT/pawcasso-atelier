@@ -27,7 +27,9 @@
     "tiktok:process": "tsx scripts/process-tiktok-queue.ts",
     "tiktok:scripts": "tsx scripts/generate-tiktok-scripts.ts",
     "instagram:metrics": "tsx scripts/collect-instagram-metrics.ts",
-    "ig:daily": "tsx ../scripts/daily-ig-content.ts"
+    "ig:daily": "tsx ../scripts/daily-ig-content.ts",
+    "ig:generate": "tsx ../scripts/generate-ig-content-manus.ts",
+    "ig:sync": "tsx ../scripts/sync-ig-content.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",

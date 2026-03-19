@@ -37,7 +37,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     return (
       <section className="py-24 px-6">
         {/* Analytics Trackers */}
-        <SuccessPageTracker amount={amountTotal} tier={tier} />
+        <SuccessPageTracker amount={amountTotal} tier={tier} sessionId={sessionId} />
         <GoogleAdsConversionTracker
           orderId={sessionId}
           amount={amountTotal}

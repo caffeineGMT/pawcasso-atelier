@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
       utmCampaign,
       giftCardCode,
       applyCredits,
+      abTestVariant,
+      abSessionId,
     } = body;
 
     if (!name || !email || !style) {
@@ -191,6 +193,8 @@ export async function POST(req: NextRequest) {
       utmCampaign,
       giftCardCode,
       creditApplied,
+      abTestVariant,
+      abSessionId,
     });
 
     // Track abandoned cart for recovery emails

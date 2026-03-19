@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Instagram Content Review — Pawcasso Atelier</title>
+  <meta name="description" content="Mobile-optimized Instagram content review dashboard for @pawcasso.atelier">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-card: #141414;
+      --bg-card-hover: #1a1a1a;
+      --border-primary: #252525;
+      --border-hover: #333333;
+      --text-primary: #ffffff;
+      --text-secondary: #e5e5e5;
+      --text-tertiary: #aaaaaa;
+      --text-muted: #666666;
+      --accent-green: #22c55e;
+      --accent-blue: #60a5fa;
+      --accent-yellow: #fbbf24;
+      --accent-purple: #a78bfa;
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-bottom: 80px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(10, 10, 10, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-primary);
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .header-content {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent-green);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    /* Container */
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--accent-green);
+      border-radius: 2px;
+    }
+
+    /* Content Cards */
+    .content-card {
+      display: block;
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .content-card:hover::before {
+      opacity: 1;
+    }
+
+    .content-card:active {
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .card-meta span::before {
+      content: '•';
+      margin-right: 8px;
+      color: var(--text-muted);
+    }
+
+    .card-meta span:first-child::before {
+      display: none;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 16px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .status-pending-generation {
+      background: rgba(30, 58, 138, 0.2);
+      color: var(--accent-blue);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .status-pending-review {
+      background: rgba(133, 77, 14, 0.2);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .status-approved {
+      background: rgba(22, 101, 52, 0.2);
+      color: var(--accent-green);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-posted {
+      background: rgba(76, 29, 149, 0.2);
+      color: var(--accent-purple);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+    }
+
+    /* Card Content */
+    .card-description {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-primary);
+      font-size: 13px;
+    }
+
+    .card-footer-left {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .posting-time {
+      color: var(--accent-green);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .posting-time::before {
+      content: '⏰';
+      font-size: 14px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      margin-bottom: 12px;
+    }
+
+    .empty-text {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border-primary);
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 24px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .footer a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Refresh Button */
+    .refresh-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(96, 165, 250, 0.4);
+      transition: all 0.3s ease;
+      z-index: 90;
+    }
+
+    .refresh-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 12px 30px rgba(96, 165, 250, 0.6);
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 480px) {
+      .header {
+        padding: 20px 16px;
+      }
+
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .brand-text h1 {
+        font-size: 18px;
+      }
+
+      .stats-bar {
+        gap: 8px;
+      }
+
+      .stat-card {
+        padding: 12px 8px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 20px 16px;
+      }
+
+      .content-card {
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .card-title {
+        font-size: 16px;
+      }
+
+      .refresh-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 52px;
+        height: 52px;
+      }
+    }
+
+    /* Touch Feedback */
+    @media (hover: none) and (pointer: coarse) {
+      .content-card:active {
+        background: var(--bg-card-hover);
+        opacity: 0.9;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-logo">🐾</div>
+        <div class="brand-text">
+          <h1>IG Content Review</h1>
+          <p>@pawcasso.atelier</p>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-pending">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-approved">0</div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-posted">0</div>
+          <div class="stat-label">Posted</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Loading State -->
+    <div id="loading-state" class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading content...</div>
+    </div>
+
+    <!-- Content Sections -->
+    <div id="content-sections" style="display: none;">
+      <!-- Pending Section -->
+      <div id="pending-section">
+        <div class="section-title">Pending Review</div>
+        <div id="pending-content"></div>
+      </div>
+
+      <!-- Approved Section -->
+      <div id="approved-section" style="display: none;">
+        <div class="section-title">Approved</div>
+        <div id="approved-content"></div>
+      </div>
+
+      <!-- Posted Section -->
+      <div id="posted-section" style="display: none;">
+        <div class="section-title">Posted</div>
+        <div id="posted-content"></div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state" style="display: none;">
+      <div class="empty-icon">📭</div>
+      <div class="empty-title">No content yet</div>
+      <div class="empty-text">
+        New Instagram content will appear here daily.<br>
+        Check back soon!
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <strong>Pawcasso Atelier</strong> · Daily IG Content System<br>
+    Last updated: <span id="last-updated">--</span><br>
+    <a href="https://github.com/pawcasso/atelier" target="_blank">GitHub</a>
+  </div>
+
+  <!-- Refresh Button -->
+  <button class="refresh-btn" onclick="loadContent()" title="Refresh content">
+    🔄
+  </button>
+
+  <script>
+    // Content data store
+    let contentItems = [];
+
+    // Load content on page load
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+    async function loadContent() {
+      try {
+        const response = await fetch('content.json');
+
+        if (!response.ok) {
+          throw new Error('Failed to load content');
+        }
+
+        const data = await response.json();
+        contentItems = data.items || [];
+
+        renderContent();
+        updateStats();
+        updateLastUpdated(data.lastUpdated);
+
+        // Hide loading, show content
+        document.getElementById('loading-state').style.display = 'none';
+
+        if (contentItems.length === 0) {
+          document.getElementById('empty-state').style.display = 'block';
+        } else {
+          document.getElementById('content-sections').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading content:', error);
+        document.getElementById('loading-state').innerHTML = `
+          <div class="empty-icon">⚠️</div>
+          <div class="empty-title">Failed to load content</div>
+          <div class="empty-text">Please try again later</div>
+        `;
+      }
+    }
+
+    function renderContent() {
+      const pending = contentItems.filter(item =>
+        item.status === 'pending_generation' || item.status === 'pending_review'
+      );
+      const approved = contentItems.filter(item => item.status === 'approved');
+      const posted = contentItems.filter(item => item.status === 'posted');
+
+      renderSection('pending-content', 'pending-section', pending);
+      renderSection('approved-content', 'approved-section', approved);
+      renderSection('posted-content', 'posted-section', posted);
+    }
+
+    function renderSection(containerId, sectionId, items) {
+      const container = document.getElementById(containerId);
+      const section = document.getElementById(sectionId);
+
+      if (items.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+
+      section.style.display = 'block';
+      container.innerHTML = items.map(item => createContentCard(item)).join('');
+    }
+
+    function createContentCard(item) {
+      const statusClass = `status-${item.status.replace('_', '-')}`;
+      const statusText = item.status.replace('_', ' ').toUpperCase();
+
+      return `
+        <a href="${item.id}.html" class="content-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">${escapeHtml(item.title)}</div>
+              <div class="card-meta">
+                <span>${item.date}</span>
+                <span>${item.contentType.replace('_', ' ')}</span>
+              </div>
+            </div>
+            <div class="status-badge ${statusClass}">${statusText}</div>
+          </div>
+          <div class="card-description">${escapeHtml(item.description)}</div>
+          <div class="card-footer">
+            <div class="card-footer-left">${item.breed || item.animal}</div>
+            <div class="posting-time">${item.bestPostingTime.time}</div>
+          </div>
+        </a>
+      `;
+    }
+
+    function updateStats() {
+      const pending = contentItems.filter(item =>
+        item.status === 'pending_generation' || item.status === 'pending_review'
+      ).length;
+      const approved = contentItems.filter(item => item.status === 'approved').length;
+      const posted = contentItems.filter(item => item.status === 'posted').length;
+
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-approved').textContent = approved;
+      document.getElementById('stat-posted').textContent = posted;
+    }
+
+    function updateLastUpdated(timestamp) {
+      if (!timestamp) {
+        const now = new Date();
+        timestamp = now.toISOString();
+      }
+
+      const date = new Date(timestamp);
+      const formatted = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      document.getElementById('last-updated').textContent = formatted;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Auto-refresh every 5 minutes
+    setInterval(loadContent, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

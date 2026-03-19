@@ -58,7 +58,7 @@ export default function PetPhotoUpload({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`border border-dashed transition-all rounded-2xl text-center cursor-pointer relative group min-h-[320px] flex flex-col items-center justify-center ${
+        className={`border border-dashed transition-all rounded-2xl text-center cursor-pointer relative group min-h-[200px] sm:min-h-[320px] flex flex-col items-center justify-center ${
           dragOver
             ? 'border-gold bg-gold/5'
             : uploadedPhotoUrl

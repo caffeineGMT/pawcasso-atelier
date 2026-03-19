@@ -28,6 +28,12 @@ interface AnalyticsMetrics {
     revenue: number;
     avgOrderValue: number;
     ltv: number;
+    // CAC metrics
+    marketingSpend: number;
+    cac: number;
+    ltvCacRatio: number;
+    roas: number; // Return on Ad Spend
+    newCustomers: number;
   }[];
 
   // Time series data
@@ -42,6 +48,15 @@ interface AnalyticsMetrics {
   totalCustomers: number;
   repeatCustomers: number;
   avgLtv: number;
+
+  // CAC Summary
+  cacSummary: {
+    totalMarketingSpend: number;
+    totalNewCustomers: number;
+    blendedCAC: number;
+    blendedLTVCACRatio: number;
+    totalROAS: number;
+  };
 }
 
 // Sync Stripe checkout sessions to database
@@ -159,12 +174,41 @@ async function calculateAnalytics(): Promise<AnalyticsMetrics> {
   const refundRate = totalOrders > 0 ? (totalRefunds / totalOrders) * 100 : 0;
   const refundAmount = refundedOrders.reduce((sum, o) => sum + o.refundAmount, 0);
 
-  // Channel breakdown
+  // Get marketing spend data (last 30 days)
+  const marketingSpend = await prisma.marketingSpend.findMany({
+    where: {
+      date: { gte: last30Days },
+    },
+  });
+
+  // Aggregate marketing spend by channel
+  const spendByChannel = new Map<string, number>();
+  for (const spend of marketingSpend) {
+    const normalizedChannel = spend.channel.toLowerCase();
+    spendByChannel.set(
+      normalizedChannel,
+      (spendByChannel.get(normalizedChannel) || 0) + spend.amount
+    );
+  }
+
+  // Channel breakdown with CAC calculations
   const channelMap = new Map<string, {
     orders: number;
     revenue: number;
     customers: Set<string>;
+    firstTimeCustomers: Set<string>;
   }>();
+
+  // Track all customer first orders
+  const customerFirstOrderChannel = new Map<string, string>();
+  const sortedOrders = [...allOrders].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+  for (const order of sortedOrders) {
+    if (!customerFirstOrderChannel.has(order.customerEmail)) {
+      const channel = order.utmSource || order.utmMedium || 'direct';
+      customerFirstOrderChannel.set(order.customerEmail, channel);
+    }
+  }
 
   for (const order of allOrders) {
     const channel = order.utmSource || order.utmMedium || 'direct';
@@ -172,22 +216,43 @@ async function calculateAnalytics(): Promise<AnalyticsMetrics> {
       orders: 0,
       revenue: 0,
       customers: new Set<string>(),
+      firstTimeCustomers: new Set<string>(),
     };
 
     existing.orders += 1;
     existing.revenue += order.amount;
     existing.customers.add(order.customerEmail);
 
+    // Count as new customer if this channel brought them in
+    if (customerFirstOrderChannel.get(order.customerEmail) === channel) {
+      existing.firstTimeCustomers.add(order.customerEmail);
+    }
+
     channelMap.set(channel, existing);
   }
 
-  const channelBreakdown = Array.from(channelMap.entries()).map(([channel, data]) => ({
-    channel,
-    orders: data.orders,
-    revenue: data.revenue,
-    avgOrderValue: data.revenue / data.orders,
-    ltv: data.revenue / data.customers.size,
-  })).sort((a, b) => b.revenue - a.revenue);
+  const channelBreakdown = Array.from(channelMap.entries()).map(([channel, data]) => {
+    const normalizedChannel = channel.toLowerCase();
+    const marketingSpendAmount = spendByChannel.get(normalizedChannel) || 0;
+    const newCustomers = data.firstTimeCustomers.size;
+    const cac = newCustomers > 0 ? marketingSpendAmount / newCustomers : 0;
+    const ltv = data.revenue / data.customers.size;
+    const ltvCacRatio = cac > 0 ? ltv / cac : 0;
+    const roas = marketingSpendAmount > 0 ? data.revenue / marketingSpendAmount : 0;
+
+    return {
+      channel,
+      orders: data.orders,
+      revenue: data.revenue,
+      avgOrderValue: data.revenue / data.orders,
+      ltv,
+      marketingSpend: marketingSpendAmount,
+      cac,
+      ltvCacRatio,
+      roas,
+      newCustomers,
+    };
+  }).sort((a, b) => b.revenue - a.revenue);
 
   // Daily stats for last 30 days
   const dailyStatsMap = new Map<string, { orders: number; revenue: number; refunds: number }>();
@@ -226,6 +291,13 @@ async function calculateAnalytics(): Promise<AnalyticsMetrics> {
   ).length;
   const avgLtv = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
 
+  // CAC Summary
+  const totalMarketingSpend = Array.from(spendByChannel.values()).reduce((sum, val) => sum + val, 0);
+  const totalNewCustomers = customerFirstOrderChannel.size;
+  const blendedCAC = totalNewCustomers > 0 ? totalMarketingSpend / totalNewCustomers : 0;
+  const blendedLTVCACRatio = blendedCAC > 0 ? avgLtv / blendedCAC : 0;
+  const totalROAS = totalMarketingSpend > 0 ? totalRevenue / totalMarketingSpend : 0;
+
   return {
     totalRevenue,
     monthlyRevenue,
@@ -242,6 +314,13 @@ async function calculateAnalytics(): Promise<AnalyticsMetrics> {
     totalCustomers,
     repeatCustomers,
     avgLtv,
+    cacSummary: {
+      totalMarketingSpend,
+      totalNewCustomers,
+      blendedCAC,
+      blendedLTVCACRatio,
+      totalROAS,
+    },
   };
 }
 

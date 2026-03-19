@@ -1,0 +1,66 @@
+{
+  "name": "Pawcasso Atelier - Custom AI Pet Portraits",
+  "short_name": "Pawcasso",
+  "description": "Transform your pet into stunning AI-generated art. Custom portraits starting at $9.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#C9A96E",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "shopping", "entertainment"],
+  "screenshots": [
+    {
+      "src": "/gallery/cat_vermeer.webp",
+      "sizes": "2048x2048",
+      "type": "image/webp",
+      "label": "Gallery of custom pet portraits"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Order Portrait",
+      "short_name": "Order",
+      "description": "Commission a custom pet portrait",
+      "url": "/order",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "View Gallery",
+      "short_name": "Gallery",
+      "description": "Browse our portfolio",
+      "url": "/gallery",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

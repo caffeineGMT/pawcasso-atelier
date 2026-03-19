@@ -14,6 +14,9 @@ import { captureUTMParams } from "@/lib/utm-tracker";
 import CrispChat from "@/components/CrispChat";
 import TrustBadges from "@/components/TrustBadges";
 import OrderActivityFeed from "@/components/OrderActivityFeed";
+import { useCheckoutFunnel } from "@/hooks/useCheckoutFunnel";
+import MobileCheckoutBar from "@/components/MobileCheckoutBar";
+import { useABPricing, applyVariantPricingClient } from "@/hooks/useABPricing";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -70,6 +73,23 @@ function OrderPageContent() {
   const [giftCardError, setGiftCardError] = useState<string | null>(null);
   const [giftCardLoading, setGiftCardLoading] = useState(false);
 
+  // Checkout funnel instrumentation
+  const {
+    trackField,
+    trackStepError,
+    trackPhotoUpload,
+    trackTierSelection,
+    trackPaymentRedirect,
+  } = useCheckoutFunnel({ currentStep });
+
+  // A/B pricing test
+  const { variant, sessionId, loading: abLoading } = useABPricing();
+
+  // Apply variant pricing to tier configs
+  const displayTierConfig = variant
+    ? TIER_CONFIG.map(tier => applyVariantPricingClient(tier, variant))
+    : TIER_CONFIG;
+
   // Track page view and check for URL params (don't track begin_checkout until form interaction)
   useEffect(() => {
     // Capture UTM params on page load
@@ -81,7 +101,7 @@ function OrderPageContent() {
     // Check for tier parameter
     const tierParam = searchParams.get('tier');
     if (tierParam) {
-      const validTier = TIER_CONFIG.find(t => t.id === tierParam);
+      const validTier = displayTierConfig.find(t => t.id === tierParam);
       if (validTier) {
         setSelectedTier(validTier.id);
       }
@@ -166,10 +186,12 @@ function OrderPageContent() {
   const validateStep1 = (): boolean => {
     if (!uploadedPhotoUrl) {
       setStep1Error("Please upload a photo of your pet");
+      trackStepError('photo', 'No photo uploaded');
       return false;
     }
     if (!petName.trim()) {
       setStep1Error("Please enter your pet's name");
+      trackStepError('petName', 'Pet name empty');
       return false;
     }
     setStep1Error("");
@@ -179,6 +201,7 @@ function OrderPageContent() {
   const validateStep2 = (): boolean => {
     if (!style) {
       setStep2Error("Please select an art style");
+      trackStepError('style', 'No style selected');
       return false;
     }
     setStep2Error("");
@@ -352,6 +375,13 @@ function OrderPageContent() {
       setUploadedPhotoUrl(uploadData.url);
       setUploadProgress(100);
 
+      // Track checkout funnel: photo uploaded
+      trackPhotoUpload({
+        file_size: file.size,
+        file_type: file.type,
+        tier: selectedTier,
+      });
+
       // Track successful upload
 //       trackEngagement('photo_upload_start', {
 //         tier: selectedTier,
@@ -420,7 +450,7 @@ function OrderPageContent() {
       const petPhotoUrl = uploadedPhotoUrl;
 
       // Track InitiateCheckout event (creates "checkout initiators" audience)
-      const selectedTierConfig = TIER_CONFIG.find(t => t.id === selectedTier);
+      const selectedTierConfig = displayTierConfig.find(t => t.id === selectedTier);
       const tierBadge = TIER_BADGES[selectedTier];
 
       trackInitiateCheckout({
@@ -459,7 +489,7 @@ function OrderPageContent() {
         items: [{ id: `portrait_${selectedTier}`, quantity: 1 }],
       });
 
-      // Create checkout session with photo URL, tier, discount code, badge info, and gift card
+      // Create checkout session with photo URL, tier, discount code, badge info, gift card, and A/B variant
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -474,12 +504,23 @@ function OrderPageContent() {
           discountCode: discountCode || undefined,
           badge: tierBadge || undefined,
           giftCardCode: giftCardValid && giftCardCode ? giftCardCode.trim() : undefined,
+          abTestVariant: variant,
+          abSessionId: sessionId,
         }),
       });
 
       const data = await res.json();
 
       if (data.url) {
+        // Track checkout funnel: payment redirect
+        trackPaymentRedirect({
+          tier: selectedTier,
+          amount: selectedTierConfig?.price,
+          style,
+          has_gift_card: giftCardValid,
+          has_discount: !!discountCode,
+        });
+
         // Track add_payment_info event before redirect to Stripe
         trackEvent('add_payment_info', {
           tier: selectedTier,
@@ -543,7 +584,7 @@ function OrderPageContent() {
               highPrice: "79.00",
               offerCount: "4",
               availability: "https://schema.org/InStock",
-              offers: TIER_CONFIG.map(tier => ({
+              offers: displayTierConfig.map(tier => ({
                 "@type": "Offer",
                 name: `${tier.name} Package`,
                 price: tier.price.toFixed(2),
@@ -612,6 +653,8 @@ function OrderPageContent() {
                         setPetName(e.target.value);
                         setStep1Error("");
                       }}
+                      {...trackField('petName')}
+                      autoComplete="off"
                       className="w-full min-h-[48px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-lg text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
                       placeholder="Sir Woofington III"
                     />
@@ -748,7 +791,7 @@ function OrderPageContent() {
                       Choose Your Package
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {TIER_CONFIG.map((tier) => {
+                      {displayTierConfig.map((tier) => {
                         const badge = TIER_BADGES[tier.id];
                         return (
                           <button
@@ -756,6 +799,7 @@ function OrderPageContent() {
                             type="button"
                             onClick={() => {
                               setSelectedTier(tier.id);
+                              trackTierSelection(tier.id, tier.price);
                               trackEngagement('tier_selection', {
                                 tier: tier.id,
                                 price: tier.price,
@@ -889,7 +933,7 @@ function OrderPageContent() {
 
             {/* STEP 3: Email + Special Requests */}
             <div className="w-full flex-shrink-0 px-1">
-              <form onSubmit={handleSubmit} className="space-y-6 min-h-[600px] flex flex-col">
+              <form onSubmit={handleSubmit} data-step="3" className="space-y-6 min-h-[600px] flex flex-col">
                 <div className="flex-1">
                   <h2 className="text-3xl font-semibold tracking-tight mb-6 text-center">
                     Final <span className="text-gradient">details</span>
@@ -1065,6 +1109,9 @@ function OrderPageContent() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      {...trackField('email')}
+                      inputMode="email"
+                      autoComplete="email"
                       className="w-full min-h-[48px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-lg text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all placeholder:text-white/20"
                       placeholder="jane@example.com"
                     />
@@ -1079,6 +1126,7 @@ function OrderPageContent() {
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
+                      {...trackField('notes')}
                       rows={4}
                       className="w-full min-h-[120px] bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-base text-text-primary focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all resize-none placeholder:text-white/20"
                       placeholder="Any specific requests? E.g., include a crown, specific background..."
@@ -1183,6 +1231,31 @@ function OrderPageContent() {
           </div>
         </div>
       </div>
+
+      {/* Sticky Mobile Checkout Bar */}
+      <MobileCheckoutBar
+        currentStep={currentStep}
+        totalSteps={3}
+        ctaLabel={
+          currentStep === 1
+            ? 'Next: Choose Style →'
+            : currentStep === 2
+            ? 'Next: Details →'
+            : `Checkout ${selectedTierConfig?.priceDisplay || '$9'}`
+        }
+        price={selectedTierConfig?.priceDisplay}
+        onCtaClick={() => {
+          if (currentStep < 3) {
+            handleNext();
+          } else {
+            // Trigger form submission
+            const form = document.querySelector('form[data-step="3"]') as HTMLFormElement;
+            if (form) form.requestSubmit();
+          }
+        }}
+        disabled={loading || (currentStep === 3 && (!style || (uploadProgress > 0 && uploadProgress < 100)))}
+        loading={loading}
+      />
     </section>
   );
 }

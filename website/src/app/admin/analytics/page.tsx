@@ -19,6 +19,11 @@ interface AnalyticsData {
     revenue: number;
     avgOrderValue: number;
     ltv: number;
+    marketingSpend: number;
+    cac: number;
+    ltvCacRatio: number;
+    roas: number;
+    newCustomers: number;
   }[];
   dailyStats: {
     date: string;
@@ -29,6 +34,13 @@ interface AnalyticsData {
   totalCustomers: number;
   repeatCustomers: number;
   avgLtv: number;
+  cacSummary: {
+    totalMarketingSpend: number;
+    totalNewCustomers: number;
+    blendedCAC: number;
+    blendedLTVCACRatio: number;
+    totalROAS: number;
+  };
   funnel?: {
     eventName: string;
     count: number;
@@ -112,13 +124,21 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-[#C9A96E]">Revenue Analytics</h1>
-          <button
-            onClick={syncStripeData}
-            disabled={syncing}
-            className="bg-[#C9A96E] text-black px-6 py-3 rounded-lg font-semibold hover:bg-[#B89960] transition disabled:opacity-50"
-          >
-            {syncing ? 'Syncing...' : 'Sync Stripe Data'}
-          </button>
+          <div className="flex gap-4">
+            <a
+              href="/admin/marketing-spend"
+              className="bg-[#1d1d1f] text-[#C9A96E] border border-[#C9A96E] px-6 py-3 rounded-lg font-semibold hover:bg-[#2d2d2f] transition"
+            >
+              📊 Manage Marketing Spend
+            </a>
+            <button
+              onClick={syncStripeData}
+              disabled={syncing}
+              className="bg-[#C9A96E] text-black px-6 py-3 rounded-lg font-semibold hover:bg-[#B89960] transition disabled:opacity-50"
+            >
+              {syncing ? 'Syncing...' : 'Sync Stripe Data'}
+            </button>
+          </div>
         </div>
 
         {/* Key Metrics Cards */}
@@ -170,6 +190,45 @@ export default function AnalyticsPage() {
             trend={analytics.monthlyOrders > 0 ? 'up' : 'neutral'}
           />
         </div>
+
+        {/* CAC Summary Cards */}
+        {analytics.cacSummary && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Customer Acquisition Cost (CAC) Summary</h2>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              <MetricCard
+                title="Marketing Spend (30d)"
+                value={`$${analytics.cacSummary.totalMarketingSpend.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                subtitle="Total ad spend"
+                trend="neutral"
+              />
+              <MetricCard
+                title="New Customers"
+                value={analytics.cacSummary.totalNewCustomers.toString()}
+                subtitle="First-time buyers"
+                trend={analytics.cacSummary.totalNewCustomers > 0 ? 'up' : 'neutral'}
+              />
+              <MetricCard
+                title="Blended CAC"
+                value={`$${analytics.cacSummary.blendedCAC.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                subtitle="Cost per customer"
+                trend={analytics.cacSummary.blendedCAC < 50 ? 'up' : analytics.cacSummary.blendedCAC > 100 ? 'down' : 'neutral'}
+              />
+              <MetricCard
+                title="LTV:CAC Ratio"
+                value={analytics.cacSummary.blendedLTVCACRatio.toFixed(2)}
+                subtitle={analytics.cacSummary.blendedLTVCACRatio >= 3 ? "✅ Healthy (≥3:1)" : "⚠️ Below target"}
+                trend={analytics.cacSummary.blendedLTVCACRatio >= 3 ? 'up' : analytics.cacSummary.blendedLTVCACRatio >= 2 ? 'neutral' : 'down'}
+              />
+              <MetricCard
+                title="Total ROAS"
+                value={analytics.cacSummary.totalROAS.toFixed(2)}
+                subtitle={analytics.cacSummary.totalROAS >= 3 ? "✅ Profitable" : "⚠️ Low return"}
+                trend={analytics.cacSummary.totalROAS >= 3 ? 'up' : analytics.cacSummary.totalROAS >= 2 ? 'neutral' : 'down'}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Conversion Funnel */}
         {analytics.funnel && analytics.funnel.length > 0 && (
@@ -247,41 +306,96 @@ export default function AnalyticsPage() {
           </div>
         )}
 
-        {/* Acquisition Channel Breakdown */}
+        {/* Acquisition Channel Breakdown with CAC */}
         <div className="bg-[#111] border border-[#1d1d1f] rounded-2xl p-6 mb-8">
-          <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Acquisition Channels</h2>
+          <h2 className="text-2xl font-bold text-[#C9A96E] mb-6">Acquisition Channels - CAC Analysis</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="text-left text-[#86868b] border-b border-[#1d1d1f]">
                   <th className="pb-4 font-semibold">Channel</th>
                   <th className="pb-4 font-semibold text-right">Orders</th>
+                  <th className="pb-4 font-semibold text-right">New Customers</th>
                   <th className="pb-4 font-semibold text-right">Revenue</th>
-                  <th className="pb-4 font-semibold text-right">AOV</th>
+                  <th className="pb-4 font-semibold text-right">Ad Spend</th>
+                  <th className="pb-4 font-semibold text-right">CAC</th>
                   <th className="pb-4 font-semibold text-right">LTV</th>
+                  <th className="pb-4 font-semibold text-right">LTV:CAC</th>
+                  <th className="pb-4 font-semibold text-right">ROAS</th>
                 </tr>
               </thead>
               <tbody>
-                {analytics.channelBreakdown.map((channel, index) => (
-                  <tr key={index} className="border-b border-[#1d1d1f] last:border-0">
-                    <td className="py-4 font-medium capitalize">{channel.channel}</td>
-                    <td className="py-4 text-right">{channel.orders}</td>
-                    <td className="py-4 text-right">${channel.revenue.toFixed(2)}</td>
-                    <td className="py-4 text-right">${channel.avgOrderValue.toFixed(2)}</td>
-                    <td className="py-4 text-right text-[#C9A96E] font-semibold">
-                      ${channel.ltv.toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
+                {analytics.channelBreakdown.map((channel, index) => {
+                  const ltvCacHealthy = channel.ltvCacRatio >= 3;
+                  const roasHealthy = channel.roas >= 3;
+
+                  return (
+                    <tr key={index} className="border-b border-[#1d1d1f] last:border-0">
+                      <td className="py-4 font-medium capitalize">{channel.channel}</td>
+                      <td className="py-4 text-right">{channel.orders}</td>
+                      <td className="py-4 text-right">{channel.newCustomers}</td>
+                      <td className="py-4 text-right">${channel.revenue.toFixed(2)}</td>
+                      <td className="py-4 text-right">
+                        {channel.marketingSpend > 0 ? (
+                          `$${channel.marketingSpend.toFixed(2)}`
+                        ) : (
+                          <span className="text-[#86868b] text-sm">No spend data</span>
+                        )}
+                      </td>
+                      <td className="py-4 text-right">
+                        {channel.cac > 0 ? (
+                          <span className={channel.cac < 50 ? 'text-green-400' : channel.cac > 100 ? 'text-red-400' : ''}>
+                            ${channel.cac.toFixed(2)}
+                          </span>
+                        ) : (
+                          <span className="text-[#86868b]">-</span>
+                        )}
+                      </td>
+                      <td className="py-4 text-right text-[#C9A96E] font-semibold">
+                        ${channel.ltv.toFixed(2)}
+                      </td>
+                      <td className="py-4 text-right">
+                        {channel.ltvCacRatio > 0 ? (
+                          <span className={ltvCacHealthy ? 'text-green-400 font-bold' : 'text-yellow-400'}>
+                            {channel.ltvCacRatio.toFixed(2)}x
+                            {ltvCacHealthy && ' ✅'}
+                          </span>
+                        ) : (
+                          <span className="text-[#86868b]">-</span>
+                        )}
+                      </td>
+                      <td className="py-4 text-right">
+                        {channel.roas > 0 ? (
+                          <span className={roasHealthy ? 'text-green-400 font-bold' : 'text-yellow-400'}>
+                            {channel.roas.toFixed(2)}x
+                          </span>
+                        ) : (
+                          <span className="text-[#86868b]">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
                 {analytics.channelBreakdown.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-[#86868b]">
+                    <td colSpan={9} className="py-8 text-center text-[#86868b]">
                       No channel data yet
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+          <div className="mt-6 p-4 bg-[#1d1d1f] rounded-lg">
+            <div className="text-sm text-[#86868b]">
+              <p className="mb-2"><strong className="text-[#F5F5F7]">📊 Key Metrics:</strong></p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li><strong className="text-[#C9A96E]">CAC</strong> (Customer Acquisition Cost) = Marketing Spend ÷ New Customers</li>
+                <li><strong className="text-[#C9A96E]">LTV</strong> (Lifetime Value) = Total Revenue ÷ Total Customers</li>
+                <li><strong className="text-[#C9A96E]">LTV:CAC Ratio</strong> - Target: ≥3:1 (healthy), 2-3:1 (acceptable), &lt;2:1 (unprofitable)</li>
+                <li><strong className="text-[#C9A96E]">ROAS</strong> (Return on Ad Spend) = Revenue ÷ Ad Spend - Target: ≥3x</li>
+              </ul>
+            </div>
           </div>
         </div>
 

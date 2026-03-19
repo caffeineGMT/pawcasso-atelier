@@ -41,12 +41,14 @@ export async function POST(req: NextRequest) {
 
 /**
  * Get funnel analytics - conversion rates and drop-off analysis
+ * Supports device-type filtering for mobile vs desktop comparison
  */
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const deviceFilter = searchParams.get('device'); // 'mobile', 'tablet', 'desktop', or null for all
 
     // Build date filter
     const dateFilter = {
@@ -62,70 +64,173 @@ export async function GET(req: NextRequest) {
       orderBy: { timestamp: 'asc' },
     });
 
-    // Calculate unique sessions per step
-    const stepCounts: Record<string, Set<string>> = {
-      landing: new Set(),
-      gallery: new Set(),
-      order_page: new Set(),
-      photo_upload: new Set(),
-      tier_selection: new Set(),
-      checkout_initiate: new Set(),
-      purchase: new Set(),
+    // Helper to check device type from metadata
+    const getDeviceType = (metadata: string | null): string => {
+      if (!metadata) return 'unknown';
+      try {
+        const parsed = JSON.parse(metadata);
+        return parsed.device_type || 'unknown';
+      } catch { return 'unknown'; }
     };
 
+    // All checkout funnel steps (new granular + legacy steps)
+    const allSteps = [
+      'landing', 'gallery', 'order_page',
+      'view_product', 'photo_upload', 'style_selection',
+      'tier_selection', 'checkout_form', 'checkout_initiate',
+      'payment_redirect', 'purchase_complete', 'purchase',
+      'funnel_complete',
+    ];
+
+    // Build per-device counts
+    type DeviceCounts = Record<string, Set<string>>;
+    const deviceGroups: Record<string, DeviceCounts> = {
+      all: {},
+      mobile: {},
+      tablet: {},
+      desktop: {},
+    };
+
+    for (const group of Object.values(deviceGroups)) {
+      for (const step of allSteps) {
+        group[step] = new Set();
+      }
+    }
+
+    // Collect dropoff signals separately
+    const dropoffSignals: Record<string, { count: number; sessions: Set<string> }> = {};
+
     events.forEach((event) => {
-      if (stepCounts[event.step]) {
-        stepCounts[event.step].add(event.sessionId);
+      const device = getDeviceType(event.metadata);
+      const step = event.step;
+
+      // Handle dropoff signal events
+      if (step.startsWith('dropoff_')) {
+        const signalType = step.replace('dropoff_', '');
+        if (!dropoffSignals[signalType]) {
+          dropoffSignals[signalType] = { count: 0, sessions: new Set() };
+        }
+        dropoffSignals[signalType].count++;
+        dropoffSignals[signalType].sessions.add(event.sessionId);
+        return;
+      }
+
+      // Regular funnel steps
+      if (deviceGroups.all[step]) {
+        deviceGroups.all[step].add(event.sessionId);
+      }
+
+      if (device && deviceGroups[device] && deviceGroups[device][step]) {
+        deviceGroups[device][step].add(event.sessionId);
       }
     });
 
-    // Convert to counts
-    const funnelData = {
-      landing: stepCounts.landing.size,
-      gallery: stepCounts.gallery.size,
-      order_page: stepCounts.order_page.size,
-      photo_upload: stepCounts.photo_upload.size,
-      tier_selection: stepCounts.tier_selection.size,
-      checkout_initiate: stepCounts.checkout_initiate.size,
-      purchase: stepCounts.purchase.size,
+    // Convert sets to counts
+    const toCountMap = (group: DeviceCounts): Record<string, number> => {
+      const result: Record<string, number> = {};
+      for (const [step, sessions] of Object.entries(group)) {
+        result[step] = sessions.size;
+      }
+      return result;
     };
 
-    // Calculate conversion rates between steps
-    const conversionRates = {
-      landing_to_gallery: funnelData.landing > 0 ? (funnelData.gallery / funnelData.landing) * 100 : 0,
-      gallery_to_order: funnelData.gallery > 0 ? (funnelData.order_page / funnelData.gallery) * 100 : 0,
-      order_to_upload: funnelData.order_page > 0 ? (funnelData.photo_upload / funnelData.order_page) * 100 : 0,
-      upload_to_tier: funnelData.photo_upload > 0 ? (funnelData.tier_selection / funnelData.photo_upload) * 100 : 0,
-      tier_to_checkout: funnelData.tier_selection > 0 ? (funnelData.checkout_initiate / funnelData.tier_selection) * 100 : 0,
-      checkout_to_purchase: funnelData.checkout_initiate > 0 ? (funnelData.purchase / funnelData.checkout_initiate) * 100 : 0,
+    // Calculate conversion rates between checkout steps
+    const calcConversionRates = (counts: Record<string, number>) => {
+      // Use the granular checkout steps
+      const viewProduct = counts.view_product || counts.order_page || 0;
+      const photoUpload = counts.photo_upload || 0;
+      const styleSelection = counts.style_selection || 0;
+      const tierSelection = counts.tier_selection || 0;
+      const checkoutForm = counts.checkout_form || counts.checkout_initiate || 0;
+      const paymentRedirect = counts.payment_redirect || 0;
+      const purchaseComplete = counts.purchase_complete || counts.purchase || 0;
+
+      return {
+        view_to_upload: viewProduct > 0 ? (photoUpload / viewProduct) * 100 : 0,
+        upload_to_style: photoUpload > 0 ? (styleSelection / photoUpload) * 100 : 0,
+        style_to_tier: styleSelection > 0 ? (tierSelection / styleSelection) * 100 : 0,
+        tier_to_form: tierSelection > 0 ? (checkoutForm / tierSelection) * 100 : 0,
+        form_to_payment: checkoutForm > 0 ? (paymentRedirect / checkoutForm) * 100 : 0,
+        payment_to_purchase: paymentRedirect > 0 ? (purchaseComplete / paymentRedirect) * 100 : 0,
+        overall: viewProduct > 0 ? (purchaseComplete / viewProduct) * 100 : 0,
+      };
     };
 
-    // Overall conversion rate (landing → purchase)
-    const overallConversion = funnelData.landing > 0 ? (funnelData.purchase / funnelData.landing) * 100 : 0;
+    // Build response based on device filter
+    const targetGroup = deviceFilter && deviceGroups[deviceFilter]
+      ? deviceFilter
+      : 'all';
 
-    // Calculate drop-off rates (inverse of conversion)
-    const dropOffRates = {
-      landing_to_gallery: 100 - conversionRates.landing_to_gallery,
-      gallery_to_order: 100 - conversionRates.gallery_to_order,
-      order_to_upload: 100 - conversionRates.order_to_upload,
-      upload_to_tier: 100 - conversionRates.upload_to_tier,
-      tier_to_checkout: 100 - conversionRates.tier_to_checkout,
-      checkout_to_purchase: 100 - conversionRates.checkout_to_purchase,
+    const counts = toCountMap(deviceGroups[targetGroup]);
+    const conversionRates = calcConversionRates(counts);
+
+    // Drop-off rates
+    const dropOffRates: Record<string, number> = {};
+    for (const [key, rate] of Object.entries(conversionRates)) {
+      if (key !== 'overall') {
+        dropOffRates[key] = 100 - rate;
+      }
+    }
+
+    // Build device comparison
+    const deviceComparison = {
+      mobile: {
+        counts: toCountMap(deviceGroups.mobile),
+        conversionRates: calcConversionRates(toCountMap(deviceGroups.mobile)),
+      },
+      tablet: {
+        counts: toCountMap(deviceGroups.tablet),
+        conversionRates: calcConversionRates(toCountMap(deviceGroups.tablet)),
+      },
+      desktop: {
+        counts: toCountMap(deviceGroups.desktop),
+        conversionRates: calcConversionRates(toCountMap(deviceGroups.desktop)),
+      },
     };
+
+    // Identify biggest mobile drop-off point
+    const mobileRates = deviceComparison.mobile.conversionRates;
+    const desktopRates = deviceComparison.desktop.conversionRates;
+    const dropoffGaps: Array<{ step: string; mobile: number; desktop: number; gap: number }> = [];
+
+    for (const key of Object.keys(mobileRates) as Array<keyof typeof mobileRates>) {
+      if (key === 'overall') continue;
+      const gap = (desktopRates[key] || 0) - (mobileRates[key] || 0);
+      if (gap > 0) {
+        dropoffGaps.push({
+          step: key,
+          mobile: mobileRates[key] || 0,
+          desktop: desktopRates[key] || 0,
+          gap,
+        });
+      }
+    }
+    dropoffGaps.sort((a, b) => b.gap - a.gap);
+
+    // Format dropoff signals
+    const formattedSignals: Record<string, { count: number; unique_sessions: number }> = {};
+    for (const [type, data] of Object.entries(dropoffSignals)) {
+      formattedSignals[type] = {
+        count: data.count,
+        unique_sessions: data.sessions.size,
+      };
+    }
 
     return NextResponse.json({
       success: true,
       data: {
-        funnelCounts: funnelData,
+        funnelCounts: counts,
         conversionRates,
         dropOffRates,
-        overallConversion,
-        totalSessions: funnelData.landing,
-        totalPurchases: funnelData.purchase,
+        overallConversion: conversionRates.overall,
+        deviceComparison,
+        mobileDropoffHotspots: dropoffGaps.slice(0, 5),
+        dropoffSignals: formattedSignals,
         dateRange: {
           start: dateFilter.timestamp.gte.toISOString(),
           end: dateFilter.timestamp.lte.toISOString(),
         },
+        deviceFilter: targetGroup,
       },
     });
   } catch (error) {
