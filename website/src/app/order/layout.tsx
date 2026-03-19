@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/gallery/cat_vermeer.png",
+        url: "/gallery/cat_vermeer.webp",
         width: 2048,
         height: 2048,
         alt: "Example pet portrait - Cat with a Pearl Earring",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: "Order Custom Portrait | Pawcasso Atelier",
     description:
       "Order your custom AI pet portrait for $9. Choose from 17 art styles.",
-    images: ["/gallery/cat_vermeer.png"],
+    images: ["/gallery/cat_vermeer.webp"],
   },
 };
 
@@ -32,7 +32,7 @@ const jsonLd = {
   "@type": "Product",
   name: "Custom AI Pet Portrait",
   description: "Personalized AI-generated pet portrait in your choice of 17 artistic styles",
-  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.png",
+  image: "https://pawcasso-atelier.vercel.app/gallery/cat_vermeer.webp",
   brand: {
     "@type": "Brand",
     name: "Pawcasso Atelier",

@@ -634,3 +634,104 @@ model ABTestEvent {
   @@index([eventType])
   @@index([timestamp])
 }
+
+// Instagram Content Tracking - Track generated content and performance
+model InstagramContent {
+  id          String   @id @default(cuid())
+  contentId   String   @unique // Generated content ID from ig-queue (e.g., "8a4a00d3")
+  contentType String // portrait, emoji_set, zodiac, reel
+  title       String
+  description String?
+  animal      String // Dog, Cat, Rabbit, etc.
+  breed       String?
+  style       String // Art style used
+
+  // Caption & posting details
+  captionTone      String? // witty, heartfelt, minimal, bold
+  captionText      String?
+  hashtags         String? // JSON array of hashtags
+  postedAt         DateTime?
+  bestPostingTime  String? // Recommended posting time
+  postingReasoning String? // Why this time was recommended
+
+  // Instagram media details
+  instagramMediaId   String? @unique // Instagram media ID after posting
+  instagramPostUrl   String? // Instagram post URL
+  instagramMediaType String? // IMAGE, CAROUSEL_ALBUM, VIDEO
+
+  // Status tracking
+  status String @default("generated") // generated, queued, posted, archived
+
+  // Engagement metrics (updated periodically)
+  likes            Int       @default(0)
+  comments         Int       @default(0)
+  saves            Int       @default(0)
+  shares           Int       @default(0)
+  reach            Int       @default(0)
+  impressions      Int       @default(0)
+  engagementRate   Float     @default(0)
+  lastMetricsSync  DateTime?
+  metricsSnapshots EngagementSnapshot[]
+
+  // Metadata
+  generatedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([contentType])
+  @@index([status])
+  @@index([postedAt])
+  @@index([animal])
+  @@index([breed])
+  @@index([engagementRate])
+}
+
+// Engagement Snapshots - Track engagement over time
+model EngagementSnapshot {
+  id                 String            @id @default(cuid())
+  instagramContentId String
+  instagramContent   InstagramContent  @relation(fields: [instagramContentId], references: [id], onDelete: Cascade)
+
+  // Metrics at this snapshot
+  likes       Int
+  comments    Int
+  saves       Int
+  shares      Int
+  reach       Int
+  impressions Int
+
+  // Calculated metrics
+  engagementRate Float // (likes + comments + saves) / reach
+  viralityScore  Float // (shares + saves) / impressions
+
+  // Snapshot metadata
+  hoursAfterPost Int // Hours since post was published
+  capturedAt     DateTime @default(now())
+
+  @@index([instagramContentId])
+  @@index([capturedAt])
+  @@index([hoursAfterPost])
+}
+
+// Content Performance Insights - AI-generated insights
+model ContentInsight {
+  id            String   @id @default(cuid())
+  insightType   String // best_content_type, optimal_posting_time, trending_animal, caption_tone_winner
+  title         String
+  description   String
+  recommendation String // Actionable recommendation
+  confidence    Float // 0-1 confidence score
+  dataPoints    Int // Number of posts analyzed
+  metadata      String? // JSON with additional context
+
+  // Validity period
+  validFrom DateTime @default(now())
+  validUntil DateTime? // When this insight expires/needs refresh
+  active    Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([insightType])
+  @@index([active])
+  @@index([validFrom])
+}

@@ -872,7 +872,7 @@ export async function POST(req: NextRequest) {
         try {
           await trackPricingConversion({
             testId: DEFAULT_TEST_CONFIG.id,
-            variant: metadata.abTestVariant,
+            variant: metadata.abTestVariant as any, // Type cast from session metadata
             sessionId: metadata.abSessionId,
             revenue: amountTotal / 100,
             tier,
