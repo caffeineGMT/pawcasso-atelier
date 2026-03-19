@@ -8,6 +8,7 @@ import EmailCaptureModal from "@/components/EmailCaptureModal";
 import SessionProvider from "@/components/SessionProvider";
 import PromotionBanner from "@/components/PromotionBanner";
 import WebVitals from "@/components/WebVitals";
+import BrowserCompat from "@/components/BrowserCompat";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ToastProvider } from "@/components/ToastProvider";
 import { NetworkStatus } from "@/components/NetworkStatus";
@@ -225,6 +226,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`min-h-screen flex flex-col antialiased ${inter.className}`}>
         <ServiceWorkerRegistration />
         <WebVitals />
+        <BrowserCompat />
         <ErrorBoundary>
           <SessionProvider>
             <FunnelTracker />

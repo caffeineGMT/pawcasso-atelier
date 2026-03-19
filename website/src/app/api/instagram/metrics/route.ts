@@ -1,114 +1,111 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-const GRAPH_API_BASE = 'https://graph.facebook.com/v18.0';
+const prisma = new PrismaClient();
 
 /**
- * GET /api/instagram/metrics
- * Fetches Instagram account and post-level metrics.
+ * POST /api/instagram/metrics
+ * Update engagement metrics for an Instagram post
  *
- * Query params:
- *   ?mediaId=<id>  - Get insights for a specific post
- *   (no params)    - Get account-level metrics
+ * Body: {
+ *   contentId: string;
+ *   likes: number;
+ *   comments: number;
+ *   saves: number;
+ *   shares: number;
+ *   reach: number;
+ *   impressions: number;
+ *   createSnapshot?: boolean; // Create a snapshot for time-series tracking
+ * }
  */
-export async function GET(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
-    const accountId = process.env.INSTAGRAM_ACCOUNT_ID;
+    const body = await request.json();
 
-    if (!accessToken || !accountId) {
+    const {
+      contentId,
+      likes = 0,
+      comments = 0,
+      saves = 0,
+      shares = 0,
+      reach = 0,
+      impressions = 0,
+      createSnapshot = false,
+    } = body;
+
+    if (!contentId) {
       return NextResponse.json(
-        { error: 'Instagram credentials not configured' },
-        { status: 500 }
+        { error: 'Missing required field: contentId' },
+        { status: 400 }
       );
     }
 
-    const { searchParams } = new URL(req.url);
-    const mediaId = searchParams.get('mediaId');
+    // Find the content
+    const content = await prisma.instagramContent.findUnique({
+      where: { contentId },
+    });
 
-    if (mediaId) {
-      // Post-level insights
-      const res = await fetch(
-        `${GRAPH_API_BASE}/${mediaId}/insights?metric=reach,impressions,likes,comments,saved,shares,total_interactions&access_token=${accessToken}`
+    if (!content) {
+      return NextResponse.json(
+        { error: 'Content not found' },
+        { status: 404 }
+      );
+    }
+
+    // Calculate engagement rate
+    const engagementRate = reach > 0
+      ? parseFloat((((likes + comments + saves) / reach) * 100).toFixed(2))
+      : 0;
+
+    // Update content metrics
+    const updated = await prisma.instagramContent.update({
+      where: { contentId },
+      data: {
+        likes,
+        comments,
+        saves,
+        shares,
+        reach,
+        impressions,
+        engagementRate,
+        lastMetricsSync: new Date(),
+      },
+    });
+
+    // Create snapshot if requested
+    if (createSnapshot && content.postedAt) {
+      const hoursAfterPost = Math.floor(
+        (Date.now() - new Date(content.postedAt).getTime()) / (1000 * 60 * 60)
       );
 
-      if (!res.ok) {
-        const error = await res.json();
-        return NextResponse.json(
-          { error: 'Failed to fetch media insights', details: error },
-          { status: 502 }
-        );
-      }
+      const viralityScore = impressions > 0
+        ? parseFloat((((shares + saves) / impressions) * 100).toFixed(2))
+        : 0;
 
-      const data = await res.json();
-      const getValue = (name: string): number => {
-        const metric = data.data?.find(
-          (m: { name: string }) => m.name === name
-        );
-        return metric?.values?.[0]?.value ?? 0;
-      };
-
-      return NextResponse.json({
-        mediaId,
-        reach: getValue('reach'),
-        impressions: getValue('impressions'),
-        likes: getValue('likes'),
-        comments: getValue('comments'),
-        saves: getValue('saved'),
-        shares: getValue('shares'),
-        engagement: getValue('total_interactions'),
+      await prisma.engagementSnapshot.create({
+        data: {
+          instagramContentId: content.id,
+          likes,
+          comments,
+          saves,
+          shares,
+          reach,
+          impressions,
+          engagementRate,
+          viralityScore,
+          hoursAfterPost,
+        },
       });
     }
 
-    // Account-level insights
-    const profileRes = await fetch(
-      `${GRAPH_API_BASE}/${accountId}?fields=followers_count,media_count,username,name&access_token=${accessToken}`
-    );
-
-    if (!profileRes.ok) {
-      const error = await profileRes.json();
-      return NextResponse.json(
-        { error: 'Failed to fetch profile', details: error },
-        { status: 502 }
-      );
-    }
-
-    const profile = await profileRes.json();
-
-    // Get 7-day insights
-    const now = Math.floor(Date.now() / 1000);
-    const weekAgo = now - 7 * 24 * 60 * 60;
-    const insightsRes = await fetch(
-      `${GRAPH_API_BASE}/${accountId}/insights?metric=reach,impressions&period=day&since=${weekAgo}&until=${now}&access_token=${accessToken}`
-    );
-
-    let weeklyReach = 0;
-    let weeklyImpressions = 0;
-
-    if (insightsRes.ok) {
-      const insights = await insightsRes.json();
-      for (const metric of insights.data || []) {
-        const total = (metric.values || []).reduce(
-          (sum: number, v: { value: number }) => sum + v.value,
-          0
-        );
-        if (metric.name === 'reach') weeklyReach = total;
-        if (metric.name === 'impressions') weeklyImpressions = total;
-      }
-    }
-
-    return NextResponse.json({
-      username: profile.username,
-      name: profile.name,
-      followers: profile.followers_count,
-      mediaCount: profile.media_count,
-      weeklyReach,
-      weeklyImpressions,
-    });
+    return NextResponse.json(updated);
   } catch (error) {
-    console.error('Metrics fetch error:', error);
+    console.error('Error updating Instagram metrics:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to update metrics' },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
