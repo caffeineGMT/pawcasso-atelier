@@ -1,265 +1,267 @@
 /**
- * Meta Conversions API (Server-Side Event Tracking)
+ * Meta Conversions API (Server-Side Tracking)
  *
- * Purpose: Send events to Meta's Conversions API from the server-side to:
- * 1. Bypass iOS 14+ tracking limitations
- * 2. Improve event match quality
- * 3. Enable accurate attribution and reporting
- * 4. Create more reliable retargeting audiences
+ * Implements server-side event tracking to Meta for:
+ * - Better attribution (bypasses iOS 14.5+ tracking limitations)
+ * - Improved data accuracy
+ * - Better retargeting audience quality
  *
- * Docs: https://developers.facebook.com/docs/marketing-api/conversions-api
+ * Requires: META_PIXEL_ACCESS_TOKEN in .env
  */
 
 import crypto from 'crypto';
 
-interface ConversionEvent {
+interface ServerEvent {
   event_name: string;
   event_time: number;
-  event_id?: string;
   user_data: {
-    em?: string[]; // Hashed email
-    ph?: string[]; // Hashed phone
-    fn?: string[]; // Hashed first name
-    ln?: string[]; // Hashed last name
-    ct?: string[]; // Hashed city
-    st?: string[]; // Hashed state
-    zp?: string[]; // Hashed zip
-    country?: string[]; // Hashed country
+    em?: string;  // Email (hashed SHA-256)
+    ph?: string;  // Phone (hashed SHA-256)
     client_ip_address?: string;
     client_user_agent?: string;
-    fbc?: string; // Facebook click ID cookie
-    fbp?: string; // Facebook browser ID cookie
+    fbc?: string; // Facebook click ID
+    fbp?: string; // Facebook browser ID
   };
   custom_data?: {
+    content_ids?: string[];
+    content_name?: string;
+    content_type?: string;
     value?: number;
     currency?: string;
-    content_ids?: string[];
-    content_type?: string;
-    content_name?: string;
     num_items?: number;
   };
-  action_source: 'website' | 'email' | 'app' | 'phone_call' | 'chat' | 'physical_store' | 'system_generated' | 'other';
   event_source_url?: string;
+  action_source: 'website';
 }
 
 /**
- * Hash a value using SHA-256 (required by Meta for PII)
+ * Hash data for user_data fields (PII protection)
  */
-function hashValue(value: string): string {
-  if (!value) return '';
-  return crypto
-    .createHash('sha256')
-    .update(value.toLowerCase().trim())
-    .digest('hex');
+function hashData(data: string): string {
+  return crypto.createHash('sha256').update(data.toLowerCase().trim()).digest('hex');
 }
 
 /**
  * Send event to Meta Conversions API
  */
-export async function sendConversionEvent(event: ConversionEvent): Promise<boolean> {
-  const accessToken = process.env.META_CONVERSIONS_API_ACCESS_TOKEN;
+export async function sendMetaServerEvent(params: {
+  event_name: string;
+  email?: string;
+  phone?: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  content_ids?: string[];
+  content_name?: string;
+  content_type?: string;
+  value?: number;
+  currency?: string;
+  num_items?: number;
+  event_source_url?: string;
+}): Promise<void> {
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const accessToken = process.env.META_PIXEL_ACCESS_TOKEN;
 
-  if (!accessToken || !pixelId) {
-    console.warn('Meta Conversions API not configured. Skipping server-side event.');
-    return false;
+  if (!pixelId || !accessToken) {
+    console.warn('[Meta CAPI] Missing credentials - skipping server-side tracking');
+    return;
   }
 
-  const url = `https://graph.facebook.com/v18.0/${pixelId}/events`;
+  // Build user_data with hashed PII
+  const user_data: ServerEvent['user_data'] = {
+    client_ip_address: params.ip,
+    client_user_agent: params.userAgent,
+    fbc: params.fbc,
+    fbp: params.fbp,
+  };
+
+  if (params.email) {
+    user_data.em = hashData(params.email);
+  }
+
+  if (params.phone) {
+    user_data.ph = hashData(params.phone);
+  }
+
+  // Build custom_data
+  const custom_data: ServerEvent['custom_data'] = {};
+  if (params.content_ids) custom_data.content_ids = params.content_ids;
+  if (params.content_name) custom_data.content_name = params.content_name;
+  if (params.content_type) custom_data.content_type = params.content_type;
+  if (params.value) custom_data.value = params.value;
+  if (params.currency) custom_data.currency = params.currency;
+  if (params.num_items) custom_data.num_items = params.num_items;
+
+  // Build server event
+  const serverEvent: ServerEvent = {
+    event_name: params.event_name,
+    event_time: Math.floor(Date.now() / 1000),
+    user_data,
+    custom_data: Object.keys(custom_data).length > 0 ? custom_data : undefined,
+    event_source_url: params.event_source_url,
+    action_source: 'website',
+  };
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: [event],
-        access_token: accessToken,
-      }),
-    });
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: [serverEvent],
+        }),
+      }
+    );
 
     const result = await response.json();
 
     if (!response.ok) {
-      console.error('Meta Conversions API error:', result);
-      return false;
+      console.error('[Meta CAPI] Error:', result);
+    } else {
+      console.log('[Meta CAPI] Event sent:', params.event_name);
     }
-
-    console.log('Meta Conversions API success:', result);
-    return true;
   } catch (error) {
-    console.error('Failed to send Meta Conversions API event:', error);
-    return false;
+    console.error('[Meta CAPI] Failed to send event:', error);
   }
 }
 
 /**
- * Track Purchase event server-side (called from Stripe webhook)
+ * Track PageView server-side
  */
-export async function trackPurchaseServerSide(params: {
-  email: string;
+export async function trackServerPageView(params: {
+  email?: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
+    event_name: 'PageView',
+    ...params,
+    event_source_url: params.url,
+  });
+}
+
+/**
+ * Track ViewContent server-side
+ */
+export async function trackServerViewContent(params: {
+  email?: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  content_ids?: string[];
+  content_name?: string;
+  content_type?: string;
+  value?: number;
+  currency?: string;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
+    event_name: 'ViewContent',
+    ...params,
+    event_source_url: params.url,
+  });
+}
+
+/**
+ * Track InitiateCheckout server-side
+ */
+export async function trackServerInitiateCheckout(params: {
+  email?: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  content_ids: string[];
+  content_name?: string;
+  content_type?: string;
   value: number;
   currency?: string;
-  orderId: string;
-  contentIds: string[];
-  contentType: string;
-  userAgent?: string;
-  ipAddress?: string;
-  eventId?: string; // For deduplication with client-side event
-  fbp?: string; // Facebook browser cookie
-  fbc?: string; // Facebook click cookie
-}): Promise<boolean> {
-  const event: ConversionEvent = {
-    event_name: 'Purchase',
-    event_time: Math.floor(Date.now() / 1000),
-    event_id: params.eventId || `purchase_${params.orderId}`,
-    user_data: {
-      em: [hashValue(params.email)],
-      client_ip_address: params.ipAddress,
-      client_user_agent: params.userAgent,
-      fbp: params.fbp,
-      fbc: params.fbc,
-    },
-    custom_data: {
-      value: params.value,
-      currency: params.currency || 'USD',
-      content_ids: params.contentIds,
-      content_type: params.contentType,
-      num_items: 1,
-    },
-    action_source: 'website',
-    event_source_url: 'https://pawcasso-atelier.vercel.app/order/success',
-  };
-
-  return sendConversionEvent(event);
-}
-
-/**
- * Track Lead event server-side (called from email subscription)
- */
-export async function trackLeadServerSide(params: {
-  email: string;
-  ipAddress?: string;
-  userAgent?: string;
-  eventId?: string;
-  fbp?: string;
-  fbc?: string;
-}): Promise<boolean> {
-  const event: ConversionEvent = {
-    event_name: 'Lead',
-    event_time: Math.floor(Date.now() / 1000),
-    event_id: params.eventId || `lead_${Date.now()}`,
-    user_data: {
-      em: [hashValue(params.email)],
-      client_ip_address: params.ipAddress,
-      client_user_agent: params.userAgent,
-      fbp: params.fbp,
-      fbc: params.fbc,
-    },
-    custom_data: {
-      value: 9,
-      currency: 'USD',
-      content_name: 'Email Signup',
-    },
-    action_source: 'website',
-    event_source_url: 'https://pawcasso-atelier.vercel.app',
-  };
-
-  return sendConversionEvent(event);
-}
-
-/**
- * Track InitiateCheckout event server-side
- */
-export async function trackInitiateCheckoutServerSide(params: {
-  email: string;
-  value: number;
-  contentIds: string[];
-  ipAddress?: string;
-  userAgent?: string;
-  eventId?: string;
-  fbp?: string;
-  fbc?: string;
-}): Promise<boolean> {
-  const event: ConversionEvent = {
+  num_items?: number;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
     event_name: 'InitiateCheckout',
-    event_time: Math.floor(Date.now() / 1000),
-    event_id: params.eventId || `checkout_${Date.now()}`,
-    user_data: {
-      em: [hashValue(params.email)],
-      client_ip_address: params.ipAddress,
-      client_user_agent: params.userAgent,
-      fbp: params.fbp,
-      fbc: params.fbc,
-    },
-    custom_data: {
-      value: params.value,
-      currency: 'USD',
-      content_ids: params.contentIds,
-      content_type: 'product',
-      num_items: 1,
-    },
-    action_source: 'website',
-    event_source_url: 'https://pawcasso-atelier.vercel.app/order',
-  };
-
-  return sendConversionEvent(event);
+    ...params,
+    currency: params.currency || 'USD',
+    event_source_url: params.url,
+  });
 }
 
 /**
- * Get Event Match Quality Score
- * Higher score = better attribution and audience building
- *
- * Factors:
- * - Email: +30 points
- * - Phone: +25 points
- * - First name + Last name: +20 points
- * - City + State + Zip: +15 points
- * - IP Address: +10 points
- * - User Agent: +5 points
- * - fbp/fbc cookies: +10 points
- *
- * Target: 6.0+ (good), 8.0+ (excellent)
+ * Track Purchase server-side
  */
-export function estimateEventMatchQuality(userData: ConversionEvent['user_data']): number {
-  let score = 0;
-
-  if (userData.em && userData.em.length > 0) score += 3.0;
-  if (userData.ph && userData.ph.length > 0) score += 2.5;
-  if (userData.fn && userData.fn.length > 0 && userData.ln && userData.ln.length > 0) score += 2.0;
-  if (userData.ct && userData.st && userData.zp) score += 1.5;
-  if (userData.client_ip_address) score += 1.0;
-  if (userData.client_user_agent) score += 0.5;
-  if (userData.fbp || userData.fbc) score += 1.0;
-
-  return Math.min(score, 10.0);
-}
-
-/**
- * Extract Facebook cookies from request headers
- */
-export function extractFacebookCookies(cookieHeader?: string): {
-  fbp?: string;
+export async function trackServerPurchase(params: {
+  email: string;
+  ip?: string;
+  userAgent?: string;
   fbc?: string;
-} {
-  if (!cookieHeader) return {};
-
-  const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
-    const [key, value] = cookie.trim().split('=');
-    acc[key] = value;
-    return acc;
-  }, {} as Record<string, string>);
-
-  return {
-    fbp: cookies._fbp,
-    fbc: cookies._fbc,
-  };
+  fbp?: string;
+  content_ids: string[];
+  content_name?: string;
+  content_type?: string;
+  value: number;
+  currency?: string;
+  num_items?: number;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
+    event_name: 'Purchase',
+    ...params,
+    currency: params.currency || 'USD',
+    event_source_url: params.url,
+  });
 }
 
 /**
- * Generate event ID for deduplication between client-side and server-side events
+ * Track AddToCart server-side
  */
-export function generateEventId(prefix: string): string {
-  return `${prefix}_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
+export async function trackServerAddToCart(params: {
+  email?: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  content_ids: string[];
+  content_name?: string;
+  content_type?: string;
+  value: number;
+  currency?: string;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
+    event_name: 'AddToCart',
+    ...params,
+    currency: params.currency || 'USD',
+    event_source_url: params.url,
+  });
+}
+
+/**
+ * Track Lead server-side (email capture)
+ */
+export async function trackServerLead(params: {
+  email: string;
+  ip?: string;
+  userAgent?: string;
+  fbc?: string;
+  fbp?: string;
+  value?: number;
+  currency?: string;
+  url?: string;
+}) {
+  return sendMetaServerEvent({
+    event_name: 'Lead',
+    ...params,
+    currency: params.currency || 'USD',
+    content_name: 'Email Signup',
+    event_source_url: params.url,
+  });
 }
