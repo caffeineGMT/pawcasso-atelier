@@ -116,6 +116,11 @@ export default function HomePage() {
           <div className="mt-16">
             <SocialProofStats />
           </div>
+
+          {/* Trust badges */}
+          <div className="mt-12">
+            <TrustBadges />
+          </div>
         </div>
 
         {/* Scroll indicator */}

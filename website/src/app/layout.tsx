@@ -11,6 +11,7 @@ import WebVitals from "@/components/WebVitals";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ToastProvider } from "@/components/ToastProvider";
 import { NetworkStatus } from "@/components/NetworkStatus";
+import { FunnelTracker } from "@/components/FunnelTracker";
 import "./globals.css";
 import "./mobile-enhancements.css";
 import "./toast.css";
@@ -215,6 +216,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WebVitals />
         <ErrorBoundary>
           <SessionProvider>
+            <FunnelTracker />
             <NetworkStatus />
             <ToastProvider />
             <PromotionBanner />

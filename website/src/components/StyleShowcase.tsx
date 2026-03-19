@@ -4,14 +4,54 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const showcaseItems = [
-  { image: "/gallery/lion_portrait.png", style: "Baroque", title: "Sovereign Light" },
-  { image: "/gallery/golden_retriever_ghibli.png", style: "Ghibli", title: "Moonlit Garden" },
-  { image: "/gallery/the_catrix_poster.png", style: "Cyberpunk", title: "The Catrix" },
-  { image: "/gallery/corgi_needle_felt.png", style: "Needle Felt", title: "Woolly Wanderer" },
-  { image: "/gallery/starry_night_persian_cat.png", style: "Impressionist", title: "Starry Night Whiskers" },
-  { image: "/gallery/the_great_catsby_poster.png", style: "Art Deco", title: "The Great Catsby" },
-  { image: "/gallery/hedgehog_bookshop_tree_trunk.png", style: "Watercolor", title: "The Little Bookshop" },
-  { image: "/gallery/red_panda_pixar_chef.png", style: "Pixar 3D", title: "Chef\u2019s Kiss" },
+  {
+    image: "/gallery/optimized/cat_vermeer-1200w.webp",
+    style: "Renaissance",
+    title: "Cat with a Pearl Earring",
+    blurDataURL: "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoKAAoABUB8JYwC7ADbZ1kkAAD+7QkpkVuT3lgmTaNWj+2IydCqzydCvrypV9HFE3h8QbgAAAA="
+  },
+  {
+    image: "/gallery/optimized/alfie_portrait_final-1200w.webp",
+    style: "Pixar 3D",
+    title: "Big Eyes",
+    blurDataURL: "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoKAAoABUB8JYwC7AELXa/4NlAA+yLqtt/qE81h/gVP2sZ4qcwWUTEZRLViiIaCSpw30fq8lhMK2AiGKCYGAy29BvMAl6AA"
+  },
+  {
+    image: "/gallery/optimized/alfie_imperial_portrait_2048x2048-1200w.webp",
+    style: "Chinese Classical",
+    title: "Imperial Portrait",
+    blurDataURL: "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADwAQCdASoKAAoABUB8JagCdADdlhAo4QAA/dI+LjzdTboE5IJ8fh7nBsxc1udLhR9K4wmO6ib9qZUAAAA="
+  },
+  {
+    image: "/gallery/optimized/border_collie_portrait_2048x2048-1200w.webp",
+    style: "Needle Felt",
+    title: "Felt Family Portrait",
+    blurDataURL: "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADwAQCdASoKAAkABUB8JYwC7AD8J1QcxCAA9ysGwsVNmj8okquEpfWz4xg81dvfStr1O3XWXj+YiMj6QkAAAA=="
+  },
+  {
+    image: "/gallery/optimized/golden_retriever_portrait_square-1200w.webp",
+    style: "Pixar 3D",
+    title: "Happy Chonk",
+    blurDataURL: "data:image/webp;base64,UklGRnwAAABXRUJQVlA4WAoAAAAQAAAACQAACQAAQUxQSB0AAAABL3D//4iICQbStilTMC9lCu7f2BVE9D+mXoD+AQBWUDggOAAAAPABAJ0BKgoACgAFQHwlkAJ0AQtdr3uQAAD+6JIaI87CxSO1kr4CNHd3CIOdKMwio8gpBgcT1kAA"
+  },
+  {
+    image: "/gallery/optimized/shiba_inu_vinyl_toy_portrait_final-1200w.webp",
+    style: "Vinyl Toy",
+    title: "Arms Crossed",
+    blurDataURL: "data:image/webp;base64,UklGRoIAAABXRUJQVlA4WAoAAAAQAAAACQAACQAAQUxQSB8AAAABF6AQQADE37nRiIgYoaBtG6YXYscfziBE9D9uJfAHAFZQOCA8AAAA8AEAnQEqCgAKAAVAfCWQAnQBDw/9OUAAAP7rhXL5kybxcgsRwse4ZpYtulDOIRn7JaD6a2j//vFPVEQA"
+  },
+  {
+    image: "/gallery/optimized/pomeranian_portrait_final-1200w.webp",
+    style: "Needle Felt",
+    title: "Cloud Puff",
+    blurDataURL: "data:image/webp;base64,UklGRnIAAABXRUJQVlA4WAoAAAAQAAAACQAACQAAQUxQSBgAAAABH9D/iAgoaNuG6YVYjT+bQYjof9wq4A9WUDggNAAAAPABAJ0BKgoACgAFQHwljAJ0ALyEPbVHgAD8+2qRaIqmoy1LboTmtgGpI3faruvXPyAAAAA="
+  },
+  {
+    image: "/gallery/optimized/chihuahua_portrait_16x9-1200w.webp",
+    style: "Pixel Art",
+    title: "Perler Bead Pup",
+    blurDataURL: "data:image/webp;base64,UklGRm4AAABXRUJQVlA4WAoAAAAQAAAACQAABQAAQUxQSBkAAAABH9D/iAgoaNuG6RvEqvzJDENE/2M9Ac96AFZQOCAuAAAAkAEAnQEqCgAGAAVAfCWkAALHpVQAAP7rgQZYhcK0UmSjJ77mO0WEJULupsAAAA=="
+  },
 ];
 
 export default function StyleShowcase() {
@@ -45,6 +85,8 @@ export default function StyleShowcase() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={i === 0}
                 loading={i === 0 ? "eager" : "lazy"}
+                placeholder="blur"
+                blurDataURL={item.blurDataURL}
               />
             </div>
           ))}

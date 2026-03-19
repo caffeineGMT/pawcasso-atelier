@@ -3,16 +3,6 @@
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 
-export const metadata = {
-  title: "Gift Cards",
-  description: "Give the gift of beautiful AI-generated pet portraits. Perfect for pet lovers, available in $25, $50, $100, or custom amounts.",
-  openGraph: {
-    title: "Pawcasso Gift Cards - The Perfect Gift for Pet Lovers",
-    description: "Delight pet lovers with a beautiful AI-generated portrait gift card. Choose from $25, $50, $100 or custom amounts. Digital delivery, 1-year validity.",
-    images: ["/gift-card-preview.jpg"],
-  },
-};
-
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
 );

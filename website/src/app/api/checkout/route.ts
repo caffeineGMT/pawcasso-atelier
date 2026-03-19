@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession, type TierId, TIER_CONFIG } from "@/lib/stripe";
 import { validateReferralCode, trackReferralClick, applyCreditToOrder } from "@/lib/referral";
+import { trackAbandonedCart } from "@/lib/cart-recovery";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -189,6 +190,28 @@ export async function POST(req: NextRequest) {
       utmCampaign,
       giftCardCode,
       creditApplied,
+    });
+
+    // Track abandoned cart for recovery emails
+    // This runs async - don't await to avoid slowing down checkout
+    trackAbandonedCart({
+      stripeSessionId: session.id,
+      customerEmail: email,
+      customerName: name,
+      tier: selectedTier,
+      amount: tierConfig.price - creditApplied,
+      petName,
+      style,
+      notes,
+      petPhotoUrl,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      referralCode: validatedReferralCode,
+      discountCode,
+    }).catch((err) => {
+      console.error('Failed to track abandoned cart:', err);
+      // Don't fail checkout if tracking fails
     });
 
     return NextResponse.json({ url: session.url, creditApplied });
