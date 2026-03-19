@@ -167,6 +167,11 @@ export function generateOrderCompleteEmailWithReferral({
       </p>
     </div>
 
+    <div style="background: linear-gradient(135deg, rgba(201, 169, 110, 0.08), rgba(201, 169, 110, 0.03)); border: 1px solid rgba(201, 169, 110, 0.2); border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 16px; font-weight: 600; margin: 0 0 8px;">🏆 You're Now a Pawcasso Loyalty Member!</p>
+      <p style="color: #86868b; font-size: 14px; margin: 0;">Earn points with every order, unlock tier upgrades, and get exclusive discounts. Check your <a href="${baseUrl}/portal" style="color: #C9A96E;">loyalty dashboard</a> for your rewards — including <strong>20% off your next portrait</strong>!</p>
+    </div>
+
     <p style="margin-top: 30px;">With love,<br/><strong>The Pawcasso Atelier Team</strong></p>
   </div>
 </body>

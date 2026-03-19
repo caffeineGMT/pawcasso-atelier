@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession, type TierId, TIER_CONFIG } from "@/lib/stripe";
 import { validateReferralCode, trackReferralClick, applyCreditToOrder } from "@/lib/referral";
+import { validateLoyaltyDiscount, markLoyaltyDiscountUsed } from "@/lib/loyalty";
 import { trackAbandonedCart } from "@/lib/cart-recovery";
 import { PrismaClient } from "@prisma/client";
 

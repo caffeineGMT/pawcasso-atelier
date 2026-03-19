@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ReferralDashboard } from "@/components/ReferralDashboard";
+import { LoyaltyDashboard } from "@/components/LoyaltyDashboard";
 
 interface Order {
   id: string;
@@ -13,10 +14,12 @@ interface Order {
   receiptUrl: string;
 }
 
+type Section = "orders" | "loyalty" | "referrals" | "settings";
+
 export default function PortalPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState<"orders" | "referrals" | "settings">("orders");
+  const [activeSection, setActiveSection] = useState<Section>("loyalty");
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +71,13 @@ export default function PortalPage() {
     );
   }
 
+  const navItems: { key: Section; label: string }[] = [
+    { key: "loyalty", label: "Loyalty" },
+    { key: "orders", label: "Orders" },
+    { key: "referrals", label: "Referrals" },
+    { key: "settings", label: "Settings" },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
@@ -78,75 +88,48 @@ export default function PortalPage() {
         </div>
 
         <nav className="space-y-2">
-          <button
-            onClick={() => setActiveSection("orders")}
-            className={`w-full text-left py-3 px-4 rounded-lg transition-colors ${
-              activeSection === "orders"
-                ? "bg-primary/10 border-l-2 border-primary text-text-primary"
-                : "text-text-secondary hover:bg-white/[0.06]"
-            }`}
-          >
-            Orders
-          </button>
-          <button
-            onClick={() => setActiveSection("referrals")}
-            className={`w-full text-left py-3 px-4 rounded-lg transition-colors ${
-              activeSection === "referrals"
-                ? "bg-primary/10 border-l-2 border-primary text-text-primary"
-                : "text-text-secondary hover:bg-white/[0.06]"
-            }`}
-          >
-            Referrals
-          </button>
-          <button
-            onClick={() => setActiveSection("settings")}
-            className={`w-full text-left py-3 px-4 rounded-lg transition-colors ${
-              activeSection === "settings"
-                ? "bg-primary/10 border-l-2 border-primary text-text-primary"
-                : "text-text-secondary hover:bg-white/[0.06]"
-            }`}
-          >
-            Settings
-          </button>
+          {navItems.map((item) => (
+            <button
+              key={item.key}
+              onClick={() => setActiveSection(item.key)}
+              className={`w-full text-left py-3 px-4 rounded-lg transition-colors ${
+                activeSection === item.key
+                  ? "bg-primary/10 border-l-2 border-primary text-text-primary"
+                  : "text-text-secondary hover:bg-white/[0.06]"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
       </aside>
 
       {/* Mobile Tab Bar */}
       <div className="md:hidden fixed bottom-0 inset-x-0 bg-bg-card border-t border-white/[0.08] flex justify-around py-3 z-50">
-        <button
-          onClick={() => setActiveSection("orders")}
-          className={`px-4 py-2 rounded-lg text-sm ${
-            activeSection === "orders"
-              ? "text-primary font-semibold"
-              : "text-text-secondary"
-          }`}
-        >
-          Orders
-        </button>
-        <button
-          onClick={() => setActiveSection("referrals")}
-          className={`px-4 py-2 rounded-lg text-sm ${
-            activeSection === "referrals"
-              ? "text-primary font-semibold"
-              : "text-text-secondary"
-          }`}
-        >
-          Referrals
-        </button>
-        <button
-          onClick={() => setActiveSection("settings")}
-          className={`px-4 py-2 rounded-lg text-sm ${
-            activeSection === "settings"
-              ? "text-primary font-semibold"
-              : "text-text-secondary"
-          }`}
-        >
-          Settings
-        </button>
+        {navItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setActiveSection(item.key)}
+            className={`px-3 py-2 rounded-lg text-sm ${
+              activeSection === item.key
+                ? "text-primary font-semibold"
+                : "text-text-secondary"
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
 
       {/* Main Content */}
       <main className="md:ml-64 p-6 md:p-12 pb-24 md:pb-12">
+        {activeSection === "loyalty" && (
+          <div>
+            <h2 className="text-3xl font-semibold text-text-primary mb-8">Loyalty Program</h2>
+            <LoyaltyDashboard />
+          </div>
+        )}
+
         {activeSection === "orders" && (
           <div>
             <h2 className="text-3xl font-semibold text-text-primary mb-8">Order History</h2>

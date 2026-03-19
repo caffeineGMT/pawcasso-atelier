@@ -4,6 +4,9 @@ import { put } from "@vercel/blob";
 import { Resend } from "resend";
 import { processReferralConversion, getOrCreateCustomer } from "@/lib/referral";
 import { generateOrderCompleteEmailWithReferral } from "@/lib/email-templates/order-complete-with-referral";
+import { processLoyaltyOrder, LOYALTY_TIERS, type LoyaltyTier, markLoyaltyDiscountUsed } from "@/lib/loyalty";
+import { generateRepeatPurchaseEmail } from "@/lib/email-templates/repeat-purchase-discount";
+import { generateTierUpgradeEmail } from "@/lib/email-templates/tier-upgrade";
 import { PrismaClient } from "@prisma/client";
 import { createGiftCard, markGiftCardAsSent } from "@/lib/gift-cards";
 import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
@@ -1207,6 +1210,90 @@ export async function POST(req: NextRequest) {
         });
       } catch (dbError) {
         console.error('Failed to update order in database:', dbError);
+      }
+
+      // Step 9: Process loyalty program (track order, generate repeat discount, tier upgrades)
+      try {
+        const orderAmount = session.amount_total ? session.amount_total / 100 : 0;
+        const loyaltyResult = await processLoyaltyOrder(
+          customerEmail,
+          customerName,
+          orderAmount,
+          petName,
+        );
+
+        console.log(`Loyalty processed: tier=${loyaltyResult.newTier}, orders=${loyaltyResult.member.totalOrders}, firstOrder=${loyaltyResult.isFirstOrder}`);
+
+        // Mark loyalty discount as used if one was applied
+        const usedDiscountCode = metadata.discountCode;
+        if (usedDiscountCode && (usedDiscountCode.startsWith("REPEAT20") || usedDiscountCode.startsWith("BDAY25") || usedDiscountCode.includes("UP-"))) {
+          try {
+            await markLoyaltyDiscountUsed(usedDiscountCode);
+            console.log(`Loyalty discount ${usedDiscountCode} marked as used`);
+          } catch (discountErr) {
+            console.error("Failed to mark loyalty discount as used:", discountErr);
+          }
+        }
+
+        // Send repeat purchase discount email after first order
+        if (loyaltyResult.isFirstOrder && loyaltyResult.repeatDiscountCode) {
+          try {
+            const repeatEmailHtml = generateRepeatPurchaseEmail({
+              customerName,
+              petName,
+              discountCode: loyaltyResult.repeatDiscountCode,
+              baseUrl,
+            });
+
+            // Send 24 hours after delivery to not overwhelm the customer
+            // For now, send immediately (can be deferred via cron later)
+            await resend.emails.send({
+              from: "Pawcasso Atelier <hello@pawcasso-atelier.com>",
+              to: customerEmail,
+              subject: `${customerName}, here's 20% off your next ${petName} portrait!`,
+              html: repeatEmailHtml,
+            });
+            console.log(`Repeat purchase discount email sent to: ${customerEmail}`);
+          } catch (emailErr) {
+            console.error("Failed to send repeat purchase email:", emailErr);
+          }
+        }
+
+        // Send tier upgrade email if tier changed
+        if (loyaltyResult.tierChanged) {
+          try {
+            const newTier = loyaltyResult.newTier as LoyaltyTier;
+            const tierConfig = LOYALTY_TIERS[newTier];
+            const reward = loyaltyResult.member.rewards?.find(
+              (r: { type: string }) => r.type === "tier_upgrade"
+            );
+
+            if (reward?.discountCode) {
+              const tierEmailHtml = generateTierUpgradeEmail({
+                customerName,
+                newTier: loyaltyResult.newTier,
+                discountCode: reward.discountCode,
+                discountPercent: tierConfig.discountPercent,
+                pointsMultiplier: tierConfig.pointsMultiplier,
+                totalOrders: loyaltyResult.member.totalOrders,
+                baseUrl,
+              });
+
+              await resend.emails.send({
+                from: "Pawcasso Atelier <hello@pawcasso-atelier.com>",
+                to: customerEmail,
+                subject: `Congratulations! You've been upgraded to ${tierConfig.label} tier!`,
+                html: tierEmailHtml,
+              });
+              console.log(`Tier upgrade email sent to: ${customerEmail} (${loyaltyResult.newTier})`);
+            }
+          } catch (emailErr) {
+            console.error("Failed to send tier upgrade email:", emailErr);
+          }
+        }
+      } catch (loyaltyError) {
+        console.error("Failed to process loyalty:", loyaltyError);
+        // Don't fail the order if loyalty processing fails
       }
 
       // Step 9: Track influencer conversion (if applicable)
