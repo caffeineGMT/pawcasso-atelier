@@ -269,13 +269,13 @@ export async function syncSubscriptionFromStripe(
       update: {
         status: stripeSubscription.status,
         cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-        canceledAt: stripeSubscription.canceled_at
-          ? new Date((stripeSubscription.canceled_at as number) * 1000)
+        canceledAt: (stripeSubscription as any).canceled_at
+          ? new Date(((stripeSubscription as any).canceled_at as number) * 1000)
           : null,
         currentPeriodStart: new Date(
-          (stripeSubscription.current_period_start as number) * 1000
+          ((stripeSubscription as any).current_period_start as number) * 1000
         ),
-        currentPeriodEnd: new Date((stripeSubscription.current_period_end as number) * 1000),
+        currentPeriodEnd: new Date(((stripeSubscription as any).current_period_end as number) * 1000),
         defaultPaymentMethodId:
           (stripeSubscription.default_payment_method as string) || null,
         updatedAt: new Date(),
