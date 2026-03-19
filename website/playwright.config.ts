@@ -91,6 +91,17 @@ export default defineConfig({
     },
 
     {
+      name: 'firefox-esr',
+      use: {
+        ...devices['Desktop Firefox'],
+        viewport: { width: 1280, height: 720 },
+        deviceScaleFactor: 1,
+        // Firefox ESR (Extended Support Release) for enterprise compatibility
+        // To test ESR specifically, set PLAYWRIGHT_FIREFOX_ESR=true
+      },
+    },
+
+    {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],

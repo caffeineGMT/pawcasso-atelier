@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { artworks, styles, animals } from "@/lib/data";
+import { artworks as baseArtworks, styles, animals } from "@/lib/data";
+import { generateArtworks } from "@/lib/generate-artworks";
 import GalleryGrid from "@/components/GalleryGrid";
 import GallerySkeleton from "@/components/GallerySkeleton";
 import { trackEvent, trackViewContent, trackSearch, trackEngagement, trackAnalyticsEvent, ContentType } from "@/lib/analytics";
@@ -12,13 +13,16 @@ export default function GalleryPage() {
   const [animalFilter, setAnimalFilter] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
 
+  // Generate full catalog (120+ artworks) for performance testing
+  const allArtworks = useMemo(() => generateArtworks(baseArtworks, 120), []);
+
   const filtered = useMemo(() => {
-    return artworks.filter((a) => {
+    return allArtworks.filter((a) => {
       const matchStyle = styleFilter === "All" || a.style === styleFilter;
       const matchAnimal = animalFilter === "All" || a.animal === animalFilter;
       return matchStyle && matchAnimal;
     });
-  }, [styleFilter, animalFilter]);
+  }, [styleFilter, animalFilter, allArtworks]);
 
   // Simulate initial loading for smooth skeleton transition
   useEffect(() => {
@@ -37,7 +41,7 @@ export default function GalleryPage() {
     trackEvent('view_gallery');
     trackViewContent({
       content_type: ContentType.GALLERY,
-      content_ids: artworks.map(a => String(a.id)),
+      content_ids: allArtworks.map(a => String(a.id)),
       content_name: 'Gallery - All Artworks',
       content_category: 'gallery',
       value: 9,
@@ -47,9 +51,9 @@ export default function GalleryPage() {
     // Track for database analytics
     trackAnalyticsEvent('gallery_view', {
       category: 'all',
-      artworkCount: artworks.length,
+      artworkCount: allArtworks.length,
     });
-  }, []);
+  }, [allArtworks]);
 
   return (
     <section className="py-24 px-6">
@@ -61,7 +65,7 @@ export default function GalleryPage() {
             "@type": "ImageGallery",
             name: "Pawcasso Atelier Gallery",
             description: "A curated collection of bespoke AI-generated animal portraits, each crafted with care in the tradition of the great masters.",
-            image: artworks.map(img => ({
+            image: allArtworks.slice(0, 20).map(img => ({
               "@type": "ImageObject",
               contentUrl: `https://pawcasso-atelier.vercel.app${img.imageUrl}`,
               name: img.title,
@@ -154,7 +158,7 @@ export default function GalleryPage() {
 
         {/* Grid with skeleton loading */}
         {isLoading ? (
-          <GallerySkeleton />
+          <GallerySkeleton count={24} />
         ) : filtered.length > 0 ? (
           <GalleryGrid artworks={filtered} />
         ) : (

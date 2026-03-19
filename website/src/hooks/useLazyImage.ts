@@ -11,7 +11,7 @@ interface UseLazyImageOptions {
 
 interface UseLazyImageResult {
   /** Ref to attach to the image container */
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;
   /** Whether the image should load */
   shouldLoad: boolean;
   /** Whether the image has been loaded */
@@ -31,7 +31,7 @@ export function useLazyImage(options: UseLazyImageOptions = {}): UseLazyImageRes
     eager = false,
   } = options;
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(eager);
   const [isLoaded, setIsLoaded] = useState(false);
 

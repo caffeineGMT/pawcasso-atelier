@@ -14,6 +14,11 @@ import { trackServerSideConversion } from "@/lib/google-ads-config";
 import { markCartAsRecovered } from "@/lib/cart-recovery";
 import { trackPricingConversion, DEFAULT_TEST_CONFIG } from "@/lib/ab-pricing";
 import { syncSubscriptionFromStripe, resetPortraitQuota } from "@/lib/subscription";
+import {
+  sendOrderConfirmationEmail,
+  sendShippingNotificationEmail,
+  sendDeliveryConfirmationEmail,
+} from "@/lib/post-purchase-emails";
 
 const prisma = new PrismaClient();
 
@@ -891,6 +896,12 @@ export async function POST(req: NextRequest) {
         console.error('Failed to mark cart as recovered:', err);
         // Don't fail the webhook if recovery tracking fails
       });
+
+      // EMAIL #1: Send order confirmation email (immediate)
+      sendOrderConfirmationEmail(session.id).catch((err) => {
+        console.error('Failed to send order confirmation email:', err);
+        // Don't fail the webhook if email fails
+      });
     } catch (dbError) {
       console.error('Failed to create order in database:', dbError);
       // Continue with order processing even if database save fails
@@ -1055,6 +1066,12 @@ export async function POST(req: NextRequest) {
       await updateDeliveryStatus(session.id, currentStep);
       const portraitCount = TIER_PORTRAIT_COUNT[tier] || 1;
       console.log(`Generating ${portraitCount} portrait(s) for tier: ${tier}`);
+
+      // EMAIL #2: Send shipping notification email (when portrait generation starts)
+      sendShippingNotificationEmail(session.id).catch((err) => {
+        console.error('Failed to send shipping notification email:', err);
+        // Don't fail the fulfillment if email fails
+      });
 
       const portraitUrls: string[] = [];
 
@@ -1227,6 +1244,12 @@ export async function POST(req: NextRequest) {
             deliveryStatus: 'completed',
             deliveredAt: new Date(),
           },
+        });
+
+        // EMAIL #3: Send delivery confirmation email (when portrait is delivered)
+        sendDeliveryConfirmationEmail(session.id).catch((err) => {
+          console.error('Failed to send delivery confirmation email:', err);
+          // Don't fail the order if email fails
         });
       } catch (dbError) {
         console.error('Failed to update order in database:', dbError);

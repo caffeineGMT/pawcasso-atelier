@@ -45,7 +45,7 @@ export function useInfiniteScroll<T>(
 
   const [visibleCount, setVisibleCount] = useState(initialLoad);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const visibleItems = allItems.slice(0, visibleCount);
