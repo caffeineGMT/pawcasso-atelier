@@ -32,6 +32,7 @@ export interface TierConfig {
   priceDisplay: string;
   features: string[];
   stripeId: string;
+  promo?: string; // Optional promotional message
 }
 
 export const TIER_CONFIG: TierConfig[] = [
@@ -316,3 +317,21 @@ export const PRINT_UPSELL_PRICES = {
 } as const;
 
 export type PrintProductType = keyof typeof PRINT_UPSELL_PRICES;
+
+// Portrait upsell configuration (shown during checkout)
+export const PORTRAIT_UPSELL = {
+  name: '2nd Portrait - Same Style',
+  originalPrice: 50,
+  discountedPrice: 35,
+  discountPercent: 30,
+  description: 'Add a second portrait in the same art style',
+  features: [
+    'Same art style as your first portrait',
+    'Different pose or variation',
+    'High-resolution digital file (4000x5000px)',
+    'Delivered with your first portrait',
+    'Perfect for gifts or home decor',
+  ],
+  stripeId: process.env.STRIPE_PRICE_SECOND_PORTRAIT || '',
+  tier: 'deluxe' as TierId, // Maps to deluxe tier features
+} as const;

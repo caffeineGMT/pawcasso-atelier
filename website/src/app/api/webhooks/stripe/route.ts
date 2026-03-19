@@ -13,6 +13,7 @@ import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
 import { trackServerSideConversion } from "@/lib/google-ads-config";
 import { markCartAsRecovered } from "@/lib/cart-recovery";
 import { trackPricingConversion, DEFAULT_TEST_CONFIG } from "@/lib/ab-pricing";
+import { syncSubscriptionFromStripe, resetPortraitQuota } from "@/lib/subscription";
 
 const prisma = new PrismaClient();
 
@@ -1420,6 +1421,182 @@ export async function POST(req: NextRequest) {
       console.error('Failed to update refund in database:', dbError);
     }
   }
+
+  // ==================== SUBSCRIPTION WEBHOOKS ====================
+
+  // Handle customer.subscription.created
+  if (event.type === "customer.subscription.created") {
+    const subscription = event.data.object as Stripe.Subscription;
+    console.log(`[Subscription Created] ${subscription.id}`);
+
+    try {
+      await syncSubscriptionFromStripe(subscription.id);
+      console.log(`Subscription ${subscription.id} created in database`);
+    } catch (error) {
+      console.error('Failed to create subscription in database:', error);
+    }
+  }
+
+  // Handle customer.subscription.updated
+  if (event.type === "customer.subscription.updated") {
+    const subscription = event.data.object as Stripe.Subscription;
+    console.log(`[Subscription Updated] ${subscription.id} - Status: ${subscription.status}`);
+
+    try {
+      await syncSubscriptionFromStripe(subscription.id);
+      console.log(`Subscription ${subscription.id} updated in database`);
+    } catch (error) {
+      console.error('Failed to update subscription in database:', error);
+    }
+  }
+
+  // Handle customer.subscription.deleted
+  if (event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object as Stripe.Subscription;
+    console.log(`[Subscription Deleted] ${subscription.id}`);
+
+    try {
+      // Update subscription status to canceled in database
+      const dbSubscription = await prisma.subscription.findUnique({
+        where: { stripeSubscriptionId: subscription.id },
+      });
+
+      if (dbSubscription) {
+        await prisma.subscription.update({
+          where: { id: dbSubscription.id },
+          data: {
+            status: 'canceled',
+            endedAt: new Date(),
+          },
+        });
+        console.log(`Subscription ${subscription.id} marked as canceled in database`);
+      }
+    } catch (error) {
+      console.error('Failed to delete subscription in database:', error);
+    }
+  }
+
+  // Handle invoice.paid - Monthly billing successful
+  if (event.type === "invoice.paid") {
+    const invoice = event.data.object as Stripe.Invoice;
+
+    // Only process subscription invoices (not one-time payments)
+    if (invoice.subscription) {
+      console.log(`[Invoice Paid] ${invoice.id} for subscription ${invoice.subscription}`);
+
+      try {
+        const subscriptionId = invoice.subscription as string;
+
+        // Sync subscription to get latest billing period
+        await syncSubscriptionFromStripe(subscriptionId);
+
+        // Get subscription from database
+        const dbSubscription = await prisma.subscription.findUnique({
+          where: { stripeSubscriptionId: subscriptionId },
+        });
+
+        if (dbSubscription) {
+          // Reset portrait quota for new billing period
+          const periodStart = new Date(invoice.period_start * 1000);
+          const periodEnd = new Date(invoice.period_end * 1000);
+
+          await resetPortraitQuota(dbSubscription.id, periodStart, periodEnd);
+
+          // Log invoice in database
+          await prisma.subscriptionInvoice.upsert({
+            where: { stripeInvoiceId: invoice.id },
+            create: {
+              subscriptionId: dbSubscription.id,
+              stripeInvoiceId: invoice.id,
+              amount: (invoice.amount_paid || 0) / 100,
+              currency: invoice.currency,
+              status: invoice.status || 'paid',
+              periodStart,
+              periodEnd,
+              paid: true,
+              paidAt: new Date(),
+              attemptCount: invoice.attempt_count || 0,
+            },
+            update: {
+              status: invoice.status || 'paid',
+              paid: true,
+              paidAt: new Date(),
+              attemptCount: invoice.attempt_count || 0,
+            },
+          });
+
+          console.log(`Invoice ${invoice.id} processed - Quota reset for subscription ${subscriptionId}`);
+
+          // TODO: Send welcome email for first payment or renewal confirmation email
+        }
+      } catch (error) {
+        console.error('Failed to process invoice.paid:', error);
+      }
+    }
+  }
+
+  // Handle invoice.payment_failed - Monthly billing failed
+  if (event.type === "invoice.payment_failed") {
+    const invoice = event.data.object as Stripe.Invoice;
+
+    if (invoice.subscription) {
+      console.log(`[Invoice Payment Failed] ${invoice.id} for subscription ${invoice.subscription}`);
+
+      try {
+        const subscriptionId = invoice.subscription as string;
+
+        // Get subscription from database
+        const dbSubscription = await prisma.subscription.findUnique({
+          where: { stripeSubscriptionId: subscriptionId },
+        });
+
+        if (dbSubscription) {
+          // Update subscription status
+          await prisma.subscription.update({
+            where: { id: dbSubscription.id },
+            data: {
+              status: 'past_due',
+            },
+          });
+
+          // Log failed invoice
+          await prisma.subscriptionInvoice.upsert({
+            where: { stripeInvoiceId: invoice.id },
+            create: {
+              subscriptionId: dbSubscription.id,
+              stripeInvoiceId: invoice.id,
+              amount: (invoice.amount_due || 0) / 100,
+              currency: invoice.currency,
+              status: invoice.status || 'open',
+              periodStart: new Date(invoice.period_start * 1000),
+              periodEnd: new Date(invoice.period_end * 1000),
+              paid: false,
+              attemptCount: invoice.attempt_count || 0,
+              nextPaymentRetry: invoice.next_payment_attempt
+                ? new Date(invoice.next_payment_attempt * 1000)
+                : null,
+            },
+            update: {
+              status: invoice.status || 'open',
+              paid: false,
+              attemptCount: invoice.attempt_count || 0,
+              nextPaymentRetry: invoice.next_payment_attempt
+                ? new Date(invoice.next_payment_attempt * 1000)
+                : null,
+            },
+          });
+
+          console.log(`Payment failed for subscription ${subscriptionId} - Status updated to past_due`);
+
+          // TODO: Send payment failed notification email
+        }
+      } catch (error) {
+        console.error('Failed to process invoice.payment_failed:', error);
+      }
+    }
+  }
+
+  // ==================== END SUBSCRIPTION WEBHOOKS ====================
 
   // Return 200 for other event types
   return NextResponse.json({ received: true });

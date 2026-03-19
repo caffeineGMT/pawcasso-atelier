@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Pre-commit hook for Pawcasso Atelier
+# Enforces build verification before allowing commits
+#
+# Installation:
+#   chmod +x hooks/pre-commit
+#   cp hooks/pre-commit .git/hooks/pre-commit
+#
+# This hook will:
+# 1. Run npm build in the website directory
+# 2. Block the commit if build fails
+# 3. Allow commit if build succeeds
+
+set -e
+
+echo ""
+echo "🔨 Pre-commit Hook: Running build verification..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Change to website directory
+cd website
+
+# Run build
+echo "📦 Building Next.js application..."
+npm run build
+
+# Check exit code
+BUILD_EXIT_CODE=$?
+
+echo ""
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "❌ BUILD FAILED!"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  echo "Fix the errors above before committing."
+  echo ""
+  echo "Common issues:"
+  echo "  • TypeScript errors - fix type issues"
+  echo "  • Missing dependencies - run 'npm install'"
+  echo "  • Syntax errors - check your code"
+  echo ""
+  echo "After fixing, try committing again."
+  echo ""
+  exit 1
+fi
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Build successful!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Proceeding with commit..."
+echo ""
+
+exit 0

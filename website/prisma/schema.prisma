@@ -735,3 +735,300 @@ model ContentInsight {
   @@index([active])
   @@index([validFrom])
 }
+
+// Subscription System - Monthly Pet Portrait Subscription ($29/mo = 1 portrait/month)
+model Subscription {
+  id                   String    @id @default(cuid())
+  stripeSubscriptionId String    @unique // Stripe subscription ID
+  stripeCustomerId     String // Stripe customer ID
+  customerEmail        String
+  customerName         String
+
+  // Subscription details
+  plan              String   @default("monthly_portrait") // monthly_portrait
+  amount            Float    @default(29.0) // $29/month
+  currency          String   @default("usd")
+  interval          String   @default("month") // month, year
+  intervalCount     Int      @default(1)
+  portraitsPerMonth Int      @default(1) // Number of portraits per billing period
+
+  // Status
+  status            String   @default("active") // active, canceled, past_due, unpaid, trialing
+  cancelAtPeriodEnd Boolean  @default(false) // True if customer requested cancellation
+  canceledAt        DateTime?
+
+  // Billing periods
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  trialStart         DateTime?
+  trialEnd           DateTime?
+
+  // Payment method
+  defaultPaymentMethodId String?
+
+  // Usage tracking
+  portraitsUsedThisPeriod Int @default(0) // How many portraits ordered this billing period
+  portraitsRemainingThisPeriod Int @default(1) // Portraits left this period
+
+  // Metadata
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  // Relations
+  orders   SubscriptionOrder[]
+  invoices SubscriptionInvoice[]
+  usage    SubscriptionUsage[]
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([stripeCustomerId])
+  @@index([currentPeriodEnd])
+}
+
+// Subscription Orders - Track portraits ordered via subscription
+model SubscriptionOrder {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  // Order details (similar to regular Order model)
+  customerEmail String
+  petName       String
+  style         String
+  notes         String?
+  petPhotoUrl   String?
+  portraitUrls  String? // Comma-separated URLs
+
+  // Status
+  status         String    @default("pending") // pending, completed, failed
+  deliveryStatus String    @default("pending") // pending, completed, failed
+  deliveredAt    DateTime?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  orderedAt DateTime @default(now())
+
+  @@index([subscriptionId])
+  @@index([customerEmail])
+  @@index([status])
+}
+
+// Subscription Invoices - Track Stripe invoices for subscriptions
+model SubscriptionInvoice {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  stripeInvoiceId String @unique // Stripe invoice ID
+  amount          Float // Amount in dollars
+  currency        String @default("usd")
+  status          String // draft, open, paid, void, uncollectible
+
+  // Billing period this invoice covers
+  periodStart DateTime
+  periodEnd   DateTime
+
+  // Payment tracking
+  paid             Boolean   @default(false)
+  paidAt           DateTime?
+  attemptCount     Int       @default(0)
+  nextPaymentRetry DateTime?
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([paid])
+}
+
+// Subscription Usage - Track portrait quota usage per billing period
+model SubscriptionUsage {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  // Usage details
+  periodStart      DateTime // Start of billing period
+  periodEnd        DateTime // End of billing period
+  portraitsAllowed Int // How many portraits allowed this period
+  portraitsUsed    Int      @default(0) // How many portraits ordered
+  portraitsRemaining Int // Portraits left this period
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([subscriptionId, periodStart])
+  @@index([subscriptionId])
+  @@index([periodEnd])
+}
+
+// Promotional Code System - Database-backed promo codes with advanced rules
+model PromoCode {
+  id          String @id @default(cuid())
+  code        String @unique // The actual promo code (e.g., "BLACKFRIDAY50")
+  name        String // Internal name for the campaign (e.g., "Black Friday 2026")
+  description String? // Internal notes about this promo code
+
+  // Discount configuration
+  discountType    String // "percent" or "fixed_amount"
+  discountPercent Int? // Percentage discount (e.g., 50 for 50% off)
+  discountAmount  Float? // Fixed dollar discount (e.g., 10.00 for $10 off)
+  minOrderAmount  Float? // Minimum order amount required to use this code
+
+  // Usage limits
+  maxUses          Int? // Maximum total uses (null = unlimited)
+  maxUsesPerCustomer Int    @default(1) // Max uses per customer email
+  currentUses      Int    @default(0) // Current total uses
+
+  // Applicable tiers (null = all tiers)
+  applicableTiers String? // JSON array of tier IDs (e.g., '["premium","deluxe"]')
+
+  // Time restrictions
+  startsAt  DateTime? // When this code becomes active (null = immediately)
+  expiresAt DateTime? // When this code expires (null = never expires)
+
+  // Status
+  active Boolean @default(true) // Can be toggled off without deleting
+
+  // Campaign tracking
+  campaignType String? // "black_friday", "cyber_monday", "holiday", "flash_sale", etc.
+  utmCampaign  String? // UTM campaign tag for tracking
+
+  // Stripe integration
+  stripeCouponId String? // Linked Stripe coupon ID for automatic application
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // Admin user who created this code
+
+  // Relations
+  usages PromoCodeUsage[]
+
+  @@index([code])
+  @@index([active])
+  @@index([campaignType])
+  @@index([expiresAt])
+}
+
+// Promo Code Usage Tracking
+model PromoCodeUsage {
+  id          String    @id @default(cuid())
+  promoCodeId String
+  promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
+
+  // Customer info
+  customerEmail String
+  customerName  String?
+
+  // Order info
+  orderId         String @unique // Stripe session ID or order ID
+  discountApplied Float // Actual discount amount in dollars
+
+  // Metadata
+  orderAmount Float // Original order amount before discount
+  finalAmount Float // Final amount after discount
+
+  // Timestamps
+  usedAt DateTime @default(now())
+
+  @@index([promoCodeId])
+  @@index([customerEmail])
+  @@index([usedAt])
+}
+
+// Holiday Bundle Configuration
+model HolidayBundle {
+  id          String @id @default(cuid())
+  slug        String @unique // URL-friendly slug (e.g., "family-3-pack")
+  name        String // Display name (e.g., "Family 3-Pack Bundle")
+  description String
+  tagline     String? // Short promotional tagline
+
+  // Pricing
+  originalPrice Float // Original total price
+  bundlePrice   Float // Discounted bundle price
+  savings       Float // Amount saved
+
+  // Bundle contents
+  portraitCount   Int     @default(3) // Number of portraits in this bundle
+  tierEquivalent  String? // Which tier this is based on (e.g., "premium")
+  features        String // JSON array of features
+  bonusFeatures   String? // JSON array of bonus features (e.g., ["Free gift wrapping"])
+
+  // Holiday theming
+  holidayTheme String? // "christmas", "black_friday", "valentines", etc.
+  emoji        String? // Theme emoji
+  primaryColor String? // Theme color hex
+  accentColor  String? // Accent color hex
+
+  // Availability
+  active    Boolean   @default(true)
+  startsAt  DateTime? // When bundle becomes available
+  expiresAt DateTime? // When bundle expires
+
+  // Stripe integration
+  stripePriceId String? // Stripe Price ID for this bundle
+
+  // Marketing
+  heroImageUrl     String? // Hero image for bundle landing page
+  ctaText          String  @default("Get This Bundle")
+  recommendedFor   String? // "Families with multiple pets", "Pet lovers", etc.
+  showOnHomepage   Boolean @default(false)
+  homepagePriority Int     @default(0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([active])
+  @@index([holidayTheme])
+  @@index([showOnHomepage])
+}
+
+// Email Campaign Tracking
+model EmailCampaign {
+  id          String @id @default(cuid())
+  name        String // Campaign name (e.g., "Black Friday 2026 Announcement")
+  subject     String // Email subject line
+  campaignType String // "promotional", "holiday", "abandoned_cart", "newsletter"
+
+  // Template configuration
+  templateId   String // ID of the email template to use
+  templateData String? // JSON with template variables
+
+  // Targeting
+  targetSegment String // "all_customers", "past_customers", "abandoned_carts", "loyalty_members"
+
+  // Related promo/bundle
+  promoCodeId     String? // Link to PromoCode if applicable
+  holidayBundleId String? // Link to HolidayBundle if applicable
+
+  // Scheduling
+  scheduledFor DateTime? // When to send (null = draft)
+  sentAt       DateTime? // When actually sent
+  status       String    @default("draft") // "draft", "scheduled", "sending", "sent", "failed"
+
+  // Performance metrics
+  totalRecipients Int @default(0)
+  delivered       Int @default(0)
+  opened          Int @default(0)
+  clicked         Int @default(0)
+  converted       Int @default(0) // Number of purchases attributed
+  revenue         Float @default(0) // Revenue attributed to this campaign
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // Admin user who created this campaign
+
+  @@index([status])
+  @@index([scheduledFor])
+  @@index([campaignType])
+}

@@ -17,6 +17,7 @@ import OrderActivityFeed from "@/components/OrderActivityFeed";
 import { useCheckoutFunnel } from "@/hooks/useCheckoutFunnel";
 import MobileCheckoutBar from "@/components/MobileCheckoutBar";
 import { useABPricing, applyVariantPricingClient } from "@/hooks/useABPricing";
+import CheckoutUpsellModal from "@/components/CheckoutUpsellModal";
 
 const stylePreviewMap: Record<string, { image: string; title: string }> = {
   renaissance: { image: "/gallery/cat_vermeer.png", title: "Cat with a Pearl Earring" },
@@ -72,6 +73,10 @@ function OrderPageContent() {
   const [giftCardValid, setGiftCardValid] = useState(false);
   const [giftCardError, setGiftCardError] = useState<string | null>(null);
   const [giftCardLoading, setGiftCardLoading] = useState(false);
+
+  // Checkout upsell modal state
+  const [showUpsellModal, setShowUpsellModal] = useState(false);
+  const [pendingCheckout, setPendingCheckout] = useState<boolean>(false);
 
   // Checkout funnel instrumentation
   const {
@@ -442,7 +447,78 @@ function OrderPageContent() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Track upsell view
+    const selectedTierConfig = displayTierConfig.find(t => t.id === selectedTier);
+    trackEvent('checkout_upsell_shown', {
+      tier: selectedTier,
+      original_value: selectedTierConfig?.price,
+      upsell_value: 35,
+      potential_total: (selectedTierConfig?.price || 0) + 35,
+    });
+
+    // Show upsell modal instead of immediately going to checkout
+    setShowUpsellModal(true);
+  };
+
+  // Handle upsell modal acceptance - checkout with 2nd portrait
+  const handleUpsellAccept = async () => {
     setLoading(true);
+    setShowUpsellModal(false);
+    setUploadError(null);
+
+    try {
+      const petPhotoUrl = uploadedPhotoUrl;
+      const selectedTierConfig = displayTierConfig.find(t => t.id === selectedTier);
+      const tierBadge = TIER_BADGES[selectedTier];
+
+      // Track upsell acceptance
+      trackEvent('checkout_upsell_accepted', {
+        tier: selectedTier,
+        upsell_value: 35,
+        total_value: (selectedTierConfig?.price || 0) + 35,
+      });
+
+      // Create checkout session WITH upsell
+      const res = await fetch("/api/checkout/portrait-upsell", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          style,
+          petName,
+          notes,
+          petPhotoUrl,
+          tier: selectedTier,
+          discountCode: discountCode || undefined,
+          badge: tierBadge || undefined,
+          giftCardCode: giftCardValid && giftCardCode ? giftCardCode.trim() : undefined,
+          abTestVariant: variant,
+          abSessionId: sessionId,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Something went wrong. Please try again or DM us on Instagram.");
+        setLoading(false);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+      setUploadError(errorMessage);
+      alert(`${errorMessage}. Please try again or DM us on Instagram.`);
+      setLoading(false);
+    }
+  };
+
+  // Handle upsell modal decline - proceed with regular checkout
+  const handleUpsellDecline = async () => {
+    setLoading(true);
+    setShowUpsellModal(false);
     setUploadError(null);
 
     try {
@@ -1255,6 +1331,15 @@ function OrderPageContent() {
         }}
         disabled={loading || (currentStep === 3 && (!style || (uploadProgress > 0 && uploadProgress < 100)))}
         loading={loading}
+      />
+
+      {/* Checkout Upsell Modal */}
+      <CheckoutUpsellModal
+        isOpen={showUpsellModal}
+        onAccept={handleUpsellAccept}
+        onDecline={handleUpsellDecline}
+        petName={petName}
+        style={style}
       />
     </section>
   );
