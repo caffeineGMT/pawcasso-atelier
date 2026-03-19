@@ -56,88 +56,88 @@ model VerificationToken {
 }
 
 model Influencer {
-  id                String              @id @default(cuid())
-  name              String
-  handle            String              @unique
-  platform          String              // "instagram" or "tiktok"
-  followerCount     Int
-  email             String?
-  status            String              @default("identified") // identified, contacted, responded, agreed, posted, declined
-  discountCode      String?             @unique
-  affiliateLink     String?
-  utmSource         String?
-  utmMedium         String?
-  utmCampaign       String?
-  contactedAt       DateTime?
-  respondedAt       DateTime?
-  agreedAt          DateTime?
-  postedAt          DateTime?
-  portraitSent      Boolean             @default(false)
-  notes             String?
-  profileUrl        String?
-  estimatedReach    Int?                // calculated from follower count
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  outreachMessages  OutreachMessage[]
-  conversions       InfluencerConversion[]
+  id               String                 @id @default(cuid())
+  name             String
+  handle           String                 @unique
+  platform         String // "instagram" or "tiktok"
+  followerCount    Int
+  email            String?
+  status           String                 @default("identified") // identified, contacted, responded, agreed, posted, declined
+  discountCode     String?                @unique
+  affiliateLink    String?
+  utmSource        String?
+  utmMedium        String?
+  utmCampaign      String?
+  contactedAt      DateTime?
+  respondedAt      DateTime?
+  agreedAt         DateTime?
+  postedAt         DateTime?
+  portraitSent     Boolean                @default(false)
+  notes            String?
+  profileUrl       String?
+  estimatedReach   Int? // calculated from follower count
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  outreachMessages OutreachMessage[]
+  conversions      InfluencerConversion[]
 }
 
 model OutreachMessage {
-  id            String      @id @default(cuid())
-  influencerId  String
-  influencer    Influencer  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
-  message       String
-  sentAt        DateTime    @default(now())
-  responseText  String?
-  respondedAt   DateTime?
+  id           String     @id @default(cuid())
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  message      String
+  sentAt       DateTime   @default(now())
+  responseText String?
+  respondedAt  DateTime?
 }
 
 model InfluencerConversion {
-  id            String      @id @default(cuid())
-  influencerId  String
-  influencer    Influencer  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
-  orderId       String
-  revenue       Float       // in dollars
-  commission    Float       // in dollars (15%)
+  id             String     @id @default(cuid())
+  influencerId   String
+  influencer     Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  orderId        String
+  revenue        Float // in dollars
+  commission     Float // in dollars (15%)
   conversionDate DateTime   @default(now())
-  utmSource     String?
-  utmMedium     String?
-  utmCampaign   String?
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
 }
 
 // Customer Referral Program
 model Customer {
-  id                  String              @id @default(cuid())
-  email               String              @unique
-  name                String?
-  referralCode        String              @unique  // Unique referral code (e.g., "FLUFFY2024")
-  stripeCustomerId    String?             @unique
-  creditBalance       Float               @default(0)  // Credit balance in dollars
-  totalReferrals      Int                 @default(0)  // Total successful referrals
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  referralsGiven      Referral[]          @relation("ReferrerCustomer")
-  referralsReceived   Referral[]          @relation("ReferredCustomer")
-  creditTransactions  CreditTransaction[]
-  milestones          MilestoneAchievement[]
+  id                 String                 @id @default(cuid())
+  email              String                 @unique
+  name               String?
+  referralCode       String                 @unique // Unique referral code (e.g., "FLUFFY2024")
+  stripeCustomerId   String?                @unique
+  creditBalance      Float                  @default(0) // Credit balance in dollars
+  totalReferrals     Int                    @default(0) // Total successful referrals
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  referralsGiven     Referral[]             @relation("ReferrerCustomer")
+  referralsReceived  Referral[]             @relation("ReferredCustomer")
+  creditTransactions CreditTransaction[]
+  milestones         MilestoneAchievement[]
 }
 
 model Referral {
-  id                String    @id @default(cuid())
-  referrerEmail     String    // Email of person who referred
-  referredEmail     String    // Email of person who was referred
-  referralCode      String    // The code that was used
-  clickedAt         DateTime? // When the referral link was first clicked
-  convertedAt       DateTime? // When the referred person made a purchase
-  orderId           String?   // Stripe session ID of the purchase
-  orderValue        Float?    // Value of the order in dollars
-  referrerCredit    Float     @default(5.0)  // $5 credit for referrer
-  referredDiscount  Float     @default(0.2)  // 20% discount for referred
-  status            String    @default("pending")  // pending, clicked, converted
-  createdAt         DateTime  @default(now())
+  id               String    @id @default(cuid())
+  referrerEmail    String // Email of person who referred
+  referredEmail    String // Email of person who was referred
+  referralCode     String // The code that was used
+  clickedAt        DateTime? // When the referral link was first clicked
+  convertedAt      DateTime? // When the referred person made a purchase
+  orderId          String? // Stripe session ID of the purchase
+  orderValue       Float? // Value of the order in dollars
+  referrerCredit   Float     @default(5.0) // $5 credit for referrer
+  referredDiscount Float     @default(0.2) // 20% discount for referred
+  status           String    @default("pending") // pending, clicked, converted
+  createdAt        DateTime  @default(now())
 
-  referrer          Customer  @relation("ReferrerCustomer", fields: [referrerEmail], references: [email])
-  referred          Customer? @relation("ReferredCustomer", fields: [referredEmail], references: [email])
+  referrer Customer  @relation("ReferrerCustomer", fields: [referrerEmail], references: [email])
+  referred Customer? @relation("ReferredCustomer", fields: [referredEmail], references: [email])
 
   @@index([referralCode])
   @@index([referrerEmail])
@@ -145,53 +145,53 @@ model Referral {
 }
 
 model CreditTransaction {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   customerEmail String
-  amount        Float     // Positive for credit, negative for spend
-  type          String    // "referral_bonus", "credit_applied", "milestone_reward"
+  amount        Float // Positive for credit, negative for spend
+  type          String // "referral_bonus", "credit_applied", "milestone_reward"
   description   String
-  referralId    String?   // Link to referral if applicable
-  orderId       String?   // Link to order if applicable
-  createdAt     DateTime  @default(now())
+  referralId    String? // Link to referral if applicable
+  orderId       String? // Link to order if applicable
+  createdAt     DateTime @default(now())
 
-  customer      Customer  @relation(fields: [customerEmail], references: [email])
+  customer Customer @relation(fields: [customerEmail], references: [email])
 
   @@index([customerEmail])
 }
 
 model MilestoneAchievement {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   customerEmail String
-  milestone     String    // "5_referrals", "10_referrals", etc.
-  reward        String    // Description of reward
-  achievedAt    DateTime  @default(now())
-  claimed       Boolean   @default(false)
+  milestone     String // "5_referrals", "10_referrals", etc.
+  reward        String // Description of reward
+  achievedAt    DateTime @default(now())
+  claimed       Boolean  @default(false)
 
-  customer      Customer  @relation(fields: [customerEmail], references: [email])
+  customer Customer @relation(fields: [customerEmail], references: [email])
 
   @@unique([customerEmail, milestone])
 }
 
 // Customer Reviews & UGC
 model CustomerReview {
-  id                String    @id @default(cuid())
-  customerEmail     String
-  customerName      String
-  petName           String
-  rating            Int       // 1-5 stars
-  reviewText        String    // Written review
-  petPhotoUrl       String?   // Original pet photo customer uploaded
-  portraitUrl       String?   // Final portrait we delivered
-  instagramHandle   String?   // Customer's Instagram handle
-  instagramPostUrl  String?   // Link to their Instagram post if they shared
-  featured          Boolean   @default(false)  // Admin can feature on homepage
-  approved          Boolean   @default(false)  // Admin approval before showing publicly
-  submittedAt       DateTime  @default(now())
-  approvedAt        DateTime?
+  id               String    @id @default(cuid())
+  customerEmail    String
+  customerName     String
+  petName          String
+  rating           Int // 1-5 stars
+  reviewText       String // Written review
+  petPhotoUrl      String? // Original pet photo customer uploaded
+  portraitUrl      String? // Final portrait we delivered
+  instagramHandle  String? // Customer's Instagram handle
+  instagramPostUrl String? // Link to their Instagram post if they shared
+  featured         Boolean   @default(false) // Admin can feature on homepage
+  approved         Boolean   @default(false) // Admin approval before showing publicly
+  submittedAt      DateTime  @default(now())
+  approvedAt       DateTime?
 
   // Metadata
-  artStyle          String?   // Which art style they ordered
-  orderValue        Float?    // Order value in dollars
+  artStyle   String? // Which art style they ordered
+  orderValue Float? // Order value in dollars
 
   @@index([approved])
   @@index([featured])
@@ -199,79 +199,79 @@ model CustomerReview {
 }
 
 model SocialProofStats {
-  id                String    @id @default(cuid())
-  totalCustomers    Int       @default(0)
-  totalPortraits    Int       @default(0)
-  averageRating     Float     @default(4.9)
-  totalReviews      Int       @default(0)
+  id                 String   @id @default(cuid())
+  totalCustomers     Int      @default(0)
+  totalPortraits     Int      @default(0)
+  averageRating      Float    @default(4.9)
+  totalReviews       Int      @default(0)
   instagramFollowers Int      @default(0)
-  updatedAt         DateTime  @updatedAt
+  updatedAt          DateTime @updatedAt
 }
 
 model InstagramPost {
-  id                String    @id @default(cuid())
-  instagramPostId   String    @unique  // Instagram post ID
-  customerEmail     String?
-  imageUrl          String    // Instagram image URL
-  caption           String?
-  likes             Int       @default(0)
-  comments          Int       @default(0)
-  postedAt          DateTime
-  featured          Boolean   @default(false)
-  createdAt         DateTime  @default(now())
+  id              String   @id @default(cuid())
+  instagramPostId String   @unique // Instagram post ID
+  customerEmail   String?
+  imageUrl        String // Instagram image URL
+  caption         String?
+  likes           Int      @default(0)
+  comments        Int      @default(0)
+  postedAt        DateTime
+  featured        Boolean  @default(false)
+  createdAt       DateTime @default(now())
 
   @@index([featured])
 }
 
 // Order tracking for revenue analytics
 model Order {
-  id                    String    @id @default(cuid())
-  stripeSessionId       String    @unique
-  stripePaymentIntentId String?   @unique
+  id                    String  @id @default(cuid())
+  stripeSessionId       String  @unique
+  stripePaymentIntentId String? @unique
   customerEmail         String
   customerName          String
 
   // Order details
-  tier                  String    // basic, premium, deluxe, bundle
-  tierName              String
-  amount                Float     // Total amount in dollars
-  subtotal              Float     // Amount before discounts
-  discount              Float     @default(0) // Discount amount
-  tax                   Float     @default(0)
+  tier     String // basic, premium, deluxe, bundle
+  tierName String
+  amount   Float // Total amount in dollars
+  subtotal Float // Amount before discounts
+  discount Float  @default(0) // Discount amount
+  tax      Float  @default(0)
 
   // Product details
-  petName               String
-  style                 String
-  notes                 String?
-  petPhotoUrl           String?
-  portraitUrls          String?   // Comma-separated URLs
-  portraitCount         Int       @default(1)
+  petName       String
+  style         String
+  notes         String?
+  petPhotoUrl   String?
+  portraitUrls  String? // Comma-separated URLs
+  portraitCount Int     @default(1)
 
   // Acquisition tracking
-  utmSource             String?
-  utmMedium             String?
-  utmCampaign           String?
-  referralCode          String?
-  discountCode          String?
-  pricingBadge          String?   // Badge shown at purchase time (e.g., "Most Popular", "Best Value")
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  referralCode String?
+  discountCode String?
+  pricingBadge String? // Badge shown at purchase time (e.g., "Most Popular", "Best Value")
 
   // Gift card payment tracking
-  giftCardCode          String?   // Gift card code used (if any)
-  giftCardAmount        Float     @default(0) // Amount paid with gift card
+  giftCardCode   String? // Gift card code used (if any)
+  giftCardAmount Float   @default(0) // Amount paid with gift card
 
   // Status
-  status                String    @default("pending") // pending, completed, refunded, failed
-  deliveryStatus        String    @default("pending") // pending, completed, failed
-  deliveredAt           DateTime?
+  status         String    @default("pending") // pending, completed, refunded, failed
+  deliveryStatus String    @default("pending") // pending, completed, failed
+  deliveredAt    DateTime?
 
   // Refund tracking
-  refunded              Boolean   @default(false)
-  refundedAt            DateTime?
-  refundAmount          Float     @default(0)
+  refunded     Boolean   @default(false)
+  refundedAt   DateTime?
+  refundAmount Float     @default(0)
 
   // Timestamps
-  createdAt             DateTime  @default(now())
-  paidAt                DateTime?
+  createdAt DateTime  @default(now())
+  paidAt    DateTime?
 
   @@index([customerEmail])
   @@index([status])
@@ -284,33 +284,33 @@ model Order {
 
 // Corporate Bulk Orders (B2B)
 model CorporateInquiry {
-  id                  String    @id @default(cuid())
-  companyName         String
-  contactName         String
-  email               String
-  teamSize            Int       // Number of portraits requested
-  useCase             String    // holiday_gifts, employee_appreciation, team_building, pet_adoption_benefit, other
+  id                    String    @id @default(cuid())
+  companyName           String
+  contactName           String
+  email                 String
+  teamSize              Int // Number of portraits requested
+  useCase               String // holiday_gifts, employee_appreciation, team_building, pet_adoption_benefit, other
   preferredDeliveryDate DateTime?
-  notes               String?   // Additional details from form
+  notes                 String? // Additional details from form
 
   // Pricing & Quote
-  estimatedValue      Float?    // Auto-calculated based on team size
-  quoteAmount         Float?    // Custom quote amount set by admin
-  quotedAt            DateTime?
+  estimatedValue Float? // Auto-calculated based on team size
+  quoteAmount    Float? // Custom quote amount set by admin
+  quotedAt       DateTime?
 
   // Status tracking
-  status              String    @default("PENDING") // PENDING, QUOTED, WON, LOST
-  wonAt               DateTime?
-  lostReason          String?
+  status     String    @default("PENDING") // PENDING, QUOTED, WON, LOST
+  wonAt      DateTime?
+  lostReason String?
 
   // UTM tracking
-  utmSource           String?
-  utmMedium           String?
-  utmCampaign         String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
 
   // Timestamps
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status])
   @@index([email])
@@ -318,19 +318,19 @@ model CorporateInquiry {
 }
 
 model CorporateOrder {
-  id                  String              @id @default(cuid())
-  companyName         String
-  contactName         String
-  contactEmail        String
-  tier                String              // basic, premium, deluxe
-  employeeCount       Int                 // Total employees in this order
-  totalAmount         Float               // Total order value
-  stripeInvoiceId     String?             @unique
-  paymentStatus       String              @default("PENDING") // PENDING, PAID, FAILED
-  paidAt              DateTime?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  employees           CorporateEmployee[]
+  id              String              @id @default(cuid())
+  companyName     String
+  contactName     String
+  contactEmail    String
+  tier            String // basic, premium, deluxe
+  employeeCount   Int // Total employees in this order
+  totalAmount     Float // Total order value
+  stripeInvoiceId String?             @unique
+  paymentStatus   String              @default("PENDING") // PENDING, PAID, FAILED
+  paidAt          DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  employees       CorporateEmployee[]
 
   @@index([contactEmail])
   @@index([paymentStatus])
@@ -338,22 +338,22 @@ model CorporateOrder {
 }
 
 model CorporateEmployee {
-  id                  String            @id @default(cuid())
+  id                  String         @id @default(cuid())
   corporateOrderId    String
-  corporateOrder      CorporateOrder    @relation(fields: [corporateOrderId], references: [id], onDelete: Cascade)
+  corporateOrder      CorporateOrder @relation(fields: [corporateOrderId], references: [id], onDelete: Cascade)
   employeeName        String
   employeeEmail       String
   petPhotoUrl         String?
-  uploadToken         String?           @unique // Unique token for upload URL
+  uploadToken         String?        @unique // Unique token for upload URL
   portraitUrl         String?
-  status              String            @default("PENDING_PHOTO") // PENDING_PHOTO, PHOTO_UPLOADED, GENERATED, DELIVERED
-  emailSent           Boolean           @default(false)
+  status              String         @default("PENDING_PHOTO") // PENDING_PHOTO, PHOTO_UPLOADED, GENERATED, DELIVERED
+  emailSent           Boolean        @default(false)
   emailSentAt         DateTime?
   photoUploadedAt     DateTime?
   portraitGeneratedAt DateTime?
   portraitDeliveredAt DateTime?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 
   @@index([employeeEmail])
   @@index([uploadToken])
@@ -363,32 +363,32 @@ model CorporateEmployee {
 
 // Gift Card System
 model GiftCard {
-  id                String    @id @default(cuid())
-  code              String    @unique  // Unique gift card code (e.g., "GIFT-ABCD-1234")
-  initialBalance    Float     // Initial value in dollars
-  currentBalance    Float     // Current balance in dollars
+  id             String @id @default(cuid())
+  code           String @unique // Unique gift card code (e.g., "GIFT-ABCD-1234")
+  initialBalance Float // Initial value in dollars
+  currentBalance Float // Current balance in dollars
 
   // Purchase info
-  purchaserEmail    String?   // Who bought this gift card
-  purchaserName     String?
-  recipientEmail    String?   // Who received it
-  recipientName     String?
+  purchaserEmail String? // Who bought this gift card
+  purchaserName  String?
+  recipientEmail String? // Who received it
+  recipientName  String?
 
   // Referral mechanism (10% credit to sender on first use)
-  senderCredited    Boolean   @default(false)  // Has sender received 10% credit?
-  senderCreditAmount Float    @default(0)      // Amount credited to sender
+  senderCredited     Boolean @default(false) // Has sender received 10% credit?
+  senderCreditAmount Float   @default(0) // Amount credited to sender
 
   // Status
-  active            Boolean   @default(true)
-  expiresAt         DateTime?
+  active    Boolean   @default(true)
+  expiresAt DateTime?
 
   // Timestamps
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  firstUsedAt       DateTime? // When first used by recipient
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  firstUsedAt DateTime? // When first used by recipient
 
   // Transactions
-  transactions      GiftCardTransaction[]
+  transactions GiftCardTransaction[]
 
   @@index([code])
   @@index([purchaserEmail])
@@ -396,19 +396,19 @@ model GiftCard {
 }
 
 model GiftCardTransaction {
-  id            String    @id @default(cuid())
-  giftCardId    String
-  giftCard      GiftCard  @relation(fields: [giftCardId], references: [id])
+  id         String   @id @default(cuid())
+  giftCardId String
+  giftCard   GiftCard @relation(fields: [giftCardId], references: [id])
 
-  amount        Float     // Amount used (positive) or added (negative for refunds)
-  type          String    // "purchase", "redemption", "refund"
-  description   String
+  amount      Float // Amount used (positive) or added (negative for refunds)
+  type        String // "purchase", "redemption", "refund"
+  description String
 
-  orderId       String?   // Related order if this was a redemption
-  balanceBefore Float     // Balance before transaction
-  balanceAfter  Float     // Balance after transaction
+  orderId       String? // Related order if this was a redemption
+  balanceBefore Float // Balance before transaction
+  balanceAfter  Float // Balance after transaction
 
-  createdAt     DateTime  @default(now())
+  createdAt DateTime @default(now())
 
   @@index([giftCardId])
   @@index([orderId])
@@ -416,20 +416,20 @@ model GiftCardTransaction {
 
 // Fulfillment Error Logging
 model FulfillmentErrorLog {
-  id              String   @id @default(cuid())
-  orderId         String?  // Link to Order if exists
-  stripeSessionId String   // Stripe checkout session ID
+  id              String    @id @default(cuid())
+  orderId         String? // Link to Order if exists
+  stripeSessionId String // Stripe checkout session ID
   customerEmail   String
-  errorType       String   // "download_failed", "generation_failed", "upload_failed", "email_failed", "timeout", "unknown"
+  errorType       String // "download_failed", "generation_failed", "upload_failed", "email_failed", "timeout", "unknown"
   errorMessage    String
   stackTrace      String?
-  step            String   // Which fulfillment step failed: "downloading_photo", "generating", "uploading", "sending_email"
-  metadata        String?  // JSON string with session metadata for debugging
-  retryCount      Int      @default(0)
-  resolved        Boolean  @default(false)
+  step            String // Which fulfillment step failed: "downloading_photo", "generating", "uploading", "sending_email"
+  metadata        String? // JSON string with session metadata for debugging
+  retryCount      Int       @default(0)
+  resolved        Boolean   @default(false)
   resolvedAt      DateTime?
-  resolvedBy      String?  // "auto_retry" or "manual_retry" or "admin"
-  createdAt       DateTime @default(now())
+  resolvedBy      String? // "auto_retry" or "manual_retry" or "admin"
+  createdAt       DateTime  @default(now())
 
   @@index([stripeSessionId])
   @@index([resolved])
@@ -438,29 +438,29 @@ model FulfillmentErrorLog {
 
 // Analytics Event Tracking
 model AnalyticsEvent {
-  id            String   @id @default(cuid())
-  eventName     String   // 'page_view', 'gallery_view', 'order_start', 'checkout_start', 'purchase_complete', 'subscription_start'
-  sessionId     String   @default(cuid())
-  userId        String?  // Customer email if known
+  id        String  @id @default(cuid())
+  eventName String // 'page_view', 'gallery_view', 'order_start', 'checkout_start', 'purchase_complete', 'subscription_start'
+  sessionId String  @default(cuid())
+  userId    String? // Customer email if known
 
   // UTM parameters
-  utmSource     String?
-  utmMedium     String?
-  utmCampaign   String?
-  utmContent    String?
-  utmTerm       String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
 
   // Page context
-  pathname      String
-  referrer      String?
+  pathname String
+  referrer String?
 
   // Event metadata (JSON)
-  metadata      String?  // Store as JSON string: {tier, amount, etc.}
+  metadata String? // Store as JSON string: {tier, amount, etc.}
 
   // Revenue tracking
-  revenue       Float    @default(0)
+  revenue Float @default(0)
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([eventName])
   @@index([sessionId])
@@ -471,17 +471,17 @@ model AnalyticsEvent {
 
 // Marketing Spend Tracking (CAC Dashboard)
 model MarketingSpend {
-  id            String   @id @default(cuid())
-  channel       String   // google_ads, instagram, pinterest, reddit, tiktok, facebook, email, influencer, organic
-  amount        Float    // Spend in dollars
-  impressions   Int      @default(0)
-  clicks        Int      @default(0)
-  conversions   Int      @default(0) // Attributed purchases
-  revenue       Float    @default(0) // Revenue from attributed conversions
-  date          DateTime // The date this spend applies to
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id          String   @id @default(cuid())
+  channel     String // google_ads, instagram, pinterest, reddit, tiktok, facebook, email, influencer, organic
+  amount      Float // Spend in dollars
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  conversions Int      @default(0) // Attributed purchases
+  revenue     Float    @default(0) // Revenue from attributed conversions
+  date        DateTime // The date this spend applies to
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@unique([channel, date])
   @@index([channel])
@@ -490,48 +490,48 @@ model MarketingSpend {
 
 // Cart Abandonment Recovery
 model AbandonedCart {
-  id                    String    @id @default(cuid())
-  stripeSessionId       String    @unique  // Stripe checkout session ID
-  customerEmail         String
-  customerName          String
+  id              String @id @default(cuid())
+  stripeSessionId String @unique // Stripe checkout session ID
+  customerEmail   String
+  customerName    String
 
   // Order details (what they were buying)
-  tier                  String    // basic, premium, deluxe, bundle
-  amount                Float     // Total amount in dollars
-  petName               String
-  style                 String
-  notes                 String?
-  petPhotoUrl           String?
+  tier        String // basic, premium, deluxe, bundle
+  amount      Float // Total amount in dollars
+  petName     String
+  style       String
+  notes       String?
+  petPhotoUrl String?
 
   // Acquisition tracking
-  utmSource             String?
-  utmMedium             String?
-  utmCampaign           String?
-  referralCode          String?
-  discountCode          String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  referralCode String?
+  discountCode String?
 
   // Recovery tracking
-  status                String    @default("abandoned")  // abandoned, email1_sent, email2_sent, email3_sent, recovered, expired
-  recoveryAttempts      Int       @default(0)            // Number of recovery emails sent
+  status           String @default("abandoned") // abandoned, email1_sent, email2_sent, email3_sent, recovered, expired
+  recoveryAttempts Int    @default(0) // Number of recovery emails sent
 
   // Recovery email timestamps
-  email1SentAt          DateTime? // 1hr email
-  email2SentAt          DateTime? // 24hr email
-  email3SentAt          DateTime? // 72hr email
+  email1SentAt DateTime? // 1hr email
+  email2SentAt DateTime? // 24hr email
+  email3SentAt DateTime? // 72hr email
 
   // Recovery discount codes (progressive escalation)
-  discountCode1         String?   // 10% discount
-  discountCode2         String?   // 15% discount
-  discountCode3         String?   // 20% discount
+  discountCode1 String? // 10% discount
+  discountCode2 String? // 15% discount
+  discountCode3 String? // 20% discount
 
   // Recovery outcome
-  recovered             Boolean   @default(false)
-  recoveredAt           DateTime?
-  recoveredOrderId      String?   // Link to Order if recovered
+  recovered        Boolean   @default(false)
+  recoveredAt      DateTime?
+  recoveredOrderId String? // Link to Order if recovered
 
   // Timestamps
-  createdAt             DateTime  @default(now())
-  expiresAt             DateTime  // 7 days from creation
+  createdAt DateTime @default(now())
+  expiresAt DateTime // 7 days from creation
 
   @@index([customerEmail])
   @@index([status])
@@ -541,27 +541,88 @@ model AbandonedCart {
 
 // Funnel Analytics - Track conversion funnel progression and drop-off
 model FunnelEvent {
-  id            String   @id @default(cuid())
-  sessionId     String   // Unique session ID for tracking user journey
-  step          String   // landing, gallery, order_page, photo_upload, tier_selection, checkout_initiate, purchase
-  timestamp     DateTime @default(now())
-  metadata      String?  // JSON string with additional context
+  id        String   @id @default(cuid())
+  sessionId String // Unique session ID for tracking user journey
+  step      String // landing, gallery, order_page, photo_upload, tier_selection, checkout_initiate, purchase
+  timestamp DateTime @default(now())
+  metadata  String? // JSON string with additional context
 
   @@index([sessionId])
   @@index([step])
   @@index([timestamp])
 }
 
+// Loyalty Program
+model LoyaltyMember {
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  name               String?
+  tier               String    @default("bronze") // bronze, silver, gold, platinum
+  totalOrders        Int       @default(0)
+  totalSpent         Float     @default(0)
+  lifetimePoints     Int       @default(0)
+  currentPoints      Int       @default(0)
+  repeatDiscountCode String?   @unique // Auto-generated 20% off code for 2nd purchase
+  repeatDiscountUsed Boolean   @default(false)
+  tierUpgradedAt     DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  petProfiles PetProfile[]
+  rewards     LoyaltyReward[]
+
+  @@index([email])
+  @@index([tier])
+}
+
+model PetProfile {
+  id              String        @id @default(cuid())
+  loyaltyMemberId String
+  loyaltyMember   LoyaltyMember @relation(fields: [loyaltyMemberId], references: [id], onDelete: Cascade)
+  name            String
+  species         String        @default("dog") // dog, cat, bird, rabbit, etc.
+  breed           String?
+  birthday        DateTime? // Pet's birthday for birthday portrait reminders
+  birthdayMonth   Int? // 1-12, extracted for easy querying
+  birthdayDay     Int? // 1-31, extracted for easy querying
+  photoUrl        String? // Reference photo
+  portraitCount   Int           @default(0) // How many portraits ordered for this pet
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([loyaltyMemberId])
+  @@index([birthdayMonth, birthdayDay])
+}
+
+model LoyaltyReward {
+  id              String        @id @default(cuid())
+  loyaltyMemberId String
+  loyaltyMember   LoyaltyMember @relation(fields: [loyaltyMemberId], references: [id], onDelete: Cascade)
+  type            String // "repeat_discount", "birthday_portrait", "tier_upgrade", "points_reward"
+  description     String
+  discountCode    String?       @unique
+  discountPercent Int?
+  discountAmount  Float?
+  used            Boolean       @default(false)
+  usedAt          DateTime?
+  expiresAt       DateTime?
+  createdAt       DateTime      @default(now())
+
+  @@index([loyaltyMemberId])
+  @@index([discountCode])
+  @@index([expiresAt])
+}
+
 // A/B Testing - Track variant assignments and conversions
 model ABTestEvent {
-  id            String   @id @default(cuid())
-  testId        String   // Test identifier (e.g., "pricing_test", "cta_button_test")
-  variant       String   // control, variant_a, variant_b, variant_c
-  sessionId     String   // User session ID
-  eventType     String   // assignment, conversion
-  revenue       Float    @default(0)  // Revenue from conversion (if applicable)
-  metadata      String?  // JSON string with additional context
-  timestamp     DateTime @default(now())
+  id        String   @id @default(cuid())
+  testId    String // Test identifier (e.g., "pricing_test", "cta_button_test")
+  variant   String // control, variant_a, variant_b, variant_c
+  sessionId String // User session ID
+  eventType String // assignment, conversion
+  revenue   Float    @default(0) // Revenue from conversion (if applicable)
+  metadata  String? // JSON string with additional context
+  timestamp DateTime @default(now())
 
   @@index([testId])
   @@index([variant])
@@ -569,4 +630,3 @@ model ABTestEvent {
   @@index([eventType])
   @@index([timestamp])
 }
-

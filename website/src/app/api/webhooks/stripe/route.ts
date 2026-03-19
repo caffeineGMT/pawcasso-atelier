@@ -8,6 +8,7 @@ import { PrismaClient } from "@prisma/client";
 import { createGiftCard, markGiftCardAsSent } from "@/lib/gift-cards";
 import { GiftCardEmail } from "@/lib/email-templates/gift-card-delivery";
 import { trackServerSideConversion } from "@/lib/google-ads-config";
+import { markCartAsRecovered } from "@/lib/cart-recovery";
 
 const prisma = new PrismaClient();
 
@@ -860,6 +861,12 @@ export async function POST(req: NextRequest) {
           }),
           revenue: amountTotal / 100, // Convert from cents to dollars
         },
+      });
+
+      // Mark abandoned cart as recovered
+      markCartAsRecovered(session.id, session.id).catch((err) => {
+        console.error('Failed to mark cart as recovered:', err);
+        // Don't fail the webhook if recovery tracking fails
       });
     } catch (dbError) {
       console.error('Failed to create order in database:', dbError);

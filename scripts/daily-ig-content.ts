@@ -395,16 +395,16 @@ function generateCaptions(
     },
     zodiac: {
       witty: [
-        `${extra.emoji} ${extra.sign} ${breed}s are ${extra.traits.toLowerCase()} and we have PROOF.\n\n"${extra.dates}" — aka the ${breed}s who [insert zodiac stereotype here].\n\nIf your ${breed} is a ${extra.sign}, this portrait was scientifically designed for your camera roll.\n\n🔮 Zodiac ${breed} series\n📩 Commission your pet's sign — link in bio`,
+        `${extra?.emoji || '✨'} ${extra?.sign || 'Zodiac'} ${breed}s are ${extra?.traits?.toLowerCase() || 'amazing'} and we have PROOF.\n\n"${extra?.dates || 'All year'}" — aka the ${breed}s who [insert zodiac stereotype here].\n\nIf your ${breed} is a ${extra?.sign || 'zodiac sign'}, this portrait was scientifically designed for your camera roll.\n\n🔮 Zodiac ${breed} series\n📩 Commission your pet's sign — link in bio`,
       ],
       heartfelt: [
-        `${extra.emoji} ${extra.sign}: ${extra.traits}.\n\nIf you have a ${breed} born ${extra.dates}, you already know — they're not just pets. They're cosmic companions.\n\nWe painted this portrait to honor every ${extra.sign} ${breed} who's ever stolen a heart (or a shoe).\n\nFor the astrology lovers and the ${breed} parents. 🤍\n\n🔮 ${extra.sign} ${breed}\n📩 Link in bio`,
+        `${extra?.emoji || '✨'} ${extra?.sign || 'Zodiac'}: ${extra?.traits || 'Special'}.\n\nIf you have a ${breed} born ${extra?.dates || 'this season'}, you already know — they're not just pets. They're cosmic companions.\n\nWe painted this portrait to honor every ${extra?.sign || 'zodiac'} ${breed} who's ever stolen a heart (or a shoe).\n\nFor the astrology lovers and the ${breed} parents. 🤍\n\n🔮 ${extra?.sign || 'Zodiac'} ${breed}\n📩 Link in bio`,
       ],
       minimal: [
-        `${extra.emoji} ${extra.sign}.\n${breed}.\n${extra.traits}.\n\n🔮 Link in bio`,
+        `${extra?.emoji || '✨'} ${extra?.sign || 'Zodiac'}.\n${breed}.\n${extra?.traits || 'Unique'}.\n\n🔮 Link in bio`,
       ],
       bold: [
-        `${extra.emoji.toUpperCase()} ${extra.sign.toUpperCase()} ${breed.toUpperCase()}S ARE BUILT DIFFERENT.\n\n${extra.traits.toUpperCase()}. UNSTOPPABLE. ICONIC.\n\nBorn ${extra.dates}? This portrait speaks your language.\n\n🔮 Zodiac ${breed} collection\n📩 Link in bio`,
+        `${extra?.emoji?.toUpperCase() || '✨'} ${extra?.sign?.toUpperCase() || 'ZODIAC'} ${breed.toUpperCase()}S ARE BUILT DIFFERENT.\n\n${extra?.traits?.toUpperCase() || 'SPECIAL'}. UNSTOPPABLE. ICONIC.\n\nBorn ${extra?.dates || 'this season'}? This portrait speaks your language.\n\n🔮 Zodiac ${breed} collection\n📩 Link in bio`,
       ],
     },
     reel_concept: {

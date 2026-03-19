@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>IG Content Queue — @pawcasso.atelier</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      background: #111;
+      border-bottom: 1px solid #222;
+      padding: 20px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-title { font-size: 24px; font-weight: 700; }
+    .header-subtitle { font-size: 14px; color: #888; margin-top: 4px; }
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .stat-item {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-value { font-size: 20px; font-weight: 600; color: #22c55e; }
+    .stat-label { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; }
+    .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 24px 0 12px;
+    }
+    .content-card {
+      display: block;
+      background: #141414;
+      border: 1px solid #252525;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .content-card:hover { background: #1a1a1a; border-color: #333; }
+    .content-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .content-title { font-size: 16px; font-weight: 600; color: #fff; }
+    .content-meta { font-size: 12px; color: #888; margin-top: 4px; }
+    .status-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .status-pending-generation { background: #1e3a8a; color: #60a5fa; }
+    .status-pending-review { background: #854d0e; color: #fbbf24; }
+    .status-approved { background: #166534; color: #22c55e; }
+    .status-posted { background: #4c1d95; color: #a78bfa; }
+    .content-concept {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .content-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #666;
+      padding-top: 12px;
+      border-top: 1px solid #222;
+    }
+    .posting-time { color: #22c55e; font-weight: 500; }
+    .empty-state {
+      text-align: center;
+      padding: 48px 16px;
+      color: #666;
+    }
+    .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state-text { font-size: 14px; }
+    .footer {
+      text-align: center;
+      padding: 32px 16px;
+      color: #555;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">IG Content Queue</div>
+    <div class="header-subtitle">@pawcasso.atelier · Daily Content Generation</div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-value">1</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Posted</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    
+      <div class="section-title">Pending Review</div>
+      
+    <a href="/ig-queue/2026-03-19-e5184bf6.html" class="content-card">
+      <div class="content-card-header">
+        <div>
+          <div class="content-title">Syrian Emoji/Sticker Set</div>
+          <div class="content-meta">2026-03-19 · emoji set</div>
+        </div>
+        <div class="status-badge status-pending-generation">pending generation</div>
+      </div>
+      <div class="content-concept">Shareable Syrian activity stickers</div>
+      <div class="content-footer">
+        <span>Syrian</span>
+        <span class="posting-time">12:30 PM</span>
+      </div>
+    </a>
+  
+    
+
+    
+
+    
+
+    
+
+    <div class="footer">
+      Pawcasso Atelier · Daily IG Content System<br>
+      Last updated: 2026-03-19
+    </div>
+  </div>
+</body>
+</html>

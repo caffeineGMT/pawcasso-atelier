@@ -12,6 +12,13 @@ export default function AdminDashboard() {
       color: 'from-[#C9A96E] to-[#B89960]',
     },
     {
+      name: 'CAC Dashboard',
+      description: 'Customer acquisition cost by channel, LTV:CAC ratio, payback period',
+      href: '/admin/cac',
+      icon: '💰',
+      color: 'from-emerald-500 to-emerald-600',
+    },
+    {
       name: 'Customer Reviews',
       description: 'Approve and manage customer testimonials',
       href: '/admin/reviews',
