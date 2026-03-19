@@ -67,6 +67,16 @@ a,
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
   }
+
+  /* Prevent sticky bottom bar from covering form content */
+  form {
+    padding-bottom: 6rem;
+  }
+
+  /* Exception: forms that don't need bottom padding */
+  form.no-bottom-padding {
+    padding-bottom: 0;
+  }
 }
 
 /* Prevent layout shift on tap */
@@ -161,6 +171,19 @@ body {
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden; /* Double safeguard */
+  max-width: 100vw;
+}
+
+/* Prevent long text from causing horizontal scroll */
+p, li, span, div {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* ─── Mobile Checkout Funnel Optimizations ─── */

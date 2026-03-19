@@ -1,0 +1,387 @@
+/**
+ * Firefox-specific CSS fixes for Pawcasso Atelier
+ * Targets Gecko engine compatibility issues
+ */
+
+/* ============================================
+   1. AUTOFILL STYLING FOR DARK THEME
+   ============================================ */
+
+/* Firefox autofill fix - prevents light yellow/blue backgrounds */
+@-moz-document url-prefix() {
+  input:-moz-autofill,
+  select:-moz-autofill,
+  textarea:-moz-autofill {
+    box-shadow: 0 0 0 1000px #111111 inset !important;
+    -moz-text-fill-color: #F5F5F7 !important;
+    border-color: rgba(201, 169, 110, 0.4) !important;
+    background-color: transparent !important;
+  }
+
+  input:-moz-autofill:hover,
+  select:-moz-autofill:hover,
+  textarea:-moz-autofill:hover {
+    box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+    border-color: rgba(201, 169, 110, 0.6) !important;
+  }
+
+  input:-moz-autofill:focus,
+  select:-moz-autofill:focus,
+  textarea:-moz-autofill:focus {
+    box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+    border-color: rgba(201, 169, 110, 0.8) !important;
+  }
+}
+
+/* Standard autofill (non-vendor-prefixed for modern Firefox) */
+input:autofill,
+select:autofill,
+textarea:autofill {
+  box-shadow: 0 0 0 1000px #111111 inset !important;
+  border-color: rgba(201, 169, 110, 0.4) !important;
+  -webkit-text-fill-color: #F5F5F7 !important;
+}
+
+input:autofill:hover,
+input:autofill:focus {
+  box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+  border-color: rgba(201, 169, 110, 0.8) !important;
+}
+
+/* ============================================
+   2. BACKDROP FILTER FALLBACK
+   ============================================ */
+
+/* Enhanced fallback for Firefox ESR without backdrop-filter support */
+@supports not (backdrop-filter: blur(20px)) {
+  .glass,
+  [class*="backdrop-blur"] {
+    /* Use more opaque background when blur is unavailable */
+    background: rgba(17, 17, 17, 0.95) !important;
+  }
+
+  /* Modals need even darker background without blur */
+  [role="dialog"] [class*="backdrop-blur"],
+  .modal [class*="backdrop-blur"] {
+    background: rgba(10, 10, 10, 0.98) !important;
+  }
+}
+
+/* Firefox-specific backdrop-filter optimization */
+@-moz-document url-prefix() {
+  @supports (backdrop-filter: blur(20px)) {
+    /* Reduce blur intensity on Firefox for better performance */
+    .glass {
+      backdrop-filter: saturate(160%) blur(15px);
+    }
+
+    /* Lighter blur for mobile Firefox */
+    @media (max-width: 768px) {
+      .glass,
+      [class*="backdrop-blur"] {
+        backdrop-filter: saturate(140%) blur(10px);
+      }
+    }
+  }
+}
+
+/* ============================================
+   3. SCROLLBAR STYLING
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Refined scrollbar colors for Firefox */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 169, 110, 0.3) transparent;
+  }
+
+  .scrollbar-thin:hover {
+    scrollbar-color: rgba(201, 169, 110, 0.5) transparent;
+  }
+
+  /* Hidden scrollbar for Firefox */
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+
+  /* Custom scrollbar for gallery and long content */
+  .gallery-container,
+  .content-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 169, 110, 0.4) rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* ============================================
+   4. FORM INPUT IMPROVEMENTS
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* File input styling - Firefox has stricter limitations */
+  input[type="file"] {
+    /* Ensure proper cursor on file inputs */
+    cursor: pointer;
+  }
+
+  input[type="file"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Number input - remove spinner on Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Search input - remove clear button styling */
+  input[type="search"]::-moz-search-decoration,
+  input[type="search"]::-moz-search-cancel-button {
+    -moz-appearance: none;
+  }
+}
+
+/* ============================================
+   5. TEXT GRADIENT OPTIMIZATION
+   ============================================ */
+
+/* Firefox supports background-clip without prefix since v49 */
+.text-gradient {
+  /* Ensure proper text gradient rendering on Firefox */
+  background: linear-gradient(135deg, #C9A96E 0%, #E8D5A8 50%, #C9A96E 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text; /* Explicit Firefox prefix for older versions */
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent; /* Firefox-specific */
+  color: transparent; /* Fallback */
+}
+
+/* ============================================
+   6. TRANSFORM & ANIMATION OPTIMIZATION
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Optimize transforms for Firefox performance */
+  .animate-slide-up,
+  .animate-scale-in,
+  .animate-fade-in-up {
+    /* Use will-change sparingly for Firefox */
+    will-change: transform, opacity;
+  }
+
+  /* Reduce motion for Firefox users with prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-up,
+    .animate-scale-in,
+    .animate-fade-in-up,
+    .animate-pulse-subtle {
+      animation: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+/* ============================================
+   7. FLEXBOX & GRID REFINEMENTS
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Firefox flexbox edge case fixes */
+  .flex {
+    /* Ensure proper flex-basis calculation */
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* Grid gap fallback for older Firefox */
+  @supports not (gap: 1rem) {
+    .grid {
+      grid-gap: 1rem;
+    }
+  }
+}
+
+/* ============================================
+   8. SAFE AREA INSETS
+   ============================================ */
+
+/* Firefox on Android - safe area support */
+@-moz-document url-prefix() {
+  @supports (padding: max(0px, env(safe-area-inset-top))) {
+    .safe-area-top {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+
+    .safe-area-bottom {
+      padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+
+    .safe-area-left {
+      padding-left: max(1rem, env(safe-area-inset-left));
+    }
+
+    .safe-area-right {
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+}
+
+/* ============================================
+   9. MOBILE FIREFOX SPECIFIC
+   ============================================ */
+
+@-moz-document url-prefix() {
+  @media (max-width: 768px) {
+    /* Touch target size enforcement for Firefox Android */
+    button,
+    a,
+    input[type="button"],
+    input[type="submit"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Prevent zoom on input focus (Firefox Mobile) */
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1rem);
+    }
+
+    /* Fix for Firefox Android address bar height changes */
+    .mobile-full-height {
+      min-height: 100vh;
+      min-height: -moz-available;
+    }
+  }
+}
+
+/* ============================================
+   10. IMAGE OPTIMIZATION
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Image rendering optimization for Firefox */
+  img {
+    /* Smooth image scaling */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  img.gallery-image {
+    /* High quality for gallery images */
+    image-rendering: auto;
+  }
+
+  /* Lazy loading optimization */
+  img[loading="lazy"] {
+    /* Firefox-specific lazy load hint */
+    content-visibility: auto;
+  }
+}
+
+/* ============================================
+   11. PAYMENT FORM (STRIPE) FIREFOX FIXES
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Stripe Elements iframe container */
+  .__PrivateStripeElement,
+  .StripeElement {
+    /* Ensure proper focus outline on Firefox */
+    outline-offset: 2px;
+  }
+
+  .__PrivateStripeElement:focus-within,
+  .StripeElement--focus {
+    outline: 2px solid rgba(201, 169, 110, 0.6);
+    outline-offset: 2px;
+  }
+
+  /* Payment button styling for Firefox */
+  .payment-button {
+    /* Ensure button appears clickable */
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
+/* ============================================
+   12. ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+
+@-moz-document url-prefix() {
+  /* Focus outline improvements for Firefox */
+  *:focus-visible {
+    outline: 2px solid rgba(201, 169, 110, 0.8);
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support (Firefox on Windows) */
+  @media (prefers-contrast: high) {
+    .border-white\/\[0\.08\],
+    .border-white\/\[0\.12\] {
+      border-color: currentColor !important;
+      border-width: 2px !important;
+    }
+
+    .text-text-secondary {
+      color: inherit !important;
+    }
+  }
+}
+
+/* ============================================
+   13. PRINT STYLES (FIREFOX PRINT)
+   ============================================ */
+
+@media print {
+  @-moz-document url-prefix() {
+    /* Ensure proper printing on Firefox */
+    .no-print {
+      display: none !important;
+    }
+
+    /* Remove background graphics (optional) */
+    * {
+      background: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    a[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+}
+
+/* ============================================
+   14. DEBUGGING HELPERS (DEV MODE ONLY)
+   ============================================ */
+
+/* Uncomment for Firefox-specific debugging */
+/*
+@-moz-document url-prefix() {
+  html::before {
+    content: "Firefox Detected";
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: #ff6600;
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    z-index: 99999;
+  }
+}
+*/

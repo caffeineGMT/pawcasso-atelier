@@ -92,6 +92,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
+    // Breed-Specific SEO Pages (Phase 2)
+    {
+      url: `${baseUrl}/golden-retriever-portraits`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    // TODO: Add these breed pages when created by Engineer 3:
+    // - /corgi-portraits
+    // - /persian-cat-portraits
+    // - /french-bulldog-portraits
+    // - /siamese-cat-portraits
     // Secondary pages
     {
       url: `${baseUrl}/about`,

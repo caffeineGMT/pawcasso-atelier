@@ -15,3 +15,12 @@ export type { StyleSelectorProps } from './StyleSelector';
 
 export { default as GiftCardInput } from './GiftCardInput';
 export type { GiftCardInputProps } from './GiftCardInput';
+
+export { default as CustomerInfoSection } from './CustomerInfoSection';
+export type { CustomerInfoSectionProps } from './CustomerInfoSection';
+
+export { default as OrderSummary } from './OrderSummary';
+export type { OrderSummaryProps } from './OrderSummary';
+
+export { default as ProgressIndicator } from './ProgressIndicator';
+export type { ProgressIndicatorProps } from './ProgressIndicator';

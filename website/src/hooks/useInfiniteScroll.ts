@@ -19,7 +19,7 @@ interface UseInfiniteScrollResult<T> {
   /** Whether all items have been loaded */
   hasMore: boolean;
   /** Ref to attach to the "load more" trigger element */
-  loadMoreRef: React.RefObject<HTMLDivElement>;
+  loadMoreRef: React.RefObject<HTMLDivElement | null>;
   /** Total number of items loaded so far */
   loadedCount: number;
   /** Manually trigger loading more items */
