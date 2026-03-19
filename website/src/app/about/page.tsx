@@ -138,5 +138,6 @@ export default function AboutPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -265,3 +265,31 @@ export async function trackServerLead(params: {
     event_source_url: params.url,
   });
 }
+
+/**
+ * Extract Facebook cookies (_fbc and _fbp) from cookie header
+ */
+export function extractFacebookCookies(cookieHeader?: string): {
+  fbc?: string;
+  fbp?: string;
+} {
+  if (!cookieHeader) return {};
+
+  const cookies: Record<string, string> = {};
+  cookieHeader.split(';').forEach(cookie => {
+    const [key, value] = cookie.trim().split('=');
+    if (key) cookies[key] = value;
+  });
+
+  return {
+    fbc: cookies._fbc,
+    fbp: cookies._fbp,
+  };
+}
+
+/**
+ * Generate event ID for deduplication (client + server events)
+ */
+export function generateEventId(eventType: string): string {
+  return `${eventType}_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+}
