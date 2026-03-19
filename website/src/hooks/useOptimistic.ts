@@ -22,18 +22,21 @@ export function useOptimisticAction<T, Args extends any[]>(
     async (...args: Args) => {
       setState((prev) => ({ ...prev, isPending: true, error: null }));
 
-      startTransition(async () => {
-        try {
-          const result = await action(...args);
-          setState({ data: result, isPending: false, error: null });
-          onSuccess?.(result);
-          return result;
-        } catch (error) {
-          const err = error instanceof Error ? error : new Error('Unknown error');
-          setState({ data: null, isPending: false, error: err });
-          onError?.(err);
-          throw err;
-        }
+      startTransition(() => {
+        // Execute async operation
+        (async () => {
+          try {
+            const result = await action(...args);
+            setState({ data: result, isPending: false, error: null });
+            onSuccess?.(result);
+            return result;
+          } catch (error) {
+            const err = error instanceof Error ? error : new Error('Unknown error');
+            setState({ data: null, isPending: false, error: err });
+            onError?.(err);
+            throw err;
+          }
+        })();
       });
     },
     [action, onSuccess, onError]

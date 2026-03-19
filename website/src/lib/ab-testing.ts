@@ -117,7 +117,8 @@ export const getVariant = (testId: string, userId?: string): Variant => {
     // Get or create persistent user ID for A/B testing
     let abTestUserId = userId;
     if (!abTestUserId) {
-      abTestUserId = localStorage.getItem('ab_test_user_id');
+      const storedUserId = localStorage.getItem('ab_test_user_id');
+      abTestUserId = storedUserId || undefined;
       if (!abTestUserId) {
         abTestUserId = crypto.randomUUID();
         localStorage.setItem('ab_test_user_id', abTestUserId);

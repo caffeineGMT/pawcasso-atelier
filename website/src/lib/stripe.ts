@@ -105,6 +105,8 @@ export async function createCheckoutSession({
   utmCampaign,
   giftCardCode,
   creditApplied,
+  promoCodeId,
+  promoCodeDiscount,
   abTestVariant,
   abSessionId,
 }: {
@@ -123,6 +125,8 @@ export async function createCheckoutSession({
   utmCampaign?: string;
   giftCardCode?: string;
   creditApplied?: number;
+  promoCodeId?: string;
+  promoCodeDiscount?: number;
   abTestVariant?: string;
   abSessionId?: string;
 }) {

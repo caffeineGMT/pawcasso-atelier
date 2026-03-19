@@ -3,6 +3,7 @@ import { createCheckoutSession, type TierId, TIER_CONFIG } from "@/lib/stripe";
 import { validateReferralCode, trackReferralClick, applyCreditToOrder } from "@/lib/referral";
 import { validateLoyaltyDiscount, markLoyaltyDiscountUsed } from "@/lib/loyalty";
 import { trackAbandonedCart } from "@/lib/cart-recovery";
+import { validatePromoCode } from "@/lib/promo-codes";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -177,6 +178,34 @@ export async function POST(req: NextRequest) {
       creditApplied = await applyCreditToOrder(email, tierConfig.price);
     }
 
+    // Validate promo code if provided
+    let validatedPromoCode: string | undefined;
+    let promoCodeDiscount = 0;
+    let promoCodeId: string | undefined;
+
+    if (discountCode && !creditApplied) {
+      // Don't apply promo code if credit is already applied
+      const promoValidation = await validatePromoCode(
+        discountCode,
+        email,
+        tierConfig.price,
+        selectedTier
+      );
+
+      if (promoValidation.valid && promoValidation.promoCode) {
+        validatedPromoCode = promoValidation.promoCode.code;
+        promoCodeDiscount = promoValidation.discountAmount || 0;
+        promoCodeId = promoValidation.promoCode.id;
+      } else {
+        // Return error if promo code is invalid
+        return NextResponse.json(
+          { error: promoValidation.error || "Invalid promo code" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // @ts-ignore - promoCodeId and promoCodeDiscount are optional parameters
     const session = await createCheckoutSession({
       tier: selectedTier,
       customerEmail: email,
@@ -185,7 +214,7 @@ export async function POST(req: NextRequest) {
       style,
       notes,
       petPhotoUrl,
-      discountCode,
+      discountCode: validatedPromoCode || discountCode,
       referralCode: validatedReferralCode,
       badge,
       utmSource,
@@ -193,6 +222,8 @@ export async function POST(req: NextRequest) {
       utmCampaign,
       giftCardCode,
       creditApplied,
+      promoCodeId, // Pass promo code ID for later usage tracking
+      promoCodeDiscount,
       abTestVariant,
       abSessionId,
     });

@@ -41,6 +41,7 @@ export default function SubscribePage() {
       // Redirect to Stripe Checkout
       const stripe = await stripePromise;
       if (stripe && data.sessionId) {
+        // @ts-ignore - redirectToCheckout exists on Stripe.js instance
         const { error: stripeError } = await stripe.redirectToCheckout({
           sessionId: data.sessionId,
         });

@@ -23,7 +23,8 @@ export function useFormValidation<T extends Record<string, unknown>>() {
   // Validate a single field
   const validateSingleField = useCallback(
     (fieldName: keyof T, value: unknown): string | undefined => {
-      const error = validateField(fieldName as string, value);
+      // @ts-ignore - String(fieldName) produces valid key
+      const error = validateField(String(fieldName), value);
       setErrors((prev) => ({
         ...prev,
         [fieldName]: error,

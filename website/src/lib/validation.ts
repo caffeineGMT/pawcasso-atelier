@@ -204,8 +204,8 @@ export function validateOrderForm(data: OrderFormData): { valid: boolean; errors
 }
 
 // Real-time field validation
-export function validateField(fieldName: keyof OrderFormData, value: unknown): string | undefined {
-  switch (fieldName) {
+export function validateField(fieldName: string, value: unknown): string | undefined {
+  switch (fieldName as keyof OrderFormData) {
     case 'name':
       return validateName(value as string).error;
     case 'email':

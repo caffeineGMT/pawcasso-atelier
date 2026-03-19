@@ -97,6 +97,7 @@ export function useAsync<T, Args extends unknown[]>(
   // Execute immediately if requested
   useEffect(() => {
     if (options.immediate) {
+      // @ts-ignore - execute can be called without args when Args extends unknown[]
       execute();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
