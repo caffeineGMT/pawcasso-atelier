@@ -251,14 +251,14 @@ export async function syncSubscriptionFromStripe(
           ? new Date(stripeSubscription.canceled_at * 1000)
           : null,
         currentPeriodStart: new Date(
-          (stripeSubscription.current_period_start as number) * 1000
+          ((stripeSubscription as any).current_period_start as number) * 1000
         ),
-        currentPeriodEnd: new Date((stripeSubscription.current_period_end as number) * 1000),
-        trialStart: stripeSubscription.trial_start
-          ? new Date((stripeSubscription.trial_start as number) * 1000)
+        currentPeriodEnd: new Date(((stripeSubscription as any).current_period_end as number) * 1000),
+        trialStart: (stripeSubscription as any).trial_start
+          ? new Date(((stripeSubscription as any).trial_start as number) * 1000)
           : null,
-        trialEnd: stripeSubscription.trial_end
-          ? new Date((stripeSubscription.trial_end as number) * 1000)
+        trialEnd: (stripeSubscription as any).trial_end
+          ? new Date(((stripeSubscription as any).trial_end as number) * 1000)
           : null,
         defaultPaymentMethodId:
           (stripeSubscription.default_payment_method as string) || null,
