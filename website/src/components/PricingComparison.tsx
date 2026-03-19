@@ -8,7 +8,7 @@ export const PricingComparison = () => {
   const TIERS = [
     { name: 'Basic', price: 9, originalPrice: 15, popular: false },
     { name: 'Premium', price: 29, originalPrice: 49, popular: true },
-    { name: 'Deluxe', price: 49, originalPrice: 82, popular: false },
+    { name: 'Deluxe', price: 49, originalPrice: 89, popular: false }, // Price anchoring: $89 → $49 Launch Special
     { name: 'Bundle', price: 79, originalPrice: 132, popular: false },
   ];
 

@@ -333,6 +333,14 @@ function OrderPageContent() {
       file_type: file.type,
     });
 
+    // Track photo_upload event for conversion funnel
+    trackAnalyticsEvent('photo_upload', {
+      tier: selectedTier,
+      price: selectedTierConfig?.price,
+      file_size: file.size,
+      file_type: file.type,
+    });
+
     // Upload immediately
     setUploading(true);
     setUploadProgress(0);
@@ -448,8 +456,16 @@ function OrderPageContent() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Track upsell view
+    // Track checkout_start event for conversion funnel
     const selectedTierConfig = displayTierConfig.find(t => t.id === selectedTier);
+    trackAnalyticsEvent('checkout_start', {
+      tier: selectedTier,
+      price: selectedTierConfig?.price,
+      style,
+      pet_name: petName,
+    });
+
+    // Track upsell view
     trackEvent('checkout_upsell_shown', {
       tier: selectedTier,
       original_value: selectedTierConfig?.price,

@@ -269,8 +269,12 @@ model Order {
   refundedAt   DateTime?
   refundAmount Float     @default(0)
 
-  // Post-delivery email tracking
-  reviewEmailSentAt DateTime? // When the 7-day review request email was sent
+  // Post-purchase email tracking (5-email drip campaign)
+  orderConfirmationEmailSentAt DateTime? // Email #1: Order confirmation (immediate after purchase)
+  shippingNotificationEmailSentAt DateTime? // Email #2: Shipping notification (when order ships)
+  deliveryConfirmationEmailSentAt DateTime? // Email #3: Delivery confirmation (when order is delivered)
+  reviewRequestEmailSentAt DateTime? // Email #4: Review request (7 days post-delivery)
+  reorderIncentiveEmailSentAt DateTime? // Email #5: Reorder incentive (30 days post-delivery)
 
   // Timestamps
   createdAt DateTime  @default(now())

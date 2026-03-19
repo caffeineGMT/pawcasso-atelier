@@ -275,7 +275,7 @@ export const useABTest = (testId: string) => {
  */
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    clarity?: (command: string, ...args: any[]) => void;
+    gtag?: (...args: unknown[]) => void;
+    clarity?: (command: string, ...args: unknown[]) => void;
   }
 }

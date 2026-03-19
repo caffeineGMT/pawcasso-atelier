@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackAnalyticsEvent } from "@/lib/analytics";
 import { trackCheckoutStep, CheckoutStep, getFunnelSummary } from "@/lib/checkout-funnel";
 
 interface SuccessPageTrackerProps {
@@ -18,6 +18,12 @@ export default function SuccessPageTracker({ amount, tier, sessionId }: SuccessP
       currency: 'USD',
       tier: tier || 'basic',
     });
+
+    // Track purchase_complete for conversion funnel analytics
+    trackAnalyticsEvent('purchase_complete', {
+      order_id: sessionId,
+      tier: tier || 'basic',
+    }, parseFloat(amount));
 
     // Track checkout funnel: purchase complete
     trackCheckoutStep(CheckoutStep.PURCHASE_COMPLETE, {

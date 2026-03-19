@@ -34,13 +34,82 @@
 
 ---
 
-## 📋 BACKLOG (Prioritized)
+### [PERFORMANCE] Image Optimization Pass - Critical for E-commerce
+**Priority:** P1 High
+**Status:** IN PROGRESS
+**Assigned:** 3 Engineers (Performance Team)
+**Started:** 2026-03-19
+**Target Completion:** 2026-03-22 (3 days)
 
-### [PERFORMANCE] Image Optimization Pass
-**Priority:** P1
-**Status:** BACKLOG
-**Impact:** 34 gallery images at 5-8MB each = ~200MB total
-**Notes:** Convert PNG → WebP, implement responsive srcSet
+**Context:**
+- 34 gallery images at 5-8MB each = ~200MB total load
+- Critical blocker for mobile performance and SEO rankings
+- Previous optimization (March 17) was basic - this is comprehensive
+- Page load times directly impact conversion rates (1s delay = 7% conversion loss)
+
+**Impact:**
+- **Current**: ~200MB total image payload
+- **Target**: <20MB with next-gen formats (90% reduction)
+- **Expected**: 5x faster page loads, improved Core Web Vitals
+- **Revenue Impact**: 10-15% conversion lift from faster load times
+
+**Scope:**
+
+1. **Engineer 1 - Image Audit & Conversion Pipeline**
+   - Audit all images in `/public` and `/website/public`
+   - Identify oversized images (>500KB unacceptable for web)
+   - Build automated image optimization pipeline
+   - Convert all images to WebP/AVIF with fallbacks
+   - Generate multiple sizes for responsive images (320w, 640w, 1024w, 1920w)
+   - Create sharp-based build script for automated optimization
+
+2. **Engineer 2 - Responsive Image Implementation**
+   - Implement `<picture>` elements with srcSet
+   - Add art direction for mobile vs desktop crops
+   - Lazy loading with intersection observer
+   - Blur-up placeholders (LQIP - Low Quality Image Placeholders)
+   - Update GalleryGrid, Hero, testimonials, blog images
+   - Lighthouse score validation (target: 95+ performance)
+
+3. **Engineer 3 - CDN Setup & Performance Validation**
+   - Configure Next.js Image Optimization
+   - Set up image CDN (Vercel Image Optimization or Cloudinary)
+   - Add caching headers (1 year cache for immutable images)
+   - Performance testing (Lighthouse, WebPageTest)
+   - Core Web Vitals monitoring setup
+   - Create image optimization documentation and guidelines
+
+**Success Criteria:**
+- [ ] All images <200KB (WebP format)
+- [ ] Responsive srcSet on 100% of images
+- [ ] Lighthouse Performance score >95
+- [ ] LCP (Largest Contentful Paint) <2.5s
+- [ ] CLS (Cumulative Layout Shift) <0.1
+- [ ] Total page weight <2MB (down from ~200MB)
+- [ ] Automated image optimization in build process
+
+**Deliverables:**
+- [ ] `scripts/optimize-images.js` (automated conversion script)
+- [ ] Updated image components with responsive images
+- [ ] `IMAGE_OPTIMIZATION_GUIDE.md` (documentation)
+- [ ] Performance benchmark report (before/after)
+- [ ] GitHub Actions workflow for image validation
+- [ ] CDN configuration for production
+
+**Dependencies:**
+- sharp library (Node.js image processing)
+- Next.js Image component (already available)
+- Vercel Image Optimization (included in hosting)
+
+**Notes:**
+- This is a revenue-critical task - slow sites lose customers
+- Mobile users (60% of traffic) are especially sensitive to load times
+- Google ranks faster sites higher (SEO impact)
+- Previous March 17 optimization was basic - this is production-grade
+
+---
+
+## 📋 BACKLOG (Prioritized)
 
 ### [REVENUE] Stripe Live Mode Switch
 **Priority:** P0
@@ -157,6 +226,10 @@
 | Checkout Completion Rate | **TBD** | 80%+ |
 | Page Load Time (Mobile 3G) | **TBD** | <3s |
 | Core Web Vitals | **TBD** | All Green |
+| Total Image Payload | ~200MB | <20MB |
+| Lighthouse Performance Score | **TBD** | 95+ |
+| Largest Contentful Paint (LCP) | **TBD** | <2.5s |
+| Cumulative Layout Shift (CLS) | **TBD** | <0.1 |
 
 ---
 
@@ -164,9 +237,11 @@
 
 | Engineer | Current Assignment | Status |
 |----------|-------------------|--------|
-| Engineer 1 | Mobile Checkout UX Audit | Active |
-| Engineer 2 | Mobile Checkout UX Audit | Active |
-| Available | - | - |
+| Mobile UX - Engineer 1 | Mobile Checkout UX Audit | Active |
+| Mobile UX - Engineer 2 | Mobile Checkout UX Audit | Active |
+| Performance - Engineer 1 | Image Optimization - Audit & Pipeline | Active |
+| Performance - Engineer 2 | Image Optimization - Responsive Implementation | Active |
+| Performance - Engineer 3 | Image Optimization - CDN & Validation | Active |
 
 ---
 

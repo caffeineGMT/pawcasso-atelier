@@ -73,6 +73,7 @@ export const TIER_CONFIG: TierConfig[] = [
       'Custom revisions included',
     ],
     stripeId: process.env.STRIPE_PRICE_DELUXE || '',
+    promo: '🎉 Launch Special - Save $40!', // Price anchoring: $89 → $49
   },
   {
     id: 'bundle',

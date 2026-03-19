@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
           lte: sixAndHalfDaysAgo,
         },
         // Only send to orders that haven't received a review email
-        reviewEmailSentAt: null,
+        reviewRequestEmailSentAt: null,
         // Don't send to refunded orders
         refunded: false,
       },
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
           // Mark as sent so we don't retry, but skip the email
           await prisma.order.update({
             where: { id: order.id },
-            data: { reviewEmailSentAt: now },
+            data: { reviewRequestEmailSentAt: now },
           });
           results.push({
             email: order.customerEmail,
@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
         // Mark this order as having received a review email
         await prisma.order.update({
           where: { id: order.id },
-          data: { reviewEmailSentAt: now },
+          data: { reviewRequestEmailSentAt: now },
         });
 
         // Track the event

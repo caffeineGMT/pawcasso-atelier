@@ -2,11 +2,12 @@ import { type TierId } from './stripe';
 
 /**
  * Original prices before discount (for strikethrough display)
+ * Updated March 2026: Deluxe tier anchored at $89 (was $82) for stronger perceived value
  */
 export const ORIGINAL_PRICES: Record<TierId, number> = {
   basic: 15,
   premium: 49,
-  deluxe: 82,
+  deluxe: 89, // Price anchoring: $89 → $49 (45% off "Launch Special")
   bundle: 132,
 };
 

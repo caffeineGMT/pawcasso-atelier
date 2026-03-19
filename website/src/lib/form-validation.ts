@@ -51,7 +51,7 @@ export const imageFileSchema = z
 export function formatValidationErrors(error: z.ZodError): Record<string, string> {
   const errors: Record<string, string> = {};
 
-  error.errors.forEach((err) => {
+  error.issues.forEach((err) => {
     const path = err.path.join(".");
     errors[path] = err.message;
   });
@@ -114,7 +114,7 @@ export const orderFormSchema = z.object({
   petName: petNameSchema,
   style: z.string().min(1, "Please select an art style"),
   tier: z.enum(["basic", "premium", "deluxe", "bundle"], {
-    errorMap: () => ({ message: "Please select a package" }),
+    message: "Please select a package",
   }),
   notes: z.string().max(500, "Notes must be less than 500 characters").optional(),
   petPhoto: imageFileSchema.optional(),
@@ -137,7 +137,7 @@ export const corporateQuoteSchema = z.object({
     .max(10000, "Please contact us directly for orders over 10,000"),
   useCase: z.enum(
     ["employee_gifts", "client_gifts", "team_building", "event_giveaway", "other"],
-    { errorMap: () => ({ message: "Please select a use case" }) }
+    { message: "Please select a use case" }
   ),
   preferredDeliveryDate: z.date().optional(),
   notes: z.string().max(1000, "Notes must be less than 1000 characters").optional(),

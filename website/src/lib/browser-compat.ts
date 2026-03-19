@@ -41,7 +41,7 @@ export const BrowserDetect = {
    */
   hasNotch(): boolean {
     if (typeof window === 'undefined') return false;
-    const iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    const iPhone = /iPhone/.test(navigator.userAgent) && !(window as any).MSStream;
     const aspect = window.screen.width / window.screen.height;
     return iPhone && (aspect > 0.5 && aspect < 0.6);
   },
