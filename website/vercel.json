@@ -16,5 +16,8 @@
       "path": "/api/cron/birthday-reminders",
       "schedule": "0 9 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": false
+  }
 }
