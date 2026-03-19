@@ -122,10 +122,11 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: string;
   hint?: string;
   options: { value: string; label: string }[];
+  placeholder?: string;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, hint, options, className, ...props }, ref) => {
+  ({ label, error, hint, options, placeholder, className, ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (
@@ -150,9 +151,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           aria-describedby={error ? `${props.id}-error` : hint ? `${props.id}-hint` : undefined}
           {...props}
         >
-          {props.placeholder && (
+          {placeholder && (
             <option value="" disabled>
-              {props.placeholder}
+              {placeholder}
             </option>
           )}
           {options.map((option) => (

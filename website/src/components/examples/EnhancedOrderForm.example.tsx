@@ -142,10 +142,10 @@ export function EnhancedOrderFormExample() {
       }, 200);
 
       // Upload with retry logic
-      const result = await api.upload('/api/upload', formData, {
+      const result = await api.post('/api/upload', formData, {
         timeout: 60000, // 1 minute for large files
         retries: 3,
-      });
+      } as any);
 
       clearInterval(progressInterval);
       setUploadProgress(100);
