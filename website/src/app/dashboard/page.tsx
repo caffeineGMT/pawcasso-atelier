@@ -97,6 +97,7 @@ export default async function DashboardPage() {
                 referralCode={customer.referralCode}
                 totalReferrals={customer.totalReferrals}
                 referrals={customer.referralsGiven}
+                creditBalance={customer.creditBalance}
               />
             )}
 

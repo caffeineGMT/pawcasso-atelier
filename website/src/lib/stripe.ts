@@ -103,6 +103,7 @@ export async function createCheckoutSession({
   utmMedium,
   utmCampaign,
   giftCardCode,
+  creditApplied,
 }: {
   tier: TierId;
   customerEmail: string;
@@ -118,6 +119,7 @@ export async function createCheckoutSession({
   utmMedium?: string;
   utmCampaign?: string;
   giftCardCode?: string;
+  creditApplied?: number;
 }) {
   const stripe = getStripe();
   const tierConfig = TIER_CONFIG.find((t) => t.id === tier);
@@ -158,6 +160,7 @@ export async function createCheckoutSession({
       utmMedium: utmMedium || "",
       utmCampaign: utmCampaign || "",
       giftCardCode: giftCardCode || "",
+      creditApplied: (creditApplied || 0).toString(),
     },
     // Expire session after 24 hours to trigger abandoned cart webhook
     expires_at: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
@@ -166,11 +169,22 @@ export async function createCheckoutSession({
   };
 
   // Priority order for discounts:
-  // 1. Explicit discount code from user
-  // 2. Active seasonal promotion
-  // 3. Referral code discount
+  // 1. Referral credit (applied as amount-off coupon)
+  // 2. Explicit discount code from user
+  // 3. Active seasonal promotion
+  // 4. Referral code discount (for new referred users)
 
-  if (discountCode) {
+  if (creditApplied && creditApplied > 0) {
+    // Create a one-time coupon for the credit amount
+    const creditCoupon = await stripe.coupons.create({
+      amount_off: Math.round(creditApplied * 100), // Convert to cents
+      currency: "usd",
+      duration: "once",
+      name: `Referral Credit ($${creditApplied.toFixed(2)})`,
+      max_redemptions: 1,
+    });
+    sessionParams.discounts = [{ coupon: creditCoupon.id }];
+  } else if (discountCode) {
     // User provided explicit discount code
     sessionParams.discounts = [{ coupon: discountCode }];
   } else {

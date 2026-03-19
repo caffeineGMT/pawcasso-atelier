@@ -1,0 +1,209 @@
+{
+  "name": "Pawcasso Instagram Reels - Daily Content Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 0
+            }
+          ]
+        },
+        "timezone": "America/Los_Angeles"
+      },
+      "id": "cron_trigger",
+      "name": "Daily 10 AM PT (1hr before post)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "notes": "Fires at 10 AM PT daily to prepare content for 11 AM posting"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Load 30-day calendar and select today's Reel\nconst calendar = require('./reels-calendar-30day.json');\n\nconst now = new Date();\nconst today = now.toISOString().split('T')[0];\n\nconst todayEntry = calendar.days.find(d => d.date === today);\n\nif (!todayEntry) {\n  return [{ json: { error: 'No Reel scheduled for today', date: today } }];\n}\n\nconst post = todayEntry.post;\n\nreturn [{\n  json: {\n    day: todayEntry.day,\n    date: todayEntry.date,\n    theme: todayEntry.theme,\n    title: todayEntry.title,\n    hook: post.hook,\n    imageFile: post.image_file,\n    imageUrl: `https://pawcasso-atelier.vercel.app/gallery/${post.image_file}`,\n    videoStyle: post.video_style,\n    duration: post.duration,\n    caption: post.caption,\n    hashtags: post.hashtags.join(' '),\n    trendingAudio: post.trending_audio,\n    cta: post.cta,\n    engagementPrompt: post.engagement_prompt,\n    postTime: `${todayEntry.date}T11:00:00-07:00`,\n    fullCaption: `${post.caption}\\n\\n${post.engagement_prompt}\\n\\n.\\n.\\n.\\n\\n${post.hashtags.join(' ')}`\n  }\n}];"
+      },
+      "id": "select_todays_reel",
+      "name": "Select Today's Reel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.error }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "check_scheduled",
+      "name": "Has Reel Today?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.OPENAI_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-4o"
+            },
+            {
+              "name": "messages",
+              "value": "=[{\"role\":\"system\",\"content\":\"You are a social media expert for Pawcasso Atelier, an AI pet portrait business. Generate an Instagram Reel script with specific video directions, text overlays, and timing cues.\"},{\"role\":\"user\",\"content\":\"Create a detailed Reel script for:\\nHook: {{ $json.hook }}\\nStyle: {{ $json.videoStyle }}\\nDuration: {{ $json.duration }}\\nImage: {{ $json.imageFile }}\\n\\nInclude: 1) Shot-by-shot breakdown with timing, 2) Text overlay copy for each segment, 3) Transition suggestions, 4) Music cue notes. Format as JSON with 'shots' array.\"}]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "generate_reel_script",
+      "name": "Generate Reel Script (GPT-4o)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [660, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the review page for Michael to approve before posting\nconst reel = $input.all()[0].json;\n\nconst reviewPage = `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset='utf-8'>\n  <meta name='viewport' content='width=device-width, initial-scale=1'>\n  <title>Reel Review - Day ${reel.day}</title>\n  <style>\n    body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0a0a0a; color: #fafafa; }\n    .card { background: #1a1a1a; border-radius: 16px; padding: 20px; margin: 16px 0; }\n    .image { width: 100%; border-radius: 12px; }\n    .caption { background: #2a2a2a; padding: 16px; border-radius: 8px; white-space: pre-wrap; font-size: 14px; }\n    .hashtags { color: #818cf8; font-size: 12px; word-wrap: break-word; }\n    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin: 4px; }\n    .theme-badge { background: #4f46e5; }\n    .time-badge { background: #059669; }\n    h1 { font-size: 24px; }\n    h2 { font-size: 18px; color: #a5b4fc; }\n    .cta-btn { display: block; text-align: center; background: #4f46e5; color: white; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin: 16px 0; }\n    .copy-btn { background: #374151; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <h1>Instagram Reel - Day ${reel.day}</h1>\n  <span class='badge theme-badge'>${reel.theme}</span>\n  <span class='badge time-badge'>Post at 11:00 AM PT</span>\n\n  <div class='card'>\n    <h2>${reel.title}</h2>\n    <img class='image' src='${reel.imageUrl}' alt='${reel.title}' />\n  </div>\n\n  <div class='card'>\n    <h2>Hook</h2>\n    <p>${reel.hook}</p>\n  </div>\n\n  <div class='card'>\n    <h2>Caption (tap to copy)</h2>\n    <div class='caption' id='caption'>${reel.fullCaption}</div>\n    <br/>\n    <button class='copy-btn' onclick='navigator.clipboard.writeText(document.getElementById(\"caption\").textContent)'>Copy Caption</button>\n  </div>\n\n  <div class='card'>\n    <h2>Video Style</h2>\n    <p>${reel.videoStyle}</p>\n    <p>Duration: ${reel.duration}</p>\n    <p>Audio: ${reel.trendingAudio}</p>\n  </div>\n\n  <div class='card'>\n    <h2>Engagement Prompt</h2>\n    <p>${reel.engagementPrompt}</p>\n  </div>\n\n  <div class='card'>\n    <h2>CTA</h2>\n    <p>${reel.cta}</p>\n  </div>\n\n  <a class='cta-btn' href='https://www.instagram.com/pawcasso.atelier/'>Open Instagram to Post</a>\n</body>\n</html>\n`;\n\nreturn [{ json: { ...reel, reviewPageHtml: reviewPage } }];"
+      },
+      "id": "build_review_page",
+      "name": "Build Review Page",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "owner": "michaelguo",
+        "repository": "pawcasso-atelier",
+        "title": "=Instagram Reel Day {{ $json.day }}: {{ $json.title }}",
+        "body": "=## Instagram Reel - Day {{ $json.day }}\n\n**Date:** {{ $json.date }}\n**Post Time:** 11:00 AM PT\n**Theme:** {{ $json.theme }}\n\n### Hook\n{{ $json.hook }}\n\n### Portrait\n![Portrait]({{ $json.imageUrl }})\n\n### Caption\n```\n{{ $json.fullCaption }}\n```\n\n### Video Details\n- **Style:** {{ $json.videoStyle }}\n- **Duration:** {{ $json.duration }}\n- **Audio:** {{ $json.trendingAudio }}\n- **CTA:** {{ $json.cta }}\n\n### Engagement Prompt\n{{ $json.engagementPrompt }}\n\n---\n**Status:** Pending Review\n**Action Required:** Review caption, approve, and post at 11 AM PT",
+        "labels": ["instagram-reel", "content"]
+      },
+      "id": "create_github_issue",
+      "name": "Create GitHub Issue for Review",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [880, 0],
+      "credentials": {
+        "githubApi": {
+          "id": "github_cred",
+          "name": "GitHub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Push review page HTML to GitHub for mobile access\nconst reel = $input.all()[0].json;\nconst filename = `reel-day${String(reel.day).padStart(2, '0')}.html`;\nconst content = Buffer.from(reel.reviewPageHtml).toString('base64');\n\nreturn [{\n  json: {\n    filename,\n    content,\n    message: `Add Reel review page for Day ${reel.day}: ${reel.title}`,\n    path: `website/public/reels-review/${filename}`\n  }\n}];"
+      },
+      "id": "prepare_review_push",
+      "name": "Prepare Review Page Push",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "operation": "noOp"
+      },
+      "id": "no_reel_today",
+      "name": "No Reel Scheduled",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [660, 300]
+    }
+  ],
+  "connections": {
+    "Daily 10 AM PT (1hr before post)": {
+      "main": [
+        [
+          {
+            "node": "Select Today's Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Today's Reel": {
+      "main": [
+        [
+          {
+            "node": "Has Reel Today?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Reel Today?": {
+      "main": [
+        [
+          {
+            "node": "Generate Reel Script (GPT-4o)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Review Page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Reel Scheduled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Reel Script (GPT-4o)": {
+      "main": [
+        [
+          {
+            "node": "Create GitHub Issue for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Review Page": {
+      "main": [
+        [
+          {
+            "node": "Prepare Review Page Push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  }
+}

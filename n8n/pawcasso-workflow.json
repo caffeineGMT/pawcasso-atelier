@@ -218,18 +218,136 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://httpbin.org/post",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"text\": \"\ud83c\udfa8 **Pawcasso Daily Review**\\n\\n\ud83d\udcc5 {{ $json.date }}\\n\ud83c\udfdb\ufe0f Pillar: {{ $json.pillar }}\\n\ud83c\udfa8 Style: {{ $json.style }}\\n\ud83d\udc3e Animal: {{ $json.animal }}\\n\\n\ud83d\udca1 Concept: {{ $json.concept }}\\n\\n\ud83d\udcdd Caption:\\n{{ $json.caption }}\\n\\n\ud83d\uddbc\ufe0f Image: {{ $json.manus_share_url }}\\n\\n\ud83d\udcb0 Credits used: {{ $json.total_credits }}\\n\\nReply APPROVE to post, or REDO to regenerate.\"\n}"
+        "jsonBody": "={\n  \"cardsV2\": [{\n    \"cardId\": \"pawcasso-review-{{ $json.date }}\",\n    \"card\": {\n      \"header\": {\n        \"title\": \"Pawcasso Daily Review\",\n        \"subtitle\": \"{{ $json.pillar }} | {{ $json.style }}\"\n      },\n      \"sections\": [\n        {\n          \"header\": \"Details\",\n          \"widgets\": [\n            { \"decoratedText\": { \"topLabel\": \"Date\", \"text\": \"{{ $json.date }}\" } },\n            { \"decoratedText\": { \"topLabel\": \"Animal\", \"text\": \"{{ $json.animal }}\" } },\n            { \"decoratedText\": { \"topLabel\": \"Credits Used\", \"text\": \"{{ $json.total_credits }}\" } }\n          ]\n        },\n        {\n          \"header\": \"Caption\",\n          \"widgets\": [{ \"textParagraph\": { \"text\": \"{{ $json.caption.substring(0, 500) }}\" } }]\n        },\n        {\n          \"header\": \"Image\",\n          \"widgets\": [{ \"image\": { \"imageUrl\": \"{{ $json.image_url }}\", \"altText\": \"{{ $json.animal }} {{ $json.style }}\" } }]\n        },\n        {\n          \"widgets\": [{ \"textParagraph\": { \"text\": \"<b>Reply 'yes' to approve and post to Instagram.</b>\\nReply 'skip' to skip.\\nReply 'edit: [new caption]' to modify.\" } }]\n        }\n      ]\n    }\n  }]\n}"
       },
       "id": "send_review",
-      "name": "Send to Michael for Review",
+      "name": "GChat: Send for Review",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
         2420,
         -100
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {
+          "webhookSuffix": "=/gchat-review-response"
+        },
+        "limitWaitTime": {
+          "values": {
+            "amount": 1,
+            "unit": "hours"
+          }
+        }
+      },
+      "id": "wait_review_reply",
+      "name": "Wait for GChat Reply",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2640,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhookData = $input.first().json;\nlet reply = '';\n\nif (webhookData.body?.text) {\n  reply = webhookData.body.text.trim().toLowerCase();\n} else if (webhookData.reply) {\n  reply = webhookData.reply.trim().toLowerCase();\n} else if (webhookData.text) {\n  reply = webhookData.text.trim().toLowerCase();\n} else {\n  reply = 'timeout';\n}\n\nconst reviewData = $('Compile Review Package').item.json;\n\nlet action = 'skip';\nlet editedCaption = '';\n\nif (reply === 'yes' || reply === 'approve' || reply === 'y') {\n  action = 'approve';\n} else if (reply.startsWith('edit:')) {\n  action = 'edit';\n  editedCaption = reply.replace(/^edit:\\s*/, '');\n}\n\nreturn [{\n  json: {\n    action,\n    imageUrl: reviewData.image_url,\n    caption: action === 'edit' ? editedCaption : reviewData.caption,\n    hashtags: reviewData.hashtags,\n    reply\n  }\n}];"
+      },
+      "id": "parse_review_reply",
+      "name": "Parse Review Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "" },
+          "conditions": [
+            {
+              "id": "is_approved_review",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "skip",
+              "operator": { "type": "string", "operation": "notEquals" }
+            }
+          ]
+        }
+      },
+      "id": "review_approved",
+      "name": "Approved for Instagram?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3080,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SITE_URL }}/api/instagram/publish",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INSTAGRAM_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"imageUrl\": \"{{ $json.imageUrl }}\",\n  \"caption\": {{ JSON.stringify($json.caption) }},\n  \"hashtags\": {{ JSON.stringify($json.hashtags) }}\n}"
+      },
+      "id": "instagram_publish",
+      "name": "Publish to Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3300,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Published to Instagram!\\nMedia ID: {{ $json.mediaId }}\\n{{ $json.permalink || '' }}\"\n}"
+      },
+      "id": "gchat_publish_success",
+      "name": "GChat: Published!",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3520,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Post skipped.\\nReason: {{ $('Parse Review Reply').item.json.reply }}\"\n}"
+      },
+      "id": "gchat_review_skipped",
+      "name": "GChat: Skipped",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3300,
+        0
       ]
     }
   ],
@@ -355,7 +473,69 @@
       "main": [
         [
           {
-            "node": "Send to Michael for Review",
+            "node": "GChat: Send for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GChat: Send for Review": {
+      "main": [
+        [
+          {
+            "node": "Wait for GChat Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for GChat Reply": {
+      "main": [
+        [
+          {
+            "node": "Parse Review Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Review Reply": {
+      "main": [
+        [
+          {
+            "node": "Approved for Instagram?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved for Instagram?": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GChat: Skipped",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to Instagram": {
+      "main": [
+        [
+          {
+            "node": "GChat: Published!",
             "type": "main",
             "index": 0
           }

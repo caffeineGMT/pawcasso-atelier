@@ -413,6 +413,28 @@ model GiftCardTransaction {
   @@index([orderId])
 }
 
+// Fulfillment Error Logging
+model FulfillmentErrorLog {
+  id              String   @id @default(cuid())
+  orderId         String?  // Link to Order if exists
+  stripeSessionId String   // Stripe checkout session ID
+  customerEmail   String
+  errorType       String   // "download_failed", "generation_failed", "upload_failed", "email_failed", "timeout", "unknown"
+  errorMessage    String
+  stackTrace      String?
+  step            String   // Which fulfillment step failed: "downloading_photo", "generating", "uploading", "sending_email"
+  metadata        String?  // JSON string with session metadata for debugging
+  retryCount      Int      @default(0)
+  resolved        Boolean  @default(false)
+  resolvedAt      DateTime?
+  resolvedBy      String?  // "auto_retry" or "manual_retry" or "admin"
+  createdAt       DateTime @default(now())
+
+  @@index([stripeSessionId])
+  @@index([resolved])
+  @@index([createdAt])
+}
+
 // Analytics Event Tracking
 model AnalyticsEvent {
   id            String   @id @default(cuid())

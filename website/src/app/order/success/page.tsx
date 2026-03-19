@@ -126,13 +126,29 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             </ul>
           </div>
 
+          {/* Referral CTA */}
+          <div className="bg-gradient-to-br from-[#E07A5F]/10 to-[#F4A261]/10 border border-[#E07A5F]/20 rounded-2xl p-8 mb-8 text-center">
+            <h2 className="text-xl font-semibold text-text-primary mb-2">
+              Give $5, Get $5
+            </h2>
+            <p className="text-text-secondary text-sm mb-4 max-w-md mx-auto">
+              Love your portrait? Share your referral link with friends. They get 20% off, and you earn $5 credit for each purchase.
+            </p>
+            <a
+              href="/dashboard"
+              className="inline-block px-8 py-3 bg-[#E07A5F] text-white font-semibold rounded-full hover:bg-[#D06A4F] transition-all"
+            >
+              Get Your Referral Link
+            </a>
+          </div>
+
           {/* CTA */}
           <div className="text-center space-y-4">
             <a
-              href="/portal"
+              href="/dashboard"
               className="inline-block px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all"
             >
-              Track Your Order & Get Referral Link
+              Track Your Order
             </a>
             <div>
               <a

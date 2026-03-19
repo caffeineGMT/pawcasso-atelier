@@ -1,0 +1,93 @@
+{
+  "name": "Pawcasso Atelier - Weekly Instagram Metrics",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtDay": 1,
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "weekly_trigger",
+      "name": "Every Monday 9:00 AM PT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SITE_URL }}/api/instagram/metrics",
+        "options": {}
+      },
+      "id": "fetch_account_metrics",
+      "name": "Fetch Account Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SITE_URL }}/api/instagram/schedule",
+        "options": {}
+      },
+      "id": "fetch_schedule_stats",
+      "name": "Fetch Schedule Stats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const accountMetrics = $('Fetch Account Metrics').item.json;\nconst scheduleStats = $('Fetch Schedule Stats').item.json;\n\nconst followers = accountMetrics.followers || 0;\nconst weeklyReach = accountMetrics.weeklyReach || 0;\nconst weeklyImpressions = accountMetrics.weeklyImpressions || 0;\nconst posted = scheduleStats.stats?.posted || 0;\nconst ready = scheduleStats.stats?.ready || 0;\n\nconst report = [\n  'Weekly Instagram Report - Pawcasso Atelier',\n  '=======================================',\n  '',\n  `Followers: ${followers.toLocaleString()}`,\n  `Weekly Reach: ${weeklyReach.toLocaleString()}`,\n  `Weekly Impressions: ${weeklyImpressions.toLocaleString()}`,\n  '',\n  'Posting Schedule:',\n  `  Total posted: ${posted}`,\n  `  Ready to post: ${ready}`,\n  `  Total in queue: ${scheduleStats.stats?.total || 0}`,\n  '',\n  'Recent Posts:',\n  ...(scheduleStats.recentPosts || []).map(p =>\n    `  #${p.id} - ${p.postedAt?.split('T')[0]} - ${p.caption?.substring(0, 60)}...`\n  ),\n  '',\n  `Report generated: ${new Date().toISOString().split('T')[0]}`,\n].join('\\n');\n\nreturn [{\n  json: {\n    report,\n    followers,\n    weeklyReach,\n    weeklyImpressions,\n    posted,\n    ready,\n    date: new Date().toISOString().split('T')[0]\n  }\n}];"
+      },
+      "id": "compile_report",
+      "name": "Compile Weekly Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.report) }}\n}"
+      },
+      "id": "send_report",
+      "name": "GChat: Weekly Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 100]
+    }
+  ],
+  "connections": {
+    "Every Monday 9:00 AM PT": {
+      "main": [
+        [
+          { "node": "Fetch Account Metrics", "type": "main", "index": 0 },
+          { "node": "Fetch Schedule Stats", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fetch Account Metrics": {
+      "main": [[{ "node": "Compile Weekly Report", "type": "main", "index": 0 }]]
+    },
+    "Fetch Schedule Stats": {
+      "main": [[{ "node": "Compile Weekly Report", "type": "main", "index": 0 }]]
+    },
+    "Compile Weekly Report": {
+      "main": [[{ "node": "GChat: Weekly Report", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

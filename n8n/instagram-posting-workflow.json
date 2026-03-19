@@ -1,0 +1,279 @@
+{
+  "name": "Pawcasso Atelier - Instagram Posting with GChat Approval",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "schedule_trigger",
+      "name": "Daily 10:00 AM PT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SITE_URL }}/api/instagram/schedule",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "fetch_next_post",
+      "name": "Fetch Next Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "instagram_auth",
+          "name": "Instagram Webhook Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "has_next_post",
+              "leftValue": "={{ $json.nextPost }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "has_post_check",
+      "name": "Has Post Available?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare the post data for approval\nconst nextPost = $input.first().json.nextPost;\n\nif (!nextPost) {\n  return [{ json: { skip: true, reason: 'No posts available' } }];\n}\n\n// Build the full caption with hashtags in first comment strategy\nconst fullCaption = nextPost.caption;\nconst hashtags = nextPost.hashtags;\n\n// Construct the publicly accessible image URL\n// Images should be hosted on Vercel Blob or similar CDN\nconst imageUrl = nextPost.image.startsWith('http')\n  ? nextPost.image\n  : `${$env.SITE_URL}/content/portfolio/${nextPost.image}`;\n\nreturn [{\n  json: {\n    postId: nextPost.id,\n    title: nextPost.title,\n    pillar: nextPost.pillar,\n    style: nextPost.style,\n    animal: nextPost.animal,\n    caption: fullCaption,\n    hashtags: hashtags,\n    imageUrl: imageUrl,\n    image: nextPost.image,\n    date: new Date().toISOString().split('T')[0]\n  }\n}];"
+      },
+      "id": "prepare_post",
+      "name": "Prepare Post Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"cardsV2\": [{\n    \"cardId\": \"pawcasso-approval-{{ $json.postId }}\",\n    \"card\": {\n      \"header\": {\n        \"title\": \"\uD83C\uDFA8 New Instagram Post Ready\",\n        \"subtitle\": \"{{ $json.pillar }} | {{ $json.style }}\"\n      },\n      \"sections\": [\n        {\n          \"header\": \"Post #{{ $json.postId }}: {{ $json.title }}\",\n          \"widgets\": [\n            {\n              \"decoratedText\": {\n                \"topLabel\": \"Animal\",\n                \"text\": \"{{ $json.animal }}\"\n              }\n            },\n            {\n              \"decoratedText\": {\n                \"topLabel\": \"Date\",\n                \"text\": \"{{ $json.date }}\"\n              }\n            }\n          ]\n        },\n        {\n          \"header\": \"Caption\",\n          \"widgets\": [\n            {\n              \"textParagraph\": {\n                \"text\": \"{{ $json.caption.substring(0, 500) }}\"\n              }\n            }\n          ]\n        },\n        {\n          \"header\": \"Image\",\n          \"widgets\": [\n            {\n              \"image\": {\n                \"imageUrl\": \"{{ $json.imageUrl }}\",\n                \"altText\": \"{{ $json.title }}\"\n              }\n            }\n          ]\n        },\n        {\n          \"widgets\": [\n            {\n              \"textParagraph\": {\n                \"text\": \"<b>Reply 'yes' to approve and post to Instagram.</b>\\nReply 'skip' to skip this post.\\nReply 'edit: [new caption]' to modify before posting.\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  }]\n}"
+      },
+      "id": "gchat_send",
+      "name": "GChat: Send Approval Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {
+          "webhookSuffix": "=/gchat-response/{{ $('Prepare Post Data').item.json.postId }}"
+        },
+        "limitWaitTime": {
+          "values": {
+            "amount": 1,
+            "unit": "hours"
+          }
+        }
+      },
+      "id": "wait_approval",
+      "name": "Wait for GChat Reply",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1100, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the GChat reply to determine the action\nconst webhookData = $input.first().json;\n\n// The reply can come from:\n// 1. GChat webhook response body\n// 2. Manual trigger with { reply: 'yes' }\nlet reply = '';\n\nif (webhookData.body?.text) {\n  reply = webhookData.body.text.trim().toLowerCase();\n} else if (webhookData.reply) {\n  reply = webhookData.reply.trim().toLowerCase();\n} else if (webhookData.text) {\n  reply = webhookData.text.trim().toLowerCase();\n} else {\n  // Timeout - default to skip\n  reply = 'timeout';\n}\n\nconst postData = $('Prepare Post Data').item.json;\n\nlet action = 'skip';\nlet editedCaption = '';\n\nif (reply === 'yes' || reply === 'approve' || reply === 'y') {\n  action = 'approve';\n} else if (reply.startsWith('edit:')) {\n  action = 'edit';\n  editedCaption = reply.replace(/^edit:\\s*/, '');\n} else if (reply === 'skip' || reply === 'no' || reply === 'n' || reply === 'timeout') {\n  action = 'skip';\n}\n\nreturn [{\n  json: {\n    action,\n    postId: postData.postId,\n    imageUrl: postData.imageUrl,\n    caption: postData.caption,\n    hashtags: postData.hashtags,\n    editedCaption: editedCaption || undefined,\n    reply: reply\n  }\n}];"
+      },
+      "id": "parse_reply",
+      "name": "Parse GChat Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": ""
+          },
+          "conditions": [
+            {
+              "id": "is_approved",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "skip",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "approval_check",
+      "name": "Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1540, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SITE_URL }}/api/instagram/webhook",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INSTAGRAM_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"{{ $json.action }}\",\n  \"postId\": {{ $json.postId }},\n  \"imageUrl\": \"{{ $json.imageUrl }}\",\n  \"caption\": {{ JSON.stringify($json.action === 'edit' ? $json.editedCaption : $json.caption) }},\n  \"hashtags\": {{ JSON.stringify($json.hashtags) }}\n}"
+      },
+      "id": "publish_to_instagram",
+      "name": "Publish to Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, -200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Published to Instagram!\\nPost #{{ $('Prepare Post Data').item.json.postId }}: {{ $('Prepare Post Data').item.json.title }}\\nMedia ID: {{ $json.mediaId }}\\n\\nEngagement tracking begins in 24h.\"\n}"
+      },
+      "id": "gchat_success",
+      "name": "GChat: Post Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1980, -200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SITE_URL }}/api/instagram/schedule",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INSTAGRAM_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"skipped\",\n  \"postId\": {{ $('Prepare Post Data').item.json.postId }}\n}"
+      },
+      "id": "mark_skipped",
+      "name": "Mark as Skipped",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Skipped post #{{ $('Prepare Post Data').item.json.postId }}: {{ $('Prepare Post Data').item.json.title }}\\nReason: {{ $('Parse GChat Reply').item.json.reply }}\"\n}"
+      },
+      "id": "gchat_skipped",
+      "name": "GChat: Post Skipped",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1980, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.GCHAT_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"No posts available in the queue. All scheduled posts have been published or skipped.\\n\\nReady: {{ $json.stats.ready }}\\nPosted: {{ $json.stats.posted }}\\nTotal: {{ $json.stats.total }}\"\n}"
+      },
+      "id": "no_posts_notify",
+      "name": "GChat: No Posts Available",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 100]
+    }
+  ],
+  "connections": {
+    "Daily 10:00 AM PT": {
+      "main": [[{ "node": "Fetch Next Post", "type": "main", "index": 0 }]]
+    },
+    "Fetch Next Post": {
+      "main": [[{ "node": "Has Post Available?", "type": "main", "index": 0 }]]
+    },
+    "Has Post Available?": {
+      "main": [
+        [{ "node": "Prepare Post Data", "type": "main", "index": 0 }],
+        [{ "node": "GChat: No Posts Available", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Post Data": {
+      "main": [[{ "node": "GChat: Send Approval Request", "type": "main", "index": 0 }]]
+    },
+    "GChat: Send Approval Request": {
+      "main": [[{ "node": "Wait for GChat Reply", "type": "main", "index": 0 }]]
+    },
+    "Wait for GChat Reply": {
+      "main": [[{ "node": "Parse GChat Reply", "type": "main", "index": 0 }]]
+    },
+    "Parse GChat Reply": {
+      "main": [[{ "node": "Approved?", "type": "main", "index": 0 }]]
+    },
+    "Approved?": {
+      "main": [
+        [{ "node": "Publish to Instagram", "type": "main", "index": 0 }],
+        [{ "node": "Mark as Skipped", "type": "main", "index": 0 }]
+      ]
+    },
+    "Publish to Instagram": {
+      "main": [[{ "node": "GChat: Post Success", "type": "main", "index": 0 }]]
+    },
+    "Mark as Skipped": {
+      "main": [[{ "node": "GChat: Post Skipped", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "instanceId": "JI702eSmG1pEdAxf"
+  }
+}

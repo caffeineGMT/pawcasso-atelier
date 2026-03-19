@@ -68,6 +68,7 @@ const jsonLd = {
   },
   sameAs: [
     "https://instagram.com/pawcasso.atelier",
+    "https://tiktok.com/@pawcasso.atelier",
   ],
   offers: {
     "@type": "Offer",

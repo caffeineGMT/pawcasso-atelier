@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession, type TierId, TIER_CONFIG } from "@/lib/stripe";
-import { validateReferralCode, trackReferralClick } from "@/lib/referral";
+import { validateReferralCode, trackReferralClick, applyCreditToOrder } from "@/lib/referral";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
       utmSource,
       utmMedium,
       utmCampaign,
-      giftCardCode
+      giftCardCode,
+      applyCredits,
     } = body;
 
     if (!name || !email || !style) {
@@ -166,6 +167,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Apply referral credits if requested
+    let creditApplied = 0;
+    if (applyCredits) {
+      creditApplied = await applyCreditToOrder(email, tierConfig.price);
+    }
+
     const session = await createCheckoutSession({
       tier: selectedTier,
       customerEmail: email,
@@ -181,9 +188,10 @@ export async function POST(req: NextRequest) {
       utmMedium,
       utmCampaign,
       giftCardCode,
+      creditApplied,
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url, creditApplied });
   } catch (error: unknown) {
     console.error("Stripe checkout error:", error);
     const errorMessage = error instanceof Error ? error.message : "Failed to create checkout session";
