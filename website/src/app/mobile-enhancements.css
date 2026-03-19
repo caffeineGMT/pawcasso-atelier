@@ -184,14 +184,17 @@ html {
 
   /* Better mobile tier cards - full width on small screens */
   @media (max-width: 400px) {
-    .grid-cols-1.sm\\:grid-cols-2 {
+    .grid-cols-1 {
       grid-template-columns: 1fr;
     }
   }
 
   /* Improve touch target for style selection on mobile */
-  .grid-cols-2.sm\\:grid-cols-3 button {
-    min-height: 72px;
+  @media (max-width: 400px) {
+    .grid-cols-2 button,
+    .grid-cols-3 button {
+      min-height: 72px;
+    }
   }
 
   /* Mobile-optimized progress bar */

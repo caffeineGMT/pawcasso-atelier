@@ -14,8 +14,18 @@
     sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Smooth scrolling with feature detection (Safari < 15.4 fallback) */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@supports not (scroll-behavior: smooth) {
+  /* Fallback: instant scroll for older browsers */
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
