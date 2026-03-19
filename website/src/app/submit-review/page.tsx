@@ -3,21 +3,48 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 function SubmitReviewForm() {
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email");
+  const nameParam = searchParams.get("name");
+  const petParam = searchParams.get("pet");
+  const orderIdParam = searchParams.get("orderId");
 
   const [email, setEmail] = useState(emailParam || "");
-  const [name, setName] = useState("");
-  const [petName, setPetName] = useState("");
+  const [name, setName] = useState(nameParam || "");
+  const [petName, setPetName] = useState(petParam || "");
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState("");
   const [instagramHandle, setInstagramHandle] = useState("");
   const [instagramPostUrl, setInstagramPostUrl] = useState("");
+  const [petPhoto, setPetPhoto] = useState<File | null>(null);
+  const [petPhotoPreview, setPetPhotoPreview] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Photo must be under 10MB");
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload an image file");
+      return;
+    }
+
+    setPetPhoto(file);
+    setPetPhotoPreview(URL.createObjectURL(file));
+    setError("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +60,8 @@ function SubmitReviewForm() {
       formData.append("review", review);
       if (instagramHandle) formData.append("instagramHandle", instagramHandle);
       if (instagramPostUrl) formData.append("instagramPostUrl", instagramPostUrl);
+      if (petPhoto) formData.append("petPhoto", petPhoto);
+      if (orderIdParam) formData.append("orderId", orderIdParam);
 
       const res = await fetch("/api/reviews/submit", {
         method: "POST",
@@ -46,7 +75,7 @@ function SubmitReviewForm() {
       } else {
         setError(data.error || "Failed to submit review");
       }
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -65,10 +94,15 @@ function SubmitReviewForm() {
           <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6">
             Thank you for your <span className="text-gradient">review!</span>
           </h1>
-          <p className="text-text-secondary text-lg mb-8 leading-relaxed">
-            Your review will be published after approval. If you shared your portrait
-            on Instagram and tagged us, we'll send you a 25% discount code within 24 hours!
+          <p className="text-text-secondary text-lg mb-4 leading-relaxed">
+            Your review will be published after approval. We'll send you a
+            <strong className="text-gold"> 25% discount code</strong> as a thank you!
           </p>
+          {instagramPostUrl && (
+            <p className="text-text-secondary text-sm mb-8 leading-relaxed">
+              We spotted your Instagram post — your discount code is on its way!
+            </p>
+          )}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/"
@@ -182,7 +216,7 @@ function SubmitReviewForm() {
                   key={star}
                   type="button"
                   onClick={() => setRating(star)}
-                  className="transition-transform hover:scale-110"
+                  className="transition-transform hover:scale-110 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
                   <svg
                     className={`w-8 h-8 ${star <= rating ? "text-gold" : "text-white/20"}`}
@@ -211,6 +245,52 @@ function SubmitReviewForm() {
             />
           </div>
 
+          {/* Photo Upload */}
+          <div>
+            <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
+              Upload a Photo <span className="normal-case text-white/20">(optional — your portrait on display, pet next to portrait, etc.)</span>
+            </label>
+            <div className="relative">
+              {petPhotoPreview ? (
+                <div className="relative rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.06]">
+                  <Image
+                    src={petPhotoPreview}
+                    alt="Preview"
+                    width={400}
+                    height={300}
+                    className="w-full h-48 object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPetPhoto(null);
+                      setPetPhotoPreview(null);
+                    }}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center w-full h-36 rounded-xl border-2 border-dashed border-white/[0.12] bg-white/[0.03] hover:bg-white/[0.06] hover:border-gold/30 transition-all cursor-pointer">
+                  <svg className="w-8 h-8 text-white/30 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-white/30 text-sm">Click to upload a photo</p>
+                  <p className="text-white/20 text-xs mt-1">Max 10MB • JPG, PNG, WebP</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
+
           {/* Instagram Handle (Optional) */}
           <div>
             <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
@@ -228,7 +308,7 @@ function SubmitReviewForm() {
           {/* Instagram Post URL (Optional) */}
           <div>
             <label className="block text-xs tracking-wider uppercase text-text-secondary mb-2 font-medium">
-              Instagram Post URL <span className="normal-case text-white/20">(optional - for 25% discount)</span>
+              Instagram Post URL <span className="normal-case text-white/20">(optional — for 25% discount)</span>
             </label>
             <input
               type="url"

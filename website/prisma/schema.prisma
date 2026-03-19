@@ -269,6 +269,9 @@ model Order {
   refundedAt   DateTime?
   refundAmount Float     @default(0)
 
+  // Post-delivery email tracking
+  reviewEmailSentAt DateTime? // When the 7-day review request email was sent
+
   // Timestamps
   createdAt DateTime  @default(now())
   paidAt    DateTime?
@@ -280,6 +283,7 @@ model Order {
   @@index([utmMedium])
   @@index([referralCode])
   @@index([giftCardCode])
+  @@index([deliveredAt])
 }
 
 // Corporate Bulk Orders (B2B)
