@@ -22,6 +22,7 @@ const InstagramFeed = dynamic(() => import("@/components/InstagramFeed"), {
   loading: () => <div className="h-[300px] animate-pulse bg-bg-card rounded-2xl" />,
 });
 const OrderActivityFeed = dynamic(() => import("@/components/OrderActivityFeed"));
+const TrustBadges = dynamic(() => import("@/components/TrustBadges"));
 
 // FAQ data for structured data
 const homeFAQs = [
@@ -255,6 +256,58 @@ export default function HomePage() {
               >
                 Get Started
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Gift Card CTA */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900/20 via-bg-card to-rose-900/20 border border-white/[0.08]">
+            {/* Ambient glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,_rgba(251,191,36,0.15),_transparent)]" />
+
+            <div className="relative z-10 p-12 md:p-16 text-center">
+              <div className="text-5xl mb-6">🎁</div>
+              <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6">
+                Give the Gift of Pet Art
+              </h2>
+              <p className="text-text-secondary text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+                Delight pet lovers with a beautiful AI-generated portrait. Gift cards available in $25, $50, $100, or custom amounts. Digital delivery, valid for 1 year.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                <Link
+                  href="/gift"
+                  className="btn-glow px-8 py-4 rounded-full bg-amber-600 hover:bg-amber-700 text-white font-medium text-[15px] transition-all duration-300 inline-flex items-center gap-2"
+                >
+                  Buy Gift Card
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
+                <div className="text-center">
+                  <div className="text-3xl mb-3">⚡</div>
+                  <h3 className="text-sm font-semibold text-text-primary mb-2">Instant Delivery</h3>
+                  <p className="text-xs text-text-secondary">Email delivery or schedule for a special date</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl mb-3">🎨</div>
+                  <h3 className="text-sm font-semibold text-text-primary mb-2">16+ Art Styles</h3>
+                  <p className="text-xs text-text-secondary">Renaissance, Baroque, Ghibli, and more</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl mb-3">💰</div>
+                  <h3 className="text-sm font-semibold text-text-primary mb-2">Earn 10% Credit</h3>
+                  <p className="text-xs text-text-secondary">Get credit when your recipient orders</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

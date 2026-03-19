@@ -19,3 +19,13 @@ export async function requireAuth() {
 
   return session;
 }
+
+export async function requireAdmin() {
+  const session = await getSession();
+
+  if (!session?.user?.email || !(session.user as any).isAdmin) {
+    throw new Error("Admin access required");
+  }
+
+  return session;
+}

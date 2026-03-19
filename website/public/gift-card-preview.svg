@@ -1,0 +1,72 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3E2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFF1F3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C9A96E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4B982;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+  
+  <!-- Card -->
+  <rect x="100" y="115" width="1000" height="400" rx="24" fill="white" filter="drop-shadow(0 20px 60px rgba(0,0,0,0.1))" />
+  
+  <!-- Card header -->
+  <rect x="100" y="115" width="1000" height="120" rx="24" fill="url(#cardGrad)" />
+  <path d="M 100 235 Q 100 235 124 235 L 1076 235 Q 1100 235 1100 235 L 1100 235 L 100 235 Z" fill="url(#cardGrad)" />
+  
+  <!-- Gift icon -->
+  <text x="600" y="195" font-size="48" text-anchor="middle">🎁</text>
+  
+  <!-- Title -->
+  <text x="600" y="300" font-size="48" font-weight="700" fill="#1f2937" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+    Pawcasso Gift Card
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="345" font-size="24" fill="#6b7280" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+    Give the gift of beautiful AI pet portraits
+  </text>
+  
+  <!-- Features -->
+  <g>
+    <text x="280" y="415" font-size="18" fill="#4b5563" font-family="system-ui, -apple-system, sans-serif">
+      ⚡ Instant delivery
+    </text>
+    <text x="550" y="415" font-size="18" fill="#4b5563" font-family="system-ui, -apple-system, sans-serif">
+      🎨 16+ styles
+    </text>
+    <text x="780" y="415" font-size="18" fill="#4b5563" font-family="system-ui, -apple-system, sans-serif">
+      💰 Earn 10% credit
+    </text>
+  </g>
+  
+  <!-- Amount options -->
+  <g>
+    <rect x="250" y="450" width="120" height="50" rx="12" fill="#FEF3E2" stroke="#C9A96E" stroke-width="2" />
+    <text x="310" y="483" font-size="20" font-weight="600" fill="#78350f" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+      $25
+    </text>
+    
+    <rect x="400" y="450" width="120" height="50" rx="12" fill="#FEF3E2" stroke="#C9A96E" stroke-width="2" />
+    <text x="460" y="483" font-size="20" font-weight="600" fill="#78350f" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+      $50
+    </text>
+    
+    <rect x="550" y="450" width="120" height="50" rx="12" fill="#FEF3E2" stroke="#C9A96E" stroke-width="2" />
+    <text x="610" y="483" font-size="20" font-weight="600" fill="#78350f" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+      $100
+    </text>
+    
+    <rect x="700" y="450" width="120" height="50" rx="12" fill="#FEF3E2" stroke="#C9A96E" stroke-width="2" />
+    <text x="760" y="483" font-size="20" font-weight="600" fill="#78350f" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+      Custom
+    </text>
+  </g>
+</svg>

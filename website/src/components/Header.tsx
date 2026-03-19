@@ -90,6 +90,15 @@ export default function Header() {
           </li>
           <li>
             <Link
+              href="/gift"
+              className="text-text-secondary hover:text-text-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-bg rounded-sm px-2 py-1"
+              aria-label="Gift cards"
+            >
+              Gift Cards
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/order"
               className="px-6 py-3 rounded-full bg-gold text-bg text-[13px] font-medium hover:bg-gold-light transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-bg"
               aria-label="Order custom portrait"
@@ -169,6 +178,16 @@ export default function Header() {
                 aria-label="Frequently asked questions"
               >
                 FAQ
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/gift"
+                onClick={() => setMobileOpen(false)}
+                className="text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-bg rounded-sm px-2 py-1"
+                aria-label="Gift cards"
+              >
+                Gift Cards
               </Link>
             </li>
             <li>

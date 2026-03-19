@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/[0.04] bg-bg">
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
             <h3 className="text-xl font-medium tracking-[0.2em] text-gradient mb-4">PAWCASSO</h3>
@@ -14,7 +14,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Links */}
+          {/* Explore */}
           <div>
             <h4 className="text-xs tracking-wider text-text-secondary mb-4 uppercase">Explore</h4>
             <ul className="space-y-3 text-sm">
@@ -22,6 +22,19 @@ export default function Footer() {
               <li><Link href="/order" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Order</Link></li>
               <li><Link href="/about" className="text-text-secondary hover:text-text-primary transition-colors duration-300">About</Link></li>
               <li><Link href="/faq" className="text-text-secondary hover:text-text-primary transition-colors duration-300">FAQ</Link></li>
+              <li><Link href="/blog" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Blog</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h4 className="text-xs tracking-wider text-text-secondary mb-4 uppercase">Portraits</h4>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/custom-dog-portraits" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Dog Portraits</Link></li>
+              <li><Link href="/custom-cat-portraits" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Cat Portraits</Link></li>
+              <li><Link href="/pet-portrait-styles" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Art Styles</Link></li>
+              <li><Link href="/pet-portrait-gift" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Gift Portraits</Link></li>
+              <li><Link href="/memorial-portraits" className="text-text-secondary hover:text-text-primary transition-colors duration-300">Memorial Art</Link></li>
             </ul>
           </div>
 

@@ -1,0 +1,87 @@
+/* Toast notification custom styles */
+
+/* Ensure toast notifications are above everything */
+[data-sonner-toaster] {
+  z-index: 99999 !important;
+}
+
+/* Custom toast animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+[data-sonner-toast] {
+  animation: slideInRight 0.3s ease-out;
+}
+
+[data-sonner-toast][data-removed="true"] {
+  animation: slideOutRight 0.2s ease-in;
+}
+
+/* Success toast styling */
+[data-sonner-toast][data-type="success"] {
+  background: #18181b !important;
+  border-color: #22c55e !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: #22c55e !important;
+}
+
+/* Error toast styling */
+[data-sonner-toast][data-type="error"] {
+  background: #18181b !important;
+  border-color: #ef4444 !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: #ef4444 !important;
+}
+
+/* Warning toast styling */
+[data-sonner-toast][data-type="warning"] {
+  background: #18181b !important;
+  border-color: #f59e0b !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-icon] {
+  color: #f59e0b !important;
+}
+
+/* Info toast styling */
+[data-sonner-toast][data-type="info"] {
+  background: #18181b !important;
+  border-color: #3b82f6 !important;
+}
+
+[data-sonner-toast][data-type="info"] [data-icon] {
+  color: #3b82f6 !important;
+}
+
+/* Loading toast styling */
+[data-sonner-toast][data-type="loading"] {
+  background: #18181b !important;
+  border-color: #6366f1 !important;
+}
+
+[data-sonner-toast][data-type="loading"] [data-icon] {
+  color: #6366f1 !important;
+}

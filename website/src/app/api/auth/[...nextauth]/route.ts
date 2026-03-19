@@ -110,6 +110,13 @@ export const authOptions: NextAuthOptions = {
         const stripeCustomerId = await getStripeCustomerId(session.user.email);
         (session.user as any).stripeCustomerId = stripeCustomerId;
         (session.user as any).id = user.id;
+
+        // Add admin status from database
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { isAdmin: true },
+        });
+        (session.user as any).isAdmin = dbUser?.isAdmin || false;
       }
       return session;
     },
