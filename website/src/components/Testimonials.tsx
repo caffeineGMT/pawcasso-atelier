@@ -89,6 +89,7 @@ function TestimonialCard({
             width={80}
             height={80}
             className="object-cover"
+            loading="lazy"
           />
         </div>
         <div className="flex-1 min-w-0">

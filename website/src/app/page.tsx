@@ -2,16 +2,46 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { artworks } from "@/lib/data";
 import GalleryGrid from "@/components/GalleryGrid";
-import StyleShowcase from "@/components/StyleShowcase";
-import Testimonials from "@/components/Testimonials";
 import LiveOrderCounter from "@/components/LiveOrderCounter";
 import SocialProofStats from "@/components/SocialProofStats";
-import InstagramFeed from "@/components/InstagramFeed";
-import OrderActivityFeed from "@/components/OrderActivityFeed";
 import { trackEngagement, trackAnalyticsEvent } from "@/lib/analytics";
 import { captureUTMParams } from "@/lib/utm-tracker";
+import { generateFAQSchema, renderStructuredData } from "@/lib/structured-data";
+
+// Lazy load below-the-fold components for better FID and LCP
+const StyleShowcase = dynamic(() => import("@/components/StyleShowcase"), {
+  loading: () => <div className="h-[600px] animate-pulse bg-bg-card rounded-2xl" />,
+});
+const Testimonials = dynamic(() => import("@/components/Testimonials"), {
+  loading: () => <div className="h-[400px] animate-pulse bg-bg-card rounded-2xl" />,
+});
+const InstagramFeed = dynamic(() => import("@/components/InstagramFeed"), {
+  loading: () => <div className="h-[300px] animate-pulse bg-bg-card rounded-2xl" />,
+});
+const OrderActivityFeed = dynamic(() => import("@/components/OrderActivityFeed"));
+
+// FAQ data for structured data
+const homeFAQs = [
+  {
+    question: "How does the process work?",
+    answer: "Upload your pet's photo, choose an art style, and we'll craft a bespoke portrait. You'll receive the finished work as a high-resolution digital file within 24 hours.",
+  },
+  {
+    question: "What file do I receive?",
+    answer: "Every portrait is delivered as a high-resolution PNG at 4000×5000 pixels — print-quality and ready to frame, share, or use however you like.",
+  },
+  {
+    question: "Can you match a specific style?",
+    answer: "We offer 16 curated styles including Renaissance, Baroque, Impressionist, Ghibli, Ukiyo-e, Pop Art, and more. You can also send a reference image and we'll match it.",
+  },
+  {
+    question: "What if I'm not happy?",
+    answer: "We offer up to 3 revisions within 14 days to make sure your portrait is perfect. Just reach out and we'll work with you.",
+  },
+];
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);

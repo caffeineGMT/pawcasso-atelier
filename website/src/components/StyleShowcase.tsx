@@ -44,6 +44,7 @@ export default function StyleShowcase() {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={i === 0}
+                loading={i === 0 ? "eager" : "lazy"}
               />
             </div>
           ))}

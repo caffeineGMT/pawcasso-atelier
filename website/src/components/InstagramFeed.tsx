@@ -101,6 +101,7 @@ export default function InstagramFeed() {
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="absolute bottom-3 left-3 right-3">
