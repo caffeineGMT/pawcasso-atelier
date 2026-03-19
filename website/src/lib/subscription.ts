@@ -204,7 +204,8 @@ export async function syncSubscriptionFromStripe(
 ): Promise<boolean> {
   try {
     const stripeSubscription = await stripe.subscriptions.retrieve(
-      stripeSubscriptionId
+      stripeSubscriptionId,
+      { expand: ['default_payment_method'] }
     );
 
     const customer = await stripe.customers.retrieve(
@@ -250,31 +251,31 @@ export async function syncSubscriptionFromStripe(
           ? new Date(stripeSubscription.canceled_at * 1000)
           : null,
         currentPeriodStart: new Date(
-          stripeSubscription.current_period_start * 1000
+          (stripeSubscription.current_period_start as number) * 1000
         ),
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+        currentPeriodEnd: new Date((stripeSubscription.current_period_end as number) * 1000),
         trialStart: stripeSubscription.trial_start
-          ? new Date(stripeSubscription.trial_start * 1000)
+          ? new Date((stripeSubscription.trial_start as number) * 1000)
           : null,
         trialEnd: stripeSubscription.trial_end
-          ? new Date(stripeSubscription.trial_end * 1000)
+          ? new Date((stripeSubscription.trial_end as number) * 1000)
           : null,
         defaultPaymentMethodId:
           (stripeSubscription.default_payment_method as string) || null,
         portraitsUsedThisPeriod: 0,
         portraitsRemainingThisPeriod: portraitsPerMonth,
-        startedAt: new Date(stripeSubscription.created * 1000),
+        startedAt: new Date((stripeSubscription.created as number) * 1000),
       },
       update: {
         status: stripeSubscription.status,
         cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
         canceledAt: stripeSubscription.canceled_at
-          ? new Date(stripeSubscription.canceled_at * 1000)
+          ? new Date((stripeSubscription.canceled_at as number) * 1000)
           : null,
         currentPeriodStart: new Date(
-          stripeSubscription.current_period_start * 1000
+          (stripeSubscription.current_period_start as number) * 1000
         ),
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+        currentPeriodEnd: new Date((stripeSubscription.current_period_end as number) * 1000),
         defaultPaymentMethodId:
           (stripeSubscription.default_payment_method as string) || null,
         updatedAt: new Date(),
