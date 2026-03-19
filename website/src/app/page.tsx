@@ -45,6 +45,7 @@ const homeFAQs = [
 
 export default function HomePage() {
   const featured = artworks.slice(0, 6);
+  const faqSchema = generateFAQSchema(homeFAQs);
 
   useEffect(() => {
     // Capture UTM params on page load
@@ -56,6 +57,12 @@ export default function HomePage() {
 
   return (
     <>
+      {/* FAQ Schema for rich snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(faqSchema)}
+      />
+
       <LiveOrderCounter />
       <OrderActivityFeed />
       {/* Hero */}

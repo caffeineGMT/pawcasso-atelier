@@ -1,10 +1,24 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { generateFAQSchema, generateBreadcrumbSchema, renderStructuredData } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "FAQ | Pawcasso Atelier",
+  title: "FAQ - Frequently Asked Questions About Custom Pet Portraits",
   description:
-    "Frequently asked questions about Pawcasso Atelier — our process, pricing, delivery, and more.",
+    "Get answers about Pawcasso Atelier's AI pet portraits: pricing ($9), delivery times (24hrs), art styles (16 options), photo requirements, revisions, and more.",
+  keywords: [
+    "pet portrait FAQ",
+    "custom pet art questions",
+    "dog portrait pricing",
+    "cat portrait delivery",
+    "pet portrait process",
+    "AI pet art questions",
+  ],
+  openGraph: {
+    title: "FAQ - Custom Pet Portrait Questions Answered",
+    description: "Everything you need to know about ordering custom AI pet portraits. Pricing, delivery, styles, and more.",
+    type: "website",
+  },
 };
 
 const faqs = [
@@ -88,8 +102,32 @@ const faqs = [
 ];
 
 export default function FAQPage() {
+  // Flatten all FAQs for schema
+  const allFAQs = faqs.flatMap((section) =>
+    section.items.map((item) => ({
+      question: item.q,
+      answer: item.a,
+    }))
+  );
+
+  const faqSchema = generateFAQSchema(allFAQs);
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://pawcasso-atelier.vercel.app" },
+    { name: "FAQ", url: "https://pawcasso-atelier.vercel.app/faq" },
+  ]);
+
   return (
-    <section className="py-24 px-6">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(faqSchema)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(breadcrumbSchema)}
+      />
+
+      <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">

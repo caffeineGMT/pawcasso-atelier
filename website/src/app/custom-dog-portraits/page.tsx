@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { artworks } from "@/lib/data";
-import { generateProductSchema, renderStructuredData } from "@/lib/structured-data";
+import { generateProductSchema, generateBreadcrumbSchema, renderStructuredData } from "@/lib/structured-data";
 import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
   title: "Custom Dog Portraits - AI Art From Your Photo in 24 Hours",
   description:
-    "Transform your dog's photo into stunning custom art. 17 styles, 4000x5000px print quality, 24-hour delivery. Golden Retrievers, Huskies, all breeds. From $9.",
+    "Transform your dog's photo into stunning custom art. 16+ styles including Renaissance, Pixar 3D, Ghibli. 4000x5000px print quality, 24-hour delivery. All breeds welcome. From $9.",
   keywords: [
     "custom dog portrait",
     "dog portrait from photo",
@@ -17,10 +17,12 @@ export const metadata: Metadata = {
     "husky portrait",
     "dog painting custom",
     "pet portrait dog",
+    "AI dog art",
+    "dog portrait gift",
   ],
   openGraph: {
     title: "Custom Dog Portraits - AI Art From Your Photo",
-    description: "Turn your dog's photo into museum-quality art. 17 styles, from $9.",
+    description: "Turn your dog's photo into museum-quality art. 16+ styles including Renaissance, Pixar, Ghibli. All breeds. From $9.",
     images: ["/gallery/shiba_portrait_final.webp"],
     type: "website",
   },
@@ -45,11 +47,20 @@ export default function CustomDogPortraitsPage() {
     artworks[4], artworks[6], artworks[7], artworks[11], artworks[13],
   ];
 
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://pawcasso-atelier.vercel.app" },
+    { name: "Custom Dog Portraits", url: "https://pawcasso-atelier.vercel.app/custom-dog-portraits" },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={renderStructuredData(productSchema)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(breadcrumbSchema)}
       />
 
       {/* Hero */}

@@ -1,14 +1,38 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { generateBreadcrumbSchema, renderStructuredData } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "About | Pawcasso Atelier",
-  description: "The story behind Pawcasso Atelier — where every pet becomes a masterpiece.",
+  title: "About Pawcasso Atelier - Our Story & Mission",
+  description: "Learn about Pawcasso Atelier: custom AI pet portraits in 16+ art styles. Founded on the belief that every pet deserves to be immortalized as a masterpiece. Museum-quality, affordable pricing.",
+  keywords: [
+    "about Pawcasso",
+    "AI pet portrait company",
+    "custom pet art story",
+    "pet portrait mission",
+    "animal art atelier",
+  ],
+  openGraph: {
+    title: "About Pawcasso Atelier - Where Every Pet Becomes a Masterpiece",
+    description: "Bespoke animal portraits crafted in the tradition of the Old Masters. 16 curated art styles, 24-hour delivery.",
+    type: "website",
+  },
 };
 
 export default function AboutPage() {
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://pawcasso-atelier.vercel.app" },
+    { name: "About", url: "https://pawcasso-atelier.vercel.app/about" },
+  ]);
+
   return (
-    <section className="py-24 px-6">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(breadcrumbSchema)}
+      />
+
+      <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">

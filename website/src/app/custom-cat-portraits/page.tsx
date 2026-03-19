@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { artworks } from "@/lib/data";
-import { generateProductSchema, renderStructuredData } from "@/lib/structured-data";
+import { generateProductSchema, generateBreadcrumbSchema, renderStructuredData } from "@/lib/structured-data";
 import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
-  title: "Custom Cat Portraits - Transform Your Cat Photo Into Art",
+  title: "Custom Cat Portraits - Transform Your Cat Photo Into Art in 24hrs",
   description:
-    "Custom cat portraits from your photo in 17 artistic styles. Persian, Tabby, Siamese, all breeds. 4000x5000px print quality, 24-hour delivery. From $9.",
+    "Custom cat portraits from your photo in 16+ artistic styles. Persian, Tabby, Siamese, all breeds. 4000x5000px print quality, 24-hour delivery. Memorial portraits available. From $9.",
   keywords: [
     "custom cat portrait",
     "cat portrait from photo",
@@ -17,10 +17,13 @@ export const metadata: Metadata = {
     "persian cat art",
     "cat painting custom",
     "pet portrait cat",
+    "AI cat portrait",
+    "cat memorial portrait",
+    "siamese cat art",
   ],
   openGraph: {
     title: "Custom Cat Portraits - Your Cat as Fine Art",
-    description: "Turn your cat's photo into stunning art. 17 styles, from $9.",
+    description: "Turn your cat's photo into stunning art. 16+ styles including Renaissance, Ghibli, Watercolor. All breeds welcome. From $9.",
     images: ["/gallery/cat_vermeer.png"],
     type: "website",
   },
@@ -43,11 +46,20 @@ export default function CustomCatPortraitsPage() {
     artworks[2], artworks[5], artworks[8], artworks[9], artworks[10], artworks[12], artworks[14],
   ];
 
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://pawcasso-atelier.vercel.app" },
+    { name: "Custom Cat Portraits", url: "https://pawcasso-atelier.vercel.app/custom-cat-portraits" },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={renderStructuredData(productSchema)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={renderStructuredData(breadcrumbSchema)}
       />
 
       {/* Hero */}

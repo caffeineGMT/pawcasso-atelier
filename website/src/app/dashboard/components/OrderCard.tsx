@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Order } from "@prisma/client";
+import OptimisticImage from "@/components/OptimisticImage";
+import LoadingButton from "@/components/LoadingButton";
 
 interface OrderCardProps {
   order: Order;
@@ -188,8 +190,14 @@ export default function OrderCard({ order }: OrderCardProps) {
                   <button
                     onClick={handleDownloadAll}
                     disabled={downloadingAll}
-                    className="text-xs font-medium text-[#E07A5F] hover:text-[#E07A5F]/80 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-xs font-medium text-[#E07A5F] hover:text-[#E07A5F]/80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                   >
+                    {downloadingAll && (
+                      <svg className="animate-spin h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                    )}
                     {downloadingAll ? "Downloading..." : "Download All"}
                   </button>
                 )}
@@ -198,10 +206,11 @@ export default function OrderCard({ order }: OrderCardProps) {
               <div className="grid grid-cols-3 gap-3">
                 {portraitUrls.map((url, index) => (
                   <div key={index} className="group relative aspect-square rounded-lg overflow-hidden bg-[#E5E5E5]">
-                    <img
+                    <OptimisticImage
                       src={url}
                       alt={`${order.petName} Portrait ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                     {/* Download overlay */}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
