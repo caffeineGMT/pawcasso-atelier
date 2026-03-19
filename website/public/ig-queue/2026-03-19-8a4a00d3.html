@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>IG Review — Holland Lop Emoji/Sticker Set</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      background: #111;
+      border-bottom: 1px solid #222;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-title { font-size: 18px; font-weight: 600; }
+    .header-meta { font-size: 12px; color: #999; margin-top: 4px; }
+    .content-type-badge {
+      display: inline-block;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 8px;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 24px 0 12px;
+    }
+    .concept-box {
+      background: #141414;
+      border: 1px solid #252525;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .concept-title { font-size: 14px; font-weight: 600; color: #ddd; margin-bottom: 8px; }
+    .concept-text { font-size: 14px; line-height: 1.6; color: #aaa; }
+    .card {
+      background: #141414;
+      border: 1px solid #252525;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .tone-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ccc;
+      background: #1f1f1f;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .copy-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #aaa;
+      font-size: 12px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-btn:hover { background: #333; color: #fff; }
+    .copy-btn.copied { background: #166534; border-color: #22c55e; color: #22c55e; }
+    .caption-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #ddd;
+      white-space: pre-wrap;
+    }
+    .hook-label {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+      border-top: 1px solid #252525;
+      padding-top: 8px;
+    }
+    .hashtag-box {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+    }
+    .hashtag-text {
+      font-size: 13px;
+      color: #7c9aed;
+      line-height: 1.8;
+      word-break: break-word;
+    }
+    .hashtag-copy { position: absolute; top: 12px; right: 12px; }
+    .posting-time-box {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .time-main { font-size: 20px; font-weight: 600; color: #22c55e; margin-bottom: 8px; }
+    .time-reasoning { font-size: 13px; color: #aaa; line-height: 1.5; }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .meta-item { background: #1a1a1a; border-radius: 8px; padding: 10px 12px; }
+    .meta-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .meta-value { font-size: 14px; color: #ccc; margin-top: 2px; }
+    .action-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111;
+      border-top: 1px solid #222;
+      padding: 12px 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .action-btn.primary { background: #22c55e; color: #000; }
+    .action-btn.secondary { background: #1a1a1a; color: #ccc; border: 1px solid #333; }
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+    .footer-spacer { height: 80px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">Holland Lop Emoji/Sticker Set</div>
+    <div class="header-meta">2026-03-19 · @pawcasso.atelier</div>
+    <div class="content-type-badge">EMOJI SET</div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">Content Concept</div>
+    <div class="concept-box">
+      <div class="concept-title">Shareable Holland Lop activity stickers</div>
+      <div class="concept-text">Holland Lop emoji/sticker set — activity stickers (🏃‍♂️ 🛌 🍽️ 🎾 📚)</div>
+    </div>
+
+    <div class="section-title">Best Posting Time</div>
+    <div class="posting-time-box">
+      <div class="time-main">12:30 PM PT (Pacific Time)</div>
+      <div class="time-reasoning">Lunch break — high engagement for fun, shareable content</div>
+    </div>
+
+    <div class="section-title">Caption Options (Choose One)</div>
+    
+    <div class="card">
+      <div class="card-header">
+        <span class="tone-badge">😄 Witty & Playful</span>
+        <button class="copy-btn" onclick="copyText('caption-0')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg> Copy
+        </button>
+      </div>
+      <p class="caption-text" id="caption-0">Your Holland Lop has more moods than you do and we have the stickers to prove it. 😤
+
+Presenting: Holland Lop activity stickers — because every text needs a tiny furball to express your exact vibe.
+
+Sad Holland Lop? Hyper Holland Lop? Existential crisis Holland Lop? We got you.
+
+Tag a Holland Lop parent who NEEDS these.
+
+🐾 Holland Lop sticker pack
+📩 Commission your pet's emoji set — link in bio</p>
+      <p class="hook-label">Hook: <em>Your Holland Lop has more moods than you do and we have the stickers to prove it. 😤</em></p>
+    </div>
+  
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tone-badge">💛 Heartfelt & Warm</span>
+        <button class="copy-btn" onclick="copyText('caption-1')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg> Copy
+        </button>
+      </div>
+      <p class="caption-text" id="caption-1">Every Holland Lop parent knows: they're not just pets. They're personalities.
+
+We turned those personalities into a activity stickers you can share, save, and send to fellow Holland Lop lovers who just get it.
+
+Because sometimes words aren't enough. Sometimes you need a tiny Holland Lop doing the talking.
+
+🐾 Holland Lop activity stickers
+📩 Want your pet as stickers? Link in bio</p>
+      <p class="hook-label">Hook: <em>Every Holland Lop parent knows: they're not just pets. They're personalities.</em></p>
+    </div>
+  
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tone-badge">✨ Minimalist & Cool</span>
+        <button class="copy-btn" onclick="copyText('caption-2')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg> Copy
+        </button>
+      </div>
+      <p class="caption-text" id="caption-2">Holland Lop moods.
+activity stickers.
+Pure joy.
+
+🐾 Link in bio</p>
+      <p class="hook-label">Hook: <em>Holland Lop moods.</em></p>
+    </div>
+  
+
+    <div class="card">
+      <div class="card-header">
+        <span class="tone-badge">🔥 Bold & Dramatic</span>
+        <button class="copy-btn" onclick="copyText('caption-3')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg> Copy
+        </button>
+      </div>
+      <p class="caption-text" id="caption-3">WE TURNED HOLLAND LOPS INTO EMOJIS AND THE INTERNET WILL NEVER BE THE SAME.
+
+activity stickers — because your group chat deserves better than generic smiley faces.
+
+Share this if you need a Holland Lop to express your every emotion.
+
+🐾 Holland Lop sticker pack
+📩 Link in bio</p>
+      <p class="hook-label">Hook: <em>WE TURNED HOLLAND LOPS INTO EMOJIS AND THE INTERNET WILL NEVER BE THE SAME.</em></p>
+    </div>
+  
+
+    <div class="section-title">Hashtags</div>
+    <div class="hashtag-box">
+      <div class="hashtag-copy">
+        <button class="copy-btn" onclick="copyText('hashtags')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg> Copy
+        </button>
+      </div>
+      <p class="hashtag-text" id="hashtags">#pawcasso #pawcassoatelier #aipetportrait #petportraitart #rabbitsofinstagram #rabbitportrait #rabbitlovers #hollandlop #hollandloplove #petstickers #emojiart #stickers #cuteart #digitalstickers #viral #explorepage #trending</p>
+    </div>
+
+    <div class="section-title">Details</div>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Animal</div>
+        <div class="meta-value">Holland Lop</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Style</div>
+        <div class="meta-value">Emoji/Sticker Design</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Content Type</div>
+        <div class="meta-value">emoji set</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Review ID</div>
+        <div class="meta-value">8a4a00d3</div>
+      </div>
+    </div>
+
+    <div class="footer-spacer"></div>
+  </div>
+
+  <div class="action-bar">
+    <a href="https://n8n.aws.metafb.cloud/form/8ae3cd62-13ea-4c8a-9ffc-2c1148783ee2" class="action-btn primary" target="_blank">Generate via n8n</a>
+    <button class="action-btn secondary" onclick="shareContent()">Share Spec</button>
+  </div>
+
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    function copyText(id) {
+      var el = document.getElementById(id);
+      var text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        var toast = document.getElementById("toast");
+        toast.classList.add("show");
+        setTimeout(function() { toast.classList.remove("show"); }, 1500);
+
+        var card = el.closest(".card, .hashtag-box");
+        var btn = card ? card.querySelector(".copy-btn") : null;
+        if (btn) {
+          btn.classList.add("copied");
+          var originalHTML = btn.innerHTML;
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+          setTimeout(function() {
+            btn.classList.remove("copied");
+            btn.innerHTML = originalHTML;
+          }, 2000);
+        }
+      });
+    }
+
+    function shareContent() {
+      const spec = {
+  "id": "8a4a00d3",
+  "date": "2026-03-19",
+  "contentType": "emoji_set",
+  "title": "Holland Lop Emoji/Sticker Set",
+  "description": "Shareable Holland Lop activity stickers",
+  "animal": "Rabbit",
+  "breed": "Holland Lop",
+  "style": "Emoji/Sticker Design",
+  "concept": "Holland Lop emoji/sticker set — activity stickers (🏃‍♂️ 🛌 🍽️ 🎾 📚)",
+  "specialInstructions": "Create a carousel-ready set of 6-9 cute Holland Lop stickers/emojis for activity stickers. Each should be isolated on transparent or solid background, vibrant, sharable. Pixar-ish 3D or flat vector style. 1080x1080 per image.",
+  "captions": [
+    {
+      "tone": "witty",
+      "toneName": "Witty & Playful",
+      "toneEmoji": "😄",
+      "text": "Your Holland Lop has more moods than you do and we have the stickers to prove it. 😤\n\nPresenting: Holland Lop activity stickers — because every text needs a tiny furball to express your exact vibe.\n\nSad Holland Lop? Hyper Holland Lop? Existential crisis Holland Lop? We got you.\n\nTag a Holland Lop parent who NEEDS these.\n\n🐾 Holland Lop sticker pack\n📩 Commission your pet's emoji set — link in bio",
+      "hook": "Your Holland Lop has more moods than you do and we have the stickers to prove it. 😤"
+    },
+    {
+      "tone": "heartfelt",
+      "toneName": "Heartfelt & Warm",
+      "toneEmoji": "💛",
+      "text": "Every Holland Lop parent knows: they're not just pets. They're personalities.\n\nWe turned those personalities into a activity stickers you can share, save, and send to fellow Holland Lop lovers who just get it.\n\nBecause sometimes words aren't enough. Sometimes you need a tiny Holland Lop doing the talking.\n\n🐾 Holland Lop activity stickers\n📩 Want your pet as stickers? Link in bio",
+      "hook": "Every Holland Lop parent knows: they're not just pets. They're personalities."
+    },
+    {
+      "tone": "minimal",
+      "toneName": "Minimalist & Cool",
+      "toneEmoji": "✨",
+      "text": "Holland Lop moods.\nactivity stickers.\nPure joy.\n\n🐾 Link in bio",
+      "hook": "Holland Lop moods."
+    },
+    {
+      "tone": "bold",
+      "toneName": "Bold & Dramatic",
+      "toneEmoji": "🔥",
+      "text": "WE TURNED HOLLAND LOPS INTO EMOJIS AND THE INTERNET WILL NEVER BE THE SAME.\n\nactivity stickers — because your group chat deserves better than generic smiley faces.\n\nShare this if you need a Holland Lop to express your every emotion.\n\n🐾 Holland Lop sticker pack\n📩 Link in bio",
+      "hook": "WE TURNED HOLLAND LOPS INTO EMOJIS AND THE INTERNET WILL NEVER BE THE SAME."
+    }
+  ],
+  "hashtags": [
+    "#pawcasso",
+    "#pawcassoatelier",
+    "#aipetportrait",
+    "#petportraitart",
+    "#rabbitsofinstagram",
+    "#rabbitportrait",
+    "#rabbitlovers",
+    "#hollandlop",
+    "#hollandloplove",
+    "#petstickers",
+    "#emojiart",
+    "#stickers",
+    "#cuteart",
+    "#digitalstickers",
+    "#viral",
+    "#explorepage",
+    "#trending"
+  ],
+  "bestPostingTime": {
+    "time": "12:30 PM",
+    "timezone": "PT (Pacific Time)",
+    "reasoning": "Lunch break — high engagement for fun, shareable content"
+  },
+  "n8nPayload": {
+    "field-0": "Rabbit",
+    "field-1": "Holland Lop",
+    "field-2": "Emoji/Sticker Set",
+    "field-3": "Holland Lop emoji/sticker set — activity stickers (🏃‍♂️ 🛌 🍽️ 🎾 📚)",
+    "field-4": "Instagram carousel. Create 5 different Holland Lop stickers for activity stickers. Cute, shareable, viral.",
+    "field-5": "Sticker/emoji set. Each image 1080x1080. Think LINE stickers aesthetic."
+  },
+  "reviewUrl": "https://pawcasso-atelier.vercel.app/ig-queue/2026-03-19-8a4a00d3.html",
+  "status": "pending_generation",
+  "generatedAt": "2026-03-19T04:39:18.965Z"
+};
+      const text = `📸 IG Content Ready\n\nType: ${spec.contentType}\nAnimal: ${spec.breed || spec.animal}\nStyle: ${spec.style}\n\n${spec.reviewUrl}`;
+
+      if (navigator.share) {
+        navigator.share({ title: spec.title, text, url: spec.reviewUrl });
+      } else {
+        navigator.clipboard.writeText(text);
+        var toast = document.getElementById("toast");
+        toast.textContent = "Spec copied!";
+        toast.classList.add("show");
+        setTimeout(function() {
+          toast.classList.remove("show");
+          toast.textContent = "Copied!";
+        }, 1500);
+      }
+    }
+  </script>
+</body>
+</html>
